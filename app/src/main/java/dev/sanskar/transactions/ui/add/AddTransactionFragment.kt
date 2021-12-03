@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import dev.sanskar.transactions.databinding.FragmentAddTransactionBinding
+import dev.sanskar.transactions.ui.model.MainViewModel
 
 class AddTransactionFragment : Fragment() {
+    private val model by activityViewModels<MainViewModel>()
     private lateinit var binding: FragmentAddTransactionBinding
 
     override fun onCreateView(
@@ -22,6 +25,13 @@ class AddTransactionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.buttonAdd.setOnClickListener {
+            // TODO: 04/12/21 Add validation
+            val isDigital = !binding.chipCash.isSelected
+            val amount = binding.textFieldAmount.editText?.text.toString().toInt()
+            val description = binding.textFieldDescription.editText?.text.toString()
 
+            model.addTransaction(amount, description, isDigital)
+        }
     }
 }
