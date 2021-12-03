@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import dev.sanskar.transactions.databinding.FragmentAddTransactionBinding
 import dev.sanskar.transactions.ui.model.MainViewModel
 
@@ -32,6 +33,7 @@ class AddTransactionFragment : Fragment() {
             val description = binding.textFieldDescription.editText?.text.toString()
 
             model.addTransaction(amount, description, isDigital)
+            findNavController().popBackStack()
         }
     }
 }
