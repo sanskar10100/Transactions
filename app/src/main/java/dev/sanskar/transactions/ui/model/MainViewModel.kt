@@ -21,6 +21,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         .allowMainThreadQueries()
         .build()
 
+    val transactions = db.transactionDao().getAllTransactions()
+
     fun addTransaction(amount: Int, description: String, isDigital: Boolean = true, isExpense: Boolean = true) {
         val transaction = Transaction(
             0,
