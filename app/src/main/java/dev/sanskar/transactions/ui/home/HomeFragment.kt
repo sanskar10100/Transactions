@@ -14,6 +14,7 @@ import dev.sanskar.transactions.ui.model.MainViewModel
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val model by activityViewModels<MainViewModel>()
+    private val adapter = TransactionsListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,12 +28,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.listTransactions.adapter = adapter
+
         binding.fabAddTransaction.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_addTransactionFragment)
         }
 
         model.transactions.observe(viewLifecycleOwner) {
-            binding.listTransactions.adapter = TransactionsListAdapter(it)
+            adapter.submitList(it)
         }
     }
 }

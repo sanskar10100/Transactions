@@ -2,12 +2,14 @@ package dev.sanskar.transactions.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.LayoutTransactionBinding
 import java.util.*
 
-class TransactionsListAdapter(private val dataset: List<Transaction>) : RecyclerView.Adapter<TransactionsListAdapter.ViewHolder>() {
+class TransactionsListAdapter : ListAdapter<Transaction, TransactionsListAdapter.ViewHolder>(TransactionDiffCallback()) {
 
     class ViewHolder(val binding: LayoutTransactionBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -16,13 +18,21 @@ class TransactionsListAdapter(private val dataset: List<Transaction>) : Recycler
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val transaction = dataset[position]
+        val transaction = getItem(position)
         with (holder.binding) {
             textViewAmount.text = transaction.amount.toString()
             textViewDescription.text = transaction.description
             textViewTimestamp.text = Date(transaction.timestamp * 1000).toString()
         }
     }
+}
 
-    override fun getItemCount() = dataset.size
+class TransactionDiffCallback : DiffUtil.ItemCallback<Transaction>() {
+    override fun areItemsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
+        return oldItem == newItem
+    }
 }
