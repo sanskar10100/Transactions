@@ -29,10 +29,11 @@ class AddTransactionFragment : Fragment() {
         binding.buttonAdd.setOnClickListener {
             // TODO: 04/12/21 Add validation
             val isDigital = !binding.chipCash.isChecked
+            val isExpense = !binding.chipIncome.isChecked
             val amount = binding.textFieldAmount.editText?.text.toString().toInt()
             val description = binding.textFieldDescription.editText?.text.toString()
 
-            model.addTransaction(amount, description, isDigital)
+            model.addTransaction(amount, description, isDigital, isExpense)
             findNavController().popBackStack()
         }
     }
