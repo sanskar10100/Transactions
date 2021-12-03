@@ -27,7 +27,7 @@ class AddTransactionFragment : Fragment() {
 
         binding.buttonAdd.setOnClickListener {
             // TODO: 04/12/21 Add validation
-            val isDigital = !binding.chipCash.isSelected
+            val isDigital = !binding.chipCash.isChecked
             val amount = binding.textFieldAmount.editText?.text.toString().toInt()
             val description = binding.textFieldDescription.editText?.text.toString()
 
