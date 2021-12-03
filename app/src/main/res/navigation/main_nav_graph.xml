@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="dev.sanskar.transactions.ui.home.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        android:label="All Transactions"
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_addTransactionFragment"
             app:destination="@id/addTransactionFragment"
@@ -21,6 +21,6 @@
     <fragment
         android:id="@+id/addTransactionFragment"
         android:name="dev.sanskar.transactions.ui.add.AddTransactionFragment"
-        android:label="fragment_add_transaction"
+        android:label="Add Transaction"
         tools:layout="@layout/fragment_add_transaction" />
 </navigation>
