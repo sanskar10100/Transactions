@@ -30,8 +30,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             description,
             isDigital
         )
-        db.transactionDao().insertTransactions(transaction)
 
+        viewModelScope.launch {
+            db.transactionDao().insertTransactions(transaction)
+        }
         Log.d(TAG, "addTransaction: added $transaction")
     }
 }
