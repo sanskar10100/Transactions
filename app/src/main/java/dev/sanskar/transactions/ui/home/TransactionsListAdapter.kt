@@ -1,5 +1,6 @@
 package dev.sanskar.transactions.ui.home
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.LayoutTransactionBinding
+import java.text.SimpleDateFormat
 import java.util.*
 
 class TransactionsListAdapter : ListAdapter<Transaction, TransactionsListAdapter.ViewHolder>(TransactionDiffCallback()) {
@@ -20,9 +22,17 @@ class TransactionsListAdapter : ListAdapter<Transaction, TransactionsListAdapter
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val transaction = getItem(position)
         with (holder.binding) {
-            textViewAmount.text = transaction.amount.toString()
+            textViewAmount.text = "₹${transaction.amount}"
             textViewDescription.text = transaction.description
-            textViewTimestamp.text = Date(transaction.timestamp * 1000).toString()
+            textViewTimestamp.text =  SimpleDateFormat("dd/MM/yy hh:mm", Locale.ENGLISH).format(Date(transaction.timestamp))
+
+            if (transaction.isExpense) {
+                root.setCardBackgroundColor(Color.parseColor("#A30000"))
+            } else {
+                root.setCardBackgroundColor(Color.parseColor("#138808"))
+            }
+
+            textViewSource.text = if (transaction.isDigital) "Digital" else "Cash"
         }
     }
 }
