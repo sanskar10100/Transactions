@@ -49,21 +49,23 @@ class AddTransactionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         if (editMode) {
             val transaction = model.transactions.value?.get(args.transactionIndex)
             if (transaction != null) {
                 binding.textFieldAmount.editText?.setText(transaction.amount.toString())
                 binding.textFieldDescription.editText?.setText(transaction.description)
 
-                binding.chipExpense.isSelected = transaction.isExpense
-//                binding.chipIncome.isSelected = !transaction.isExpense
+                binding.chipExpense.isChecked = transaction.isExpense
+                binding.chipIncome.isChecked = !transaction.isExpense
 
-                binding.chipDigital.isSelected = transaction.isDigital
-//                binding.chipCash.isSelected = !transaction.isDigital
+                binding.chipDigital.isChecked = transaction.isDigital
+                binding.chipCash.isChecked = !transaction.isDigital
             }
 
             binding.buttonAdd.text = "Update"
+        } else {
+            binding.chipExpense.isChecked = true
+            binding.chipDigital.isChecked = true
         }
 
         binding.buttonAdd.setOnClickListener {
