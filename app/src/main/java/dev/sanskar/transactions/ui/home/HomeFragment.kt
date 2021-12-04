@@ -14,7 +14,9 @@ import dev.sanskar.transactions.ui.model.MainViewModel
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val model by activityViewModels<MainViewModel>()
-    private val adapter = TransactionsListAdapter()
+    private val adapter by lazy {
+        TransactionsListAdapter(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
