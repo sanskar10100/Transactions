@@ -15,7 +15,7 @@ import dev.sanskar.transactions.databinding.LayoutTransactionBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TransactionsListAdapter(val context: Context) : ListAdapter<Transaction, TransactionsListAdapter.ViewHolder>(TransactionDiffCallback()) {
+class TransactionsListAdapter(private val context: Context) : ListAdapter<Transaction, TransactionsListAdapter.ViewHolder>(TransactionDiffCallback()) {
 
     class ViewHolder(val binding: LayoutTransactionBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -39,7 +39,7 @@ class TransactionsListAdapter(val context: Context) : ListAdapter<Transaction, T
             textViewSource.text = if (transaction.isDigital) "Digital" else "Cash"
 
             root.setOnClickListener {
-                root.findNavController().navigate(R.id.action_homeFragment_to_addTransactionFragment)
+                root.findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToAddTransactionFragment(position))
             }
         }
     }

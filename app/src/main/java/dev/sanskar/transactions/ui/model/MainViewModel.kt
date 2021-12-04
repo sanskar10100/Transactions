@@ -8,6 +8,7 @@ import androidx.room.Room
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.data.TransactionDatabase
 import kotlinx.coroutines.launch
+import java.sql.Timestamp
 
 private const val TAG = "MainViewModel"
 
@@ -37,5 +38,37 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             db.transactionDao().insertTransaction(transaction)
         }
         Log.d(TAG, "addTransaction: added $transaction")
+    }
+
+    fun updateTransaction(id: Int, amount: Int, description: String, isDigital: Boolean = true, isExpense: Boolean = true, timestamp: Long) {
+        val transaction = Transaction(
+            id,
+            amount,
+            timestamp,
+            isExpense,
+            description,
+            isDigital
+        )
+
+        viewModelScope.launch {
+            db.transactionDao().updateTransaction(transaction)
+        }
+        Log.d(TAG, "updateTransaction: updated $transaction")
+    }
+
+    fun deleteTransaction(amount: Int, description: String, isDigital: Boolean = true, isExpense: Boolean = true) {
+        val transaction = Transaction(
+            0,
+            amount,
+            System.currentTimeMillis(),
+            isExpense,
+            description,
+            isDigital
+        )
+
+        viewModelScope.launch {
+            db.transactionDao().deleteTransaction(transaction)
+        }
+        Log.d(TAG, "deleteTransaction: deleted $transaction")
     }
 }
