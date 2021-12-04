@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +37,10 @@ class TransactionsListAdapter(val context: Context) : ListAdapter<Transaction, T
             }
 
             textViewSource.text = if (transaction.isDigital) "Digital" else "Cash"
+
+            root.setOnClickListener {
+                root.findNavController().navigate(R.id.action_homeFragment_to_addTransactionFragment)
+            }
         }
     }
 }
