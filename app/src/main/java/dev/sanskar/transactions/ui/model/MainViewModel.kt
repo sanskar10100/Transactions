@@ -62,4 +62,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
         Log.d(TAG, "deleteTransaction: deleted $transaction")
     }
+
+    fun clearTransactions() {
+        viewModelScope.launch {
+            db.transactionDao().clearTransactions()
+        }
+
+        Log.d(TAG, "clearTransactions: all transactions cleared!")
+    }
 }
