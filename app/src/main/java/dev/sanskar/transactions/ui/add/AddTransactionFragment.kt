@@ -1,21 +1,26 @@
 package dev.sanskar.transactions.ui.add
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import dev.sanskar.transactions.R
 import dev.sanskar.transactions.databinding.FragmentAddTransactionBinding
 import dev.sanskar.transactions.ui.model.MainViewModel
 
 class AddTransactionFragment : Fragment() {
     private val model by activityViewModels<MainViewModel>()
     private lateinit var binding: FragmentAddTransactionBinding
-    val args: AddTransactionFragmentArgs by navArgs()
-    var editMode = false
+    private val args: AddTransactionFragmentArgs by navArgs()
+    private var editMode = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+        editMode = args.transactionIndex >= 0
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,10 +31,24 @@ class AddTransactionFragment : Fragment() {
         return binding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        if (editMode) inflater.inflate(R.menu.add_transaction_options_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_delete_transaction) {
+            val transaction = model.transactions.value?.get(args.transactionIndex)
+            if (transaction != null) {
+                model.deleteTransaction(transaction)
+                findNavController().popBackStack()
+            }
+        }
+        return true
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        editMode = args.transactionIndex >= 0
 
         if (editMode) {
             val transaction = model.transactions.value?.get(args.transactionIndex)

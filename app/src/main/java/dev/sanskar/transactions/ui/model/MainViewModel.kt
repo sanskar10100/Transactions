@@ -56,16 +56,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         Log.d(TAG, "updateTransaction: updated $transaction")
     }
 
-    fun deleteTransaction(amount: Int, description: String, isDigital: Boolean = true, isExpense: Boolean = true) {
-        val transaction = Transaction(
-            0,
-            amount,
-            System.currentTimeMillis(),
-            isExpense,
-            description,
-            isDigital
-        )
-
+    fun deleteTransaction(transaction: Transaction) {
         viewModelScope.launch {
             db.transactionDao().deleteTransaction(transaction)
         }
