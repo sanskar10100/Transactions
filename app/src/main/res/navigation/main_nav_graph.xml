@@ -22,5 +22,10 @@
         android:id="@+id/addTransactionFragment"
         android:name="dev.sanskar.transactions.ui.add.AddTransactionFragment"
         android:label="Add Transaction"
-        tools:layout="@layout/fragment_add_transaction" />
+        tools:layout="@layout/fragment_add_transaction" >
+        <argument
+            android:name="transaction_index"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
 </navigation>

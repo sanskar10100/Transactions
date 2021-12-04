@@ -1,17 +1,21 @@
 package dev.sanskar.transactions.ui.home
 
+import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import dev.sanskar.transactions.R
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.LayoutTransactionBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TransactionsListAdapter : ListAdapter<Transaction, TransactionsListAdapter.ViewHolder>(TransactionDiffCallback()) {
+class TransactionsListAdapter(private val context: Context) : ListAdapter<Transaction, TransactionsListAdapter.ViewHolder>(TransactionDiffCallback()) {
 
     class ViewHolder(val binding: LayoutTransactionBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -27,12 +31,16 @@ class TransactionsListAdapter : ListAdapter<Transaction, TransactionsListAdapter
             textViewTimestamp.text =  SimpleDateFormat("dd/MM/yy hh:mm", Locale.ENGLISH).format(Date(transaction.timestamp))
 
             if (transaction.isExpense) {
-                root.setCardBackgroundColor(Color.parseColor("#A30000"))
+                root.setCardBackgroundColor(ContextCompat.getColor(context, R.color.expense_red))
             } else {
-                root.setCardBackgroundColor(Color.parseColor("#138808"))
+                root.setCardBackgroundColor(ContextCompat.getColor(context, R.color.income_green))
             }
 
             textViewSource.text = if (transaction.isDigital) "Digital" else "Cash"
+
+            root.setOnClickListener {
+                root.findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToAddTransactionFragment(position))
+            }
         }
     }
 }
