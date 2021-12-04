@@ -35,7 +35,27 @@ class HomeFragment : Fragment() {
         }
 
         model.transactions.observe(viewLifecycleOwner) {
+            var cashBalance = 0
+            var digitalBalance = 0
+            it.forEach { transaction ->
+                if (transaction.isDigital) {
+                    if (transaction.isExpense) {
+                        digitalBalance -= transaction.amount
+                    } else {
+                        digitalBalance += transaction.amount
+                    }
+                } else {
+                    if (transaction.isExpense) {
+                        cashBalance -= transaction.amount
+                    } else {
+                        cashBalance += transaction.amount
+                    }
+                }
+            }
+
             adapter.submitList(it)
+            binding.textViewCashBalance.text = "₹$cashBalance"
+            binding.textViewDigitalBalance.text = "₹$digitalBalance"
         }
     }
 }
