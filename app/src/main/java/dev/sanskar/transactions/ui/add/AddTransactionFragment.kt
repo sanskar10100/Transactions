@@ -107,11 +107,11 @@ class AddTransactionFragment : Fragment() {
                         description,
                         isDigital,
                         isExpense,
-                        transaction.timestamp
+                        localModel.timestamp
                     )
                 }
             } else {
-                model.addTransaction(amount, description, isDigital, isExpense)
+                model.addTransaction(amount, description, localModel.timestamp, isDigital, isExpense)
             }
             findNavController().popBackStack()
         }

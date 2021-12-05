@@ -26,9 +26,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun addTransaction(
         amount: Int,
         description: String,
+        timestamp: Long,
         isDigital: Boolean = true,
         isExpense: Boolean = true,
-        timestamp: Long = System.currentTimeMillis()
     ) {
         val transaction = Transaction(
             0,
