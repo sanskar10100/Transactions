@@ -13,10 +13,10 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
+        android:contentDescription="FAB to add a transaction"
         android:src="@drawable/ic_baseline_add_circle_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="FAB to add a transaction" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/textView_cash_balance"
@@ -29,9 +29,9 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:drawableStartCompat="@drawable/ic_baseline_cash_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:drawableStartCompat="@drawable/ic_baseline_cash_24" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView_digital_balance"
@@ -43,9 +43,9 @@
         android:text="Digital Balance"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:drawableEndCompat="@drawable/ic_baseline_digital_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:drawableEndCompat="@drawable/ic_baseline_digital_24" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_transactions"
@@ -53,15 +53,15 @@
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:clipToPadding="false"
+        android:paddingBottom="64dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView_cash_balance"
-        android:clipToPadding="false"
-        android:paddingBottom="64dp"/>
+        app:layout_constraintTop_toBottomOf="@id/textView_cash_balance" />
 
     <View
         android:id="@+id/divider"

@@ -51,7 +51,7 @@ class AddTransactionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (editMode) {
-            // Set recieved values in case of edit mode
+            // Set received values in case of edit mode
             val transaction = model.transactions.value?.get(args.transactionIndex)
             if (transaction != null) {
                 binding.textFieldAmount.editText?.setText(transaction.amount.toString())
@@ -77,7 +77,11 @@ class AddTransactionFragment : Fragment() {
             var description = ""
             binding.textFieldAmount.editText?.text.toString().run {
                 if (this.isEmpty()) {
-                    Snackbar.make(binding.root, "Looks like you forgot to input amount!", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        binding.root,
+                        "Looks like you forgot to input amount!",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                     return@setOnClickListener
                 } else {
                     amount = this.toInt()
@@ -85,7 +89,11 @@ class AddTransactionFragment : Fragment() {
             }
             binding.textFieldDescription.editText?.text.toString().run {
                 if (this.isEmpty()) {
-                    Snackbar.make(binding.root, "Are you sure you want to add an empty description?", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(
+                        binding.root,
+                        "Are you sure you want to add an empty description?",
+                        Snackbar.LENGTH_SHORT
+                    )
                         .setAction("Yes") {
                             description = ""
                         }
@@ -98,7 +106,14 @@ class AddTransactionFragment : Fragment() {
             if (editMode) {
                 val transaction = model.transactions.value?.get(args.transactionIndex)
                 if (transaction != null) {
-                    model.updateTransaction(transaction.id, amount, description, isDigital, isExpense, transaction.timestamp)
+                    model.updateTransaction(
+                        transaction.id,
+                        amount,
+                        description,
+                        isDigital,
+                        isExpense,
+                        transaction.timestamp
+                    )
                 }
             } else {
                 model.addTransaction(amount, description, isDigital, isExpense)
