@@ -9,7 +9,7 @@ interface TransactionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transactions: Transaction)
 
-    @Query("SELECT * FROM `transaction`")
+    @Query("SELECT * FROM `transaction` ORDER BY timestamp")
     fun getAllTransactions(): LiveData<List<Transaction>>
 
     @Update

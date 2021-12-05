@@ -10,6 +10,7 @@ class AddTransactionFragmentModel : ViewModel() {
     var timestamp: Long
     set(value) {
         // Called every time timestamp is set after the initialization
+        // I'm not sure why this exists, but at this point I'm too afraid to ask
         updateComponents(value)
     }
     get() {
