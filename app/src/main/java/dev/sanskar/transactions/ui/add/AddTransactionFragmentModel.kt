@@ -7,23 +7,31 @@ import java.util.*
 private const val TAG = "AddTransactionFragmentM"
 
 class AddTransactionFragmentModel : ViewModel() {
-    var timestamp = System.currentTimeMillis()
+    var timestamp: Long
     set(value) {
         // Called every time timestamp is set after the initialization
         updateComponents(value)
     }
+    get() {
+        Calendar.getInstance().apply {
+            set(year, month, day, hour, minute)
+            return this.timeInMillis
+        }
+    }
 
     init {
         // For initialization
+        timestamp = System.currentTimeMillis()
         updateComponents(timestamp)
     }
 
 
-    private var year = 0
-    private var month = 0
-    private var day = 0
-    private var hour = 0
-    private var minute = 0
+    var year = 0
+    var month = 0
+    var day = 0
+    var hour = 0
+    var minute = 0
+
     private fun updateComponents(timestamp: Long) {
         val cal = Calendar.getInstance()
         cal.timeInMillis = timestamp
