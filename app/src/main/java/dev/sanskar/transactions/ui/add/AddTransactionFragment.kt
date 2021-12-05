@@ -68,6 +68,8 @@ class AddTransactionFragment : Fragment() {
         // Sets timestamp in human readable format
         binding.textViewTime.text = localModel.timestamp.asFormattedDateTime()
 
+        setupTimePicker()
+
         binding.buttonAdd.setOnClickListener {
             val isDigital = !binding.chipCash.isChecked
             val isExpense = !binding.chipIncome.isChecked
@@ -114,6 +116,18 @@ class AddTransactionFragment : Fragment() {
                 model.addTransaction(amount, description, localModel.timestamp, isDigital, isExpense)
             }
             findNavController().popBackStack()
+        }
+    }
+
+    private fun setupTimePicker() {
+        binding.buttonSetTime.setOnClickListener {
+            findNavController().navigate(AddTransactionFragmentDirections.actionAddTransactionFragmentToTimePickerFragment(localModel.hour, localModel.minute))
+        }
+
+        parentFragmentManager.setFragmentResultListener("timePicker", viewLifecycleOwner) { _, bundle ->
+            localModel.hour = bundle.getInt("hour")
+            localModel.minute = bundle.getInt("minute")
+            binding.textViewTime.text = localModel.timestamp.asFormattedDateTime()
         }
     }
 

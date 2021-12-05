@@ -27,5 +27,18 @@
             android:name="transaction_index"
             app:argType="integer"
             android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_addTransactionFragment_to_timePickerFragment"
+            app:destination="@id/timePickerFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/timePickerFragment"
+        android:name="dev.sanskar.transactions.ui.add.TimePickerFragment"
+        android:label="TimePickerFragment" >
+        <argument android:name="hour"
+            app:argType="integer" />
+        <argument
+            android:name="minute"
+            app:argType="integer" />
+    </dialog>
 </navigation>
