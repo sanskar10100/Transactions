@@ -4,15 +4,18 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import dev.sanskar.transactions.R
+import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.FragmentAddTransactionBinding
 import dev.sanskar.transactions.ui.model.MainViewModel
 
 class AddTransactionFragment : Fragment() {
     private val model by activityViewModels<MainViewModel>()
+    private val localModel by viewModels<AddTransactionFragmentModel>()
     private lateinit var binding: FragmentAddTransactionBinding
     private val args: AddTransactionFragmentArgs by navArgs()
     private var editMode = false
@@ -54,17 +57,8 @@ class AddTransactionFragment : Fragment() {
             // Set received values in case of edit mode
             val transaction = model.transactions.value?.get(args.transactionIndex)
             if (transaction != null) {
-                binding.textFieldAmount.editText?.setText(transaction.amount.toString())
-                binding.textFieldDescription.editText?.setText(transaction.description)
-
-                binding.chipExpense.isChecked = transaction.isExpense
-                binding.chipIncome.isChecked = !transaction.isExpense
-
-                binding.chipDigital.isChecked = transaction.isDigital
-                binding.chipCash.isChecked = !transaction.isDigital
+                fillEditData(transaction)
             }
-
-            binding.buttonAdd.text = "Update"
         } else {
             binding.chipExpense.isChecked = true
             binding.chipDigital.isChecked = true
@@ -91,12 +85,9 @@ class AddTransactionFragment : Fragment() {
                 if (this.isEmpty()) {
                     Snackbar.make(
                         binding.root,
-                        "Are you sure you want to add an empty description?",
+                        "Anonymous transaction added!",
                         Snackbar.LENGTH_SHORT
                     )
-                        .setAction("Yes") {
-                            description = ""
-                        }
                         .show()
                 } else {
                     description = this
@@ -120,5 +111,17 @@ class AddTransactionFragment : Fragment() {
             }
             findNavController().popBackStack()
         }
+    }
+
+    private fun fillEditData(transaction: Transaction) {
+        binding.textFieldAmount.editText?.setText(transaction.amount.toString())
+        binding.textFieldDescription.editText?.setText(transaction.description)
+
+        binding.chipExpense.isChecked = transaction.isExpense
+        binding.chipIncome.isChecked = !transaction.isExpense
+
+        binding.chipDigital.isChecked = transaction.isDigital
+        binding.chipCash.isChecked = !transaction.isDigital
+        binding.buttonAdd.text = "Update"
     }
 }
