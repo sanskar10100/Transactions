@@ -24,11 +24,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val transactions = db.transactionDao().getAllTransactions()
 
-    fun addTransaction(amount: Int, description: String, isDigital: Boolean = true, isExpense: Boolean = true) {
+    fun addTransaction(amount: Int, description: String, isDigital: Boolean = true, isExpense: Boolean = true, timestamp: Long = System.currentTimeMillis()) {
         val transaction = Transaction(
             0,
             amount,
-            System.currentTimeMillis(),
+            timestamp,
             isExpense,
             description,
             isDigital
