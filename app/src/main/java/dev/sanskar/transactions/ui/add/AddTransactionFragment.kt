@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import dev.sanskar.transactions.R
+import dev.sanskar.transactions.asFormattedDateTime
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.FragmentAddTransactionBinding
 import dev.sanskar.transactions.ui.model.MainViewModel
@@ -64,10 +65,13 @@ class AddTransactionFragment : Fragment() {
             binding.chipDigital.isChecked = true
         }
 
+        // Sets timestamp in human readable format
+        binding.textViewTime.text = localModel.timestamp.asFormattedDateTime()
+
         binding.buttonAdd.setOnClickListener {
             val isDigital = !binding.chipCash.isChecked
             val isExpense = !binding.chipIncome.isChecked
-            var amount = -1
+            var amount: Int
             var description = ""
             binding.textFieldAmount.editText?.text.toString().run {
                 if (this.isEmpty()) {
@@ -123,5 +127,7 @@ class AddTransactionFragment : Fragment() {
         binding.chipDigital.isChecked = transaction.isDigital
         binding.chipCash.isChecked = !transaction.isDigital
         binding.buttonAdd.text = "Update"
+
+        localModel.timestamp = transaction.timestamp
     }
 }

@@ -106,10 +106,49 @@
         android:id="@+id/button_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="Add"
         app:icon="@drawable/ic_baseline_done_all_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_set_time" />
+
+    <TextView
+        android:id="@+id/textView_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textField_description" />
+
+    <Button
+        android:id="@+id/button_set_time"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Time"
+        app:icon="@drawable/ic_baseline_access_time_filled_24"
+        app:layout_constraintEnd_toStartOf="@+id/button_set_date"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_time" />
+
+    <Button
+        android:id="@+id/button_set_date"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Date"
+        app:icon="@drawable/ic_baseline_calendar_month_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button_set_time"
+        app:layout_constraintTop_toBottomOf="@+id/textView_time" />
 </androidx.constraintlayout.widget.ConstraintLayout>

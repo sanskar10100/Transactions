@@ -9,10 +9,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.sanskar.transactions.R
+import dev.sanskar.transactions.asFormattedDateTime
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.LayoutTransactionBinding
-import java.text.SimpleDateFormat
-import java.util.*
 
 class TransactionsListAdapter(private val context: Context) :
     ListAdapter<Transaction, TransactionsListAdapter.ViewHolder>(TransactionDiffCallback()) {
@@ -34,10 +33,7 @@ class TransactionsListAdapter(private val context: Context) :
         with(holder.binding) {
             textViewAmount.text = "₹${transaction.amount}"
             textViewDescription.text = transaction.description
-            textViewTimestamp.text = SimpleDateFormat(
-                "dd/MM/yy hh:mm",
-                Locale.ENGLISH
-            ).format(Date(transaction.timestamp))
+            textViewTimestamp.text = transaction.timestamp.asFormattedDateTime()
 
             if (transaction.isExpense) {
                 root.setCardBackgroundColor(ContextCompat.getColor(context, R.color.expense_red))
