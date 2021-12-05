@@ -69,6 +69,7 @@ class AddTransactionFragment : Fragment() {
         binding.textViewTime.text = localModel.timestamp.asFormattedDateTime()
 
         setupTimePicker()
+        setupDatePicker()
 
         binding.buttonAdd.setOnClickListener {
             val isDigital = !binding.chipCash.isChecked
@@ -127,6 +128,19 @@ class AddTransactionFragment : Fragment() {
         parentFragmentManager.setFragmentResultListener("timePicker", viewLifecycleOwner) { _, bundle ->
             localModel.hour = bundle.getInt("hour")
             localModel.minute = bundle.getInt("minute")
+            binding.textViewTime.text = localModel.timestamp.asFormattedDateTime()
+        }
+    }
+
+    private fun setupDatePicker() {
+        binding.buttonSetDate.setOnClickListener {
+            findNavController().navigate(AddTransactionFragmentDirections.actionAddTransactionFragmentToDatePickerFragment(localModel.year, localModel.month, localModel.day))
+        }
+
+        parentFragmentManager.setFragmentResultListener("datePicker", viewLifecycleOwner) { _, bundle ->
+            localModel.year = bundle.getInt("year")
+            localModel.month = bundle.getInt("month")
+            localModel.day = bundle.getInt("day")
             binding.textViewTime.text = localModel.timestamp.asFormattedDateTime()
         }
     }

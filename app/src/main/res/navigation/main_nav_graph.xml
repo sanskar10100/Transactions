@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_addTransactionFragment_to_timePickerFragment"
             app:destination="@id/timePickerFragment" />
+        <action
+            android:id="@+id/action_addTransactionFragment_to_datePickerFragment"
+            app:destination="@id/datePickerFragment" />
     </fragment>
     <dialog
         android:id="@+id/timePickerFragment"
@@ -39,6 +42,20 @@
             app:argType="integer" />
         <argument
             android:name="minute"
+            app:argType="integer" />
+    </dialog>
+    <dialog
+        android:id="@+id/datePickerFragment"
+        android:name="dev.sanskar.transactions.ui.add.DatePickerFragment"
+        android:label="DatePickerFragment" >
+        <argument
+            android:name="year"
+            app:argType="integer" />
+        <argument
+            android:name="month"
+            app:argType="integer" />
+        <argument
+            android:name="day"
             app:argType="integer" />
     </dialog>
 </navigation>
