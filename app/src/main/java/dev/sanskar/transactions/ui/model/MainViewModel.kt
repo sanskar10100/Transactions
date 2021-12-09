@@ -87,10 +87,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         var digitalBalance = 0
 
         transactions.value?.forEach { transaction ->
-            if (transaction.isExpense) {
-                digitalBalance -= transaction.amount
-            } else {
-                digitalBalance += transaction.amount
+            if (transaction.isDigital) {
+                if (transaction.isExpense) {
+                    digitalBalance -= transaction.amount
+                } else {
+                    digitalBalance += transaction.amount
+                }
             }
         }
 
@@ -101,13 +103,51 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         var cashBalance = 0
 
         transactions.value?.forEach { transaction ->
-            if (transaction.isExpense) {
-                cashBalance -= transaction.amount
-            } else {
-                cashBalance += transaction.amount
+            if (!transaction.isDigital) {
+                if (transaction.isExpense) {
+                    cashBalance -= transaction.amount
+                } else {
+                    cashBalance += transaction.amount
+                }
             }
         }
 
         return cashBalance
+    }
+
+    fun getTotalExpenses(): Int {
+        var totalExpense = 0
+
+        transactions.value?.forEach {
+            if (it.isExpense) {
+                totalExpense += it.amount
+            }
+        }
+
+        return totalExpense
+    }
+
+    fun getCashExpense(): Int {
+        var totalCashExpense = 0
+
+        transactions.value?.forEach {
+            if (it.isExpense and !it.isDigital) {
+                totalCashExpense += it.amount
+            }
+        }
+
+        return totalCashExpense
+    }
+
+    fun getTotalDigitalExpense(): Int {
+        var totalDigitalExpense = 0
+
+        transactions.value?.forEach {
+            if (it.isExpense and it.isDigital) {
+                totalDigitalExpense += it.amount
+            }
+        }
+
+        return totalDigitalExpense
     }
 }
