@@ -82,4 +82,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         Log.d(TAG, "clearTransactions: all transactions cleared!")
     }
+
+    fun getDigitalExpense(): Int {
+        var digitalBalance = 0
+
+        transactions.value?.forEach { transaction ->
+            if (transaction.isExpense) {
+                digitalBalance -= transaction.amount
+            } else {
+                digitalBalance += transaction.amount
+            }
+        }
+
+        return digitalBalance
+    }
+
+    fun getCashBalance(): Int {
+        var cashBalance = 0
+
+        transactions.value?.forEach { transaction ->
+            if (transaction.isExpense) {
+                cashBalance -= transaction.amount
+            } else {
+                cashBalance += transaction.amount
+            }
+        }
+
+        return cashBalance
+    }
 }
