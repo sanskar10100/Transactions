@@ -3,6 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/action_dashboard"
+        android:icon="@drawable/ic_baseline_dashboard_24"
+        android:title="Dashboard"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_clear_transactions"
         android:icon="@drawable/ic_baseline_delete_sweep_24"
         android:title="Clear Transactions"

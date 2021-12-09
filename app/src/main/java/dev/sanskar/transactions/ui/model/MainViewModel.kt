@@ -83,7 +83,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         Log.d(TAG, "clearTransactions: all transactions cleared!")
     }
 
-    fun getDigitalExpense(): Int {
+    fun getDigitalBalance(): Int {
         var digitalBalance = 0
 
         transactions.value?.forEach { transaction ->
@@ -115,7 +115,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return cashBalance
     }
 
-    fun getTotalExpenses(): Int {
+    fun getTotalExpenses(): Float {
         var totalExpense = 0
 
         transactions.value?.forEach {
@@ -124,10 +124,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
 
-        return totalExpense
+        return totalExpense.toFloat()
     }
 
-    fun getCashExpense(): Int {
+    fun getCashExpense(): Float {
         var totalCashExpense = 0
 
         transactions.value?.forEach {
@@ -136,10 +136,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
 
-        return totalCashExpense
+        return totalCashExpense.toFloat()
     }
 
-    fun getTotalDigitalExpense(): Int {
+    fun getDigitalExpense(): Float {
         var totalDigitalExpense = 0
 
         transactions.value?.forEach {
@@ -148,6 +148,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
 
-        return totalDigitalExpense
+        return totalDigitalExpense.toFloat()
     }
 }

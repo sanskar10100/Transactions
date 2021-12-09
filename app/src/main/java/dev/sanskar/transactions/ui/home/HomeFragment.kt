@@ -36,8 +36,13 @@ class HomeFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_clear_transactions) {
-            model.clearTransactions()
+        when (item.itemId) {
+            R.id.action_clear_transactions -> {
+                model.clearTransactions()
+            }
+            R.id.action_dashboard -> {
+                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDashboardFragment())
+            }
         }
 
         return true
@@ -55,7 +60,7 @@ class HomeFragment : Fragment() {
         model.transactions.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             binding.textViewCashBalance.text = "₹${model.getCashBalance()}"
-            binding.textViewDigitalBalance.text = "₹${model.getDigitalExpense()}"
+            binding.textViewDigitalBalance.text = "₹${model.getDigitalBalance()}"
         }
     }
 }

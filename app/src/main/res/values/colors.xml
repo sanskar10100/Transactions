@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="expense_red">#A30000</color>
     <color name="income_green">#138808</color>
+    <color name="digital_blue">#3F51B5</color>
+    <color name="cash_orange">#F57F17</color>
 </resources>

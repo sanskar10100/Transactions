@@ -17,6 +17,9 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_homeFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
     </fragment>
     <fragment
         android:id="@+id/addTransactionFragment"
@@ -58,4 +61,9 @@
             android:name="day"
             app:argType="integer" />
     </dialog>
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="dev.sanskar.transactions.ui.dashboard.DashboardFragment"
+        android:label="Dashboard"
+        tools:layout="@layout/fragment_dashboard" />
 </navigation>
