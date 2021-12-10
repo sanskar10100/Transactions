@@ -18,7 +18,7 @@ A small transaction (income/expense) manager that I'm building for myself that c
 - Material Design 3
 - Clean MVVM Architecture
 - Room ORM (Version 2.4)
-- - MPAndroidChart
+- MPAndroidChart
 - Kotlin Coroutines
 - LiveData
 - Single Activity Architecture
