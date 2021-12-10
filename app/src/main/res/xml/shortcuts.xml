@@ -1,0 +1,26 @@
+<shortcuts xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="add"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_add_circle_24"
+        android:shortcutShortLabel="@string/Add"
+        tools:targetApi="n_mr1">
+        <intent
+            android:action="shortcut_add_transaction"
+            android:targetPackage="dev.sanskar.transactions"
+            android:targetClass="dev.sanskar.transactions.ui.MainActivity" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="dashboard"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_dashboard_24"
+        android:shortcutShortLabel="@string/dashboard"
+        tools:targetApi="n_mr1">
+        <intent
+            android:action="shortcut_dashboard"
+            android:targetPackage="dev.sanskar.transactions"
+            android:targetClass="dev.sanskar.transactions.ui.MainActivity" />
+    </shortcut>
+</shortcuts>

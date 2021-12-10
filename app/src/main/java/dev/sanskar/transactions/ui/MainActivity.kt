@@ -8,6 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import dev.sanskar.transactions.R
+import dev.sanskar.transactions.ui.home.HomeFragmentDirections
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -21,6 +22,12 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        // If app launched through action (Android 7+)
+        when (intent.action) {
+            "shortcut_add_transaction" -> navController.navigate(HomeFragmentDirections.actionHomeFragmentToAddTransactionFragment())
+            "shortcut_dashboard" -> navController.navigate(HomeFragmentDirections.actionHomeFragmentToDashboardFragment())
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
