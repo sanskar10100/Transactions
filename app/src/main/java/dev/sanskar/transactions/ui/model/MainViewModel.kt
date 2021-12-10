@@ -8,6 +8,7 @@ import androidx.room.Room
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.data.TransactionDatabase
 import kotlinx.coroutines.launch
+import java.util.*
 
 private const val TAG = "MainViewModel"
 
@@ -92,4 +93,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun getCashExpense() = db.transactionDao().getTotalCashExpenses().toFloat()
 
     fun getDigitalExpense() = db.transactionDao().getTotalDigitalExpenses()
+
+    fun getThisWeekExpense(): Int {
+        Calendar.getInstance().apply {
+            this.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+            return db.transactionDao().getThisWeekExpense(this.timeInMillis)
+        }
+    }
 }

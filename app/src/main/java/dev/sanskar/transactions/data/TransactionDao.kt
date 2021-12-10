@@ -39,4 +39,7 @@ interface TransactionDao {
     @Query("DELETE FROM `transaction`")
     suspend fun clearTransactions()
 
+    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND timestamp >= :timestamp")
+    fun getThisWeekExpense(timestamp: Long): Int
+
 }

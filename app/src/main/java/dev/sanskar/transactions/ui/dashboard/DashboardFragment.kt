@@ -37,7 +37,15 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        with(binding.chartPieChart) {
+        setupSourcePieChart()
+
+        with (binding) {
+            textViewWeekExpense.text = "This week's expense: ₹${model.getThisWeekExpense().toString()}"
+        }
+    }
+
+    private fun setupSourcePieChart() {
+        with (binding.chartPieChart) {
             val expense: MutableList<PieEntry> = mutableListOf(
                 PieEntry((model.getDigitalExpense() / model.getTotalExpenses()) * 10, "Digital"),
                 PieEntry((model.getCashExpense() / model.getTotalExpenses())  * 10, "Cash"),
