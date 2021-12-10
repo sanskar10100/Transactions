@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:checkable="true"
             android:text="Income"
-            app:chipIcon="@drawable/ic_baseline_cash_24" />
+            app:chipIcon="@drawable/ic_baseline_income_24" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_expense"
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:checkable="true"
             android:text="Expense"
-            app:chipIcon="@drawable/ic_baseline_digital_24" />
+            app:chipIcon="@drawable/ic_baseline_expense_24" />
     </com.google.android.material.chip.ChipGroup>
 
     <com.google.android.material.textfield.TextInputLayout
