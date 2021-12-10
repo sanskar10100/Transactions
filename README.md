@@ -22,6 +22,10 @@ A small transaction (income/expense) manager that I'm building for myself that c
 - Navigation Component with SafeArgs plugin
 - FragmentResults API
 
+### WIP: Dashboard
+![Dashboard](https://user-images.githubusercontent.com/22092047/145647581-1dfcc73f-ef68-406d-9a89-2f5a7e057c2a.jpg)
+
+
 ### Light Mode
 ![Transactions-Light](https://user-images.githubusercontent.com/22092047/144749789-6dccd19e-b077-4970-8694-a2636fae68ee.png)
 
