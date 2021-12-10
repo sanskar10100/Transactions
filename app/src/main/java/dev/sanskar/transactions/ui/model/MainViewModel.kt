@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
+import dev.sanskar.transactions.asFormattedDateTime
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.data.TransactionDatabase
 import kotlinx.coroutines.launch
@@ -97,6 +98,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun getThisWeekExpense(): Int {
         Calendar.getInstance().apply {
             this.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+            this.set(Calendar.HOUR_OF_DAY, 0)
+            this.set(Calendar.MINUTE, 0)
+            Log.d(TAG, "getThisWeekExpense: ${this.timeInMillis.asFormattedDateTime()}")
             return db.transactionDao().getThisWeekExpense(this.timeInMillis)
         }
     }
