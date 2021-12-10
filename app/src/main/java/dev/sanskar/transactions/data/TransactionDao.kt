@@ -13,22 +13,22 @@ interface TransactionDao {
     fun getAllTransactions(): LiveData<List<Transaction>>
 
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND isDigital = 0")
-    suspend fun getTotalCashExpenses(): Int
+    fun getTotalCashExpenses(): Int
 
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND isDigital = 1")
-    suspend fun getTotalDigitalExpenses(): Int
+    fun getTotalDigitalExpenses(): Int
 
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 0 AND isDigital = 0")
-    suspend fun getTotalCashIncome(): Int
+    fun getTotalCashIncome(): Int
 
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 0 and isDigital = 1")
-    suspend fun getTotalDigitalIncome(): Int
+    fun getTotalDigitalIncome(): Int
 
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 0")
-    suspend fun getTotalIncome(): Int
+    fun getTotalIncome(): Int
 
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1")
-    suspend fun getTotalExpenses(): Int
+    fun getTotalExpenses(): Int
 
     @Update
     suspend fun updateTransaction(transactions: Transaction)

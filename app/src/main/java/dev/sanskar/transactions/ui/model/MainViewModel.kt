@@ -83,71 +83,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         Log.d(TAG, "clearTransactions: all transactions cleared!")
     }
 
-    fun getDigitalBalance(): Int {
-        var digitalBalance = 0
+    fun getDigitalBalance() = db.transactionDao().getTotalDigitalIncome() - db.transactionDao().getTotalDigitalExpenses()
 
-        transactions.value?.forEach { transaction ->
-            if (transaction.isDigital) {
-                if (transaction.isExpense) {
-                    digitalBalance -= transaction.amount
-                } else {
-                    digitalBalance += transaction.amount
-                }
-            }
-        }
+    fun getCashBalance() = db.transactionDao().getTotalCashIncome() - db.transactionDao().getTotalCashExpenses()
 
-        return digitalBalance
-    }
+    fun getTotalExpenses() = db.transactionDao().getTotalExpenses().toFloat()
 
-    fun getCashBalance(): Int {
-        var cashBalance = 0
+    fun getCashExpense() = db.transactionDao().getTotalCashExpenses().toFloat()
 
-        transactions.value?.forEach { transaction ->
-            if (!transaction.isDigital) {
-                if (transaction.isExpense) {
-                    cashBalance -= transaction.amount
-                } else {
-                    cashBalance += transaction.amount
-                }
-            }
-        }
-
-        return cashBalance
-    }
-
-    fun getTotalExpenses(): Float {
-        var totalExpense = 0
-
-        transactions.value?.forEach {
-            if (it.isExpense) {
-                totalExpense += it.amount
-            }
-        }
-
-        return totalExpense.toFloat()
-    }
-
-    fun getCashExpense(): Float {
-        var totalCashExpense = 0
-
-        transactions.value?.forEach {
-            if (it.isExpense and !it.isDigital) {
-                totalCashExpense += it.amount
-            }
-        }
-
-        return totalCashExpense.toFloat()
-    }
-
-    fun getDigitalExpense(): Float {
-        var totalDigitalExpense = 0
-
-        transactions.value?.forEach {
-            if (it.isExpense and it.isDigital) {
-                totalDigitalExpense += it.amount
-            }
-        }
-
-        return totalDigitalExpense.toFloat()
-    }
+    fun getDigitalExpense() = db.transactionDao().getTotalDigitalExpenses()
 }
