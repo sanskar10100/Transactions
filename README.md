@@ -6,9 +6,11 @@ A small transaction (income/expense) manager that I'm building for myself that c
 - Fields for amount, description
 - Chips for selecting digital/cash income/expense
 - Time and Date Picker along with default values
+- Dashboard containing charts and various stats
 - Color coded expense/income tracking
 - Simple Material3 UI
 - Add/Edit/Delete/Clear Transactions
+- App Shortcuts for directly opening Transaction Add Screen or Dashboard
 
 ### What is being used in building this app
 - Kotlin
@@ -16,6 +18,7 @@ A small transaction (income/expense) manager that I'm building for myself that c
 - Material Design 3
 - Clean MVVM Architecture
 - Room ORM (Version 2.4)
+- - MPAndroidChart
 - Kotlin Coroutines
 - LiveData
 - Single Activity Architecture
