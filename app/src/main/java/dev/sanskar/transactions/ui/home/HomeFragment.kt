@@ -5,6 +5,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.sanskar.transactions.R
 import dev.sanskar.transactions.databinding.FragmentHomeBinding
 import dev.sanskar.transactions.ui.model.MainViewModel
@@ -38,7 +39,17 @@ class HomeFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_clear_transactions -> {
-                model.clearTransactions()
+                // Clear transactions on dialog confirmation
+                MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Are you sure?")
+                        .setMessage("Are you sure you want to delete all transactions to date?")
+                        .setPositiveButton("Yes") { _, _ ->
+                            model.clearTransactions()
+                        }
+                        .setNegativeButton("No") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .show()
             }
             R.id.action_dashboard -> {
                 findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDashboardFragment())
