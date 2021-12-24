@@ -40,7 +40,8 @@ class DashboardFragment : Fragment() {
         setupSourcePieChart()
 
         with (binding) {
-            textViewWeekExpense.text = "This week's expense: ₹${model.getThisWeekExpense().toString()}"
+            // TODO review and fix
+//            textViewWeekExpense.text = "This week's expense: ₹${model.getThisWeekExpense().toString()}"
         }
     }
 
