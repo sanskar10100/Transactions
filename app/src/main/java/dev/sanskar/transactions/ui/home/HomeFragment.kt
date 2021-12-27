@@ -1,10 +1,14 @@
 package dev.sanskar.transactions.ui.home
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.github.javiersantos.appupdater.AppUpdater
+import com.github.javiersantos.appupdater.enums.Display
+import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.sanskar.transactions.R
 import dev.sanskar.transactions.databinding.FragmentHomeBinding
@@ -64,7 +68,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        checkAppUpdate()
         binding.listTransactions.adapter = adapter
 
         binding.fabAddTransaction.setOnClickListener {
@@ -76,5 +80,13 @@ class HomeFragment : Fragment() {
             binding.textViewCashBalance.text = "₹${model.getCashBalance()}"
             binding.textViewDigitalBalance.text = "₹${model.getDigitalBalance()}"
         }
+    }
+
+    private fun checkAppUpdate() {
+        AppUpdater(context)
+            .setUpdateFrom(UpdateFrom.GITHUB)
+            .setGitHubUserAndRepo("sanskar10100", "Transactions")
+            .setDisplay(Display.DIALOG)
+            .start()
     }
 }
