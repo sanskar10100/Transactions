@@ -54,6 +54,9 @@ class HomeFragment : Fragment() {
             R.id.action_dashboard -> {
                 findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDashboardFragment())
             }
+            R.id.action_exchange_medium -> {
+                findNavController().navigate(R.id.action_homeFragment_to_mediumExchangeFragment)
+            }
         }
 
         return true

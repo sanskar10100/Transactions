@@ -10,6 +10,7 @@ A small transaction (income/expense) manager that I'm building for myself that c
 - Color coded expense/income tracking
 - Simple Material3 UI
 - Add/Edit/Delete/Clear Transactions
+- Exchange amount between cash and digital mediums
 - App Shortcuts for directly opening Transaction Add Screen or Dashboard
 
 ### What is being used in building this app

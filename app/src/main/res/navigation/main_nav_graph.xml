@@ -24,6 +24,9 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_homeFragment_to_mediumExchangeFragment"
+            app:destination="@id/mediumExchangeFragment" />
     </fragment>
     <fragment
         android:id="@+id/addTransactionFragment"
@@ -70,4 +73,9 @@
         android:name="dev.sanskar.transactions.ui.dashboard.DashboardFragment"
         android:label="Dashboard"
         tools:layout="@layout/fragment_dashboard" />
+    <dialog
+        android:id="@+id/mediumExchangeFragment"
+        android:name="dev.sanskar.transactions.ui.exchange.MediumExchangeFragment"
+        android:label="fragment_medium_exchange"
+        tools:layout="@layout/fragment_medium_exchange" />
 </navigation>
