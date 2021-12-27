@@ -13,4 +13,10 @@
         android:icon="@drawable/ic_baseline_delete_sweep_24"
         android:title="Clear Transactions"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_exchange_medium"
+        android:icon="@drawable/ic_baseline_currency_exchange_24"
+        android:title="Exchange Medium"
+        app:showAsAction="ifRoom" />
 </menu>
