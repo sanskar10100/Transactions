@@ -12,6 +12,7 @@ A small transaction (income/expense) manager that I'm building for myself that c
 - Add/Edit/Delete/Clear Transactions
 - Exchange amount between cash and digital mediums
 - App Shortcuts for directly opening Transaction Add Screen or Dashboard
+- Automatic Update checks on GitHub Releases
 
 ### What is being used in building this app
 - Kotlin
