@@ -39,4 +39,4 @@ A transaction manager for Android which helps you track your income and expenses
 
 ---
 
-Please open an [issue](https://github.com/sanskar10100/Transactions/issues/new) any feedback! Thanks
+Please open an [issue](https://github.com/sanskar10100/Transactions/issues/new) for any feedback! Thanks
