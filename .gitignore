@@ -14,3 +14,4 @@
 .cxx
 local.properties
 /app/release/output-metadata.json
+credentials.json
