@@ -1,6 +1,6 @@
 # Transactions
 
-A small transaction (income/expense) manager that I'm building for myself that caters to my specific needs.
+A transaction manager for Android which helps you track your income and expenses. Specifically designed to cater to the needs of the **hostelers and students** with features like an intuitive, color coded UI, app shortcuts, medium exchange, filtering (coming soon) and linked income(coming soon)
 
 ### Features:
 - Fields for amount, description
@@ -20,16 +20,16 @@ A small transaction (income/expense) manager that I'm building for myself that c
 - Material Design 3
 - Clean MVVM Architecture
 - Room ORM (Version 2.4)
-- MPAndroidChart
 - Kotlin Coroutines
 - LiveData
 - Single Activity Architecture
 - Navigation Component with SafeArgs plugin
 - FragmentResults API
+- [AppUpdater](https://github.com/javiersantos/AppUpdater)
+- [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
 
 ### WIP: Dashboard
 ![Dashboard](https://user-images.githubusercontent.com/22092047/145647581-1dfcc73f-ef68-406d-9a89-2f5a7e057c2a.jpg)
-
 
 ### Light Mode
 ![Transactions-Light](https://user-images.githubusercontent.com/22092047/144749789-6dccd19e-b077-4970-8694-a2636fae68ee.png)
@@ -37,5 +37,6 @@ A small transaction (income/expense) manager that I'm building for myself that c
 ### Dark Mode
 ![Transactions-Dark](https://user-images.githubusercontent.com/22092047/144749800-7b469a75-f55b-462e-a520-b1b66d64e6ff.png)
 
-### What's next?
-Probably a search feature.
+---
+
+Please open an [issue](https://github.com/sanskar10100/Transactions/issues/new) for any feedback! Thanks
