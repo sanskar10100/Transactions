@@ -1,6 +1,6 @@
 # Transactions
 
-A transaction manager for Android which helps you track your income and expenses. Specifically designed to cater to the needs of the **newer Indian generation** with features like an intuitive, color coded UI, app shortcuts, medium exchange, filtering (coming soon) and linked income(coming soon)
+A transaction manager for Android which helps you track your income and expenses. Specifically designed to cater to the needs of the **hostelers and students** with features like an intuitive, color coded UI, app shortcuts, medium exchange, filtering (coming soon) and linked income(coming soon)
 
 ### Features:
 - Fields for amount, description
