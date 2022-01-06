@@ -1,12 +1,13 @@
 package dev.sanskar.transactions.ui.filter
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dev.sanskar.transactions.R
 import dev.sanskar.transactions.databinding.FragmentFilterParameterBottomDialogBinding
 import dev.sanskar.transactions.getText
 
@@ -20,7 +21,7 @@ class FilterParameterBottomDialog : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentFilterParameterBottomDialogBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -34,11 +35,8 @@ class FilterParameterBottomDialog : BottomSheetDialogFragment() {
             } else {
                 val amount = binding.textFieldFilterAmount.getText().toInt()
                 model.filterOnAmount(amount)
+                findNavController().navigate(R.id.action_filterParameterBottomDialog_to_filterResultFragment)
             }
-        }
-
-        model.filteredTransactions.observe(viewLifecycleOwner) {
-            Log.d(TAG, "onViewCreated: ${model.filteredTransactions.value}")
         }
     }
 }

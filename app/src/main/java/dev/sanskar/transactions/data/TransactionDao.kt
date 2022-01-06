@@ -12,7 +12,7 @@ interface TransactionDao {
     @Query("SELECT * FROM `transaction` ORDER BY timestamp")
     fun getAllTransactions(): LiveData<List<Transaction>>
 
-    @Query("SELECT * FROM `transaction` WHERE amount >= :amount",)
+    @Query("SELECT * FROM `transaction` WHERE amount >= :amount ORDER BY amount DESC",)
     suspend fun filterOnAmountGreater(amount: Int): List<Transaction>
 
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND isDigital = 0")
