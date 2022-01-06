@@ -1,14 +1,13 @@
 package dev.sanskar.transactions.ui.filter
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.sanskar.transactions.data.DBInstanceHolder
 import dev.sanskar.transactions.data.Transaction
 import kotlinx.coroutines.launch
 
-class FilterViewModel(application: Application) : AndroidViewModel(application) {
+class FilterViewModel() : ViewModel() {
 
     // Get Database Instance from singleton object
     private var db = DBInstanceHolder.db
