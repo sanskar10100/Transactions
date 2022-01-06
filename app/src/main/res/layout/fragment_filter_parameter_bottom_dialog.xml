@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     tools:context=".ui.filter.FilterParameterBottomDialog">
 
-
     <TextView
         android:id="@+id/textView_filter_parameters"
         android:layout_width="wrap_content"
@@ -28,8 +27,10 @@
         android:layout_marginEnd="8dp"
         android:hint="Amount"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_filter_parameters">
+        app:layout_constraintTop_toBottomOf="@+id/switch_less_or_greater"
+        app:startIconDrawable="@drawable/ic_baseline_currency_rupee_24">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -48,4 +49,48 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textField_filter_amount" />
+
+    <TextView
+        android:id="@+id/textView_transactions_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Transactions that are"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_filter_parameters" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_less_or_greater"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_transactions_amount" />
+
+    <TextView
+        android:id="@+id/textView_greater_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Greater Than"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/switch_less_or_greater"
+        app:layout_constraintEnd_toStartOf="@+id/switch_less_or_greater"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/switch_less_or_greater" />
+
+    <TextView
+        android:id="@+id/textView_lesser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lesser Than"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/switch_less_or_greater"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toEndOf="@+id/switch_less_or_greater"
+        app:layout_constraintTop_toTopOf="@+id/switch_less_or_greater" />
 </androidx.constraintlayout.widget.ConstraintLayout>
