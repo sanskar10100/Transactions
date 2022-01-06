@@ -7,3 +7,7 @@ import androidx.room.RoomDatabase
 abstract class TransactionDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionDao
 }
+
+object DBInstanceHolder {
+    lateinit var db: TransactionDatabase
+}
