@@ -13,10 +13,16 @@ interface TransactionDao {
     fun getAllTransactions(): LiveData<List<Transaction>>
 
     @Query("SELECT * FROM `transaction` WHERE amount >= :amount ORDER BY amount DESC",)
-    suspend fun filterOnAmountGreater(amount: Int): List<Transaction>
+    suspend fun filterOnTransactionAmountGreater(amount: Int): List<Transaction>
 
     @Query("SELECT * FROM `transaction` WHERE amount <= :amount ORDER BY amount DESC",)
-    suspend fun filterOnAmountLesser(amount: Int): List<Transaction>
+    suspend fun filterOnTransactionAmountLesser(amount: Int): List<Transaction>
+
+    @Query("SELECT * FROM `transaction` WHERE amount <= :amount AND isExpense=1 ORDER BY amount DESC",)
+    suspend fun filterOnExpenseAmountLesser(amount: Int): List<Transaction>
+
+    @Query("SELECT * FROM `transaction` WHERE amount >= :amount AND isExpense=1 ORDER BY amount DESC",)
+    suspend fun filterOnExpenseAmountGreater(amount: Int): List<Transaction>
 
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND isDigital = 0")
     fun getTotalCashExpenses(): Int

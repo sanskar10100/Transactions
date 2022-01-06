@@ -65,10 +65,9 @@
         android:id="@+id/switch_less_or_greater"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_transactions_amount" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_only_expense" />
 
     <TextView
         android:id="@+id/textView_greater_switch"
@@ -93,4 +92,13 @@
         app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toEndOf="@+id/switch_less_or_greater"
         app:layout_constraintTop_toTopOf="@+id/switch_less_or_greater" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkBox_only_expense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Only Expenses"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_transactions_amount" />
 </androidx.constraintlayout.widget.ConstraintLayout>

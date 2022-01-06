@@ -28,7 +28,9 @@ class FilterResultFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.listFilteredTransactions.adapter = adapter
-        binding.textViewFilterParameters.text = model.parameterDescription
+        binding.textViewFilterParameters.text = model.getParameterDescription().also {
+            model.clearParameterDescription()
+        }
 
         model.filteredTransactions.observe(viewLifecycleOwner) {
             adapter.submitList(it)

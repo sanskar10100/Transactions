@@ -11,19 +11,40 @@ class FilterViewModel() : ViewModel() {
 
     // Get Database Instance from singleton object
     private var db = DBInstanceHolder.db
-    var parameterDescription = ""
+    private var amount = 0
+    private var onlyExpense = true
+    private var greaterThan = true
 
     val filteredTransactions = MutableLiveData<List<Transaction>>()
 
-    fun filterOnAmount(amount: Int, greaterThan: Boolean) {
+    fun filterOnAmount(amount: Int, greaterThan: Boolean, onlyExpenses: Boolean) {
+        this.amount = amount
+        this.greaterThan = greaterThan
+        this.onlyExpense = onlyExpenses
         viewModelScope.launch {
-            if (greaterThan) {
-                parameterDescription = "All Transactions with amount > $amount"
-                filteredTransactions.value = db.transactionDao().filterOnAmountGreater(amount)
-            } else {
-                parameterDescription = "All Transactions with amount < $amount"
-                filteredTransactions.value = db.transactionDao().filterOnAmountLesser(amount)
+            if (onlyExpenses && greaterThan) {
+                filteredTransactions.value = db.transactionDao().filterOnExpenseAmountGreater(amount)
+            } else if (onlyExpenses && !greaterThan) {
+                filteredTransactions.value = db.transactionDao().filterOnExpenseAmountLesser(amount)
+            } else if (!onlyExpenses && greaterThan) {
+                filteredTransactions.value = db.transactionDao().filterOnTransactionAmountGreater(amount)
+            } else if (!onlyExpenses && !greaterThan) {
+                filteredTransactions.value = db.transactionDao().filterOnTransactionAmountLesser(amount)
             }
         }
+    }
+
+    fun getParameterDescription(): String {
+        var result = ""
+        result += if (onlyExpense) "All expenses with amount " else "All transactions with amount "
+        result += if (greaterThan) "> " else "< "
+        result += "$amount"
+        return result
+    }
+
+    fun clearParameterDescription() {
+        amount = 0
+        onlyExpense = true
+        greaterThan = true
     }
 }

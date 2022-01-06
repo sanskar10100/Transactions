@@ -34,7 +34,7 @@ class FilterParameterBottomDialog : BottomSheetDialogFragment() {
                 binding.textFieldFilterAmount.error = "Please enter a valid amount"
             } else {
                 val amount = binding.textFieldFilterAmount.getText().toInt()
-                model.filterOnAmount(amount, ! binding.switchLessOrGreater.isChecked)
+                model.filterOnAmount(amount, !binding.switchLessOrGreater.isChecked, binding.checkBoxOnlyExpense.isChecked)
                 findNavController().navigate(R.id.action_filterParameterBottomDialog_to_filterResultFragment)
             }
         }
