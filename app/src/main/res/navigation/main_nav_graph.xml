@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_homeFragment_to_mediumExchangeFragment"
             app:destination="@id/mediumExchangeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_filterParameterBottomDialog"
+            app:destination="@id/filterParameterBottomDialog" />
     </fragment>
     <fragment
         android:id="@+id/addTransactionFragment"
@@ -76,6 +79,20 @@
     <dialog
         android:id="@+id/mediumExchangeFragment"
         android:name="dev.sanskar.transactions.ui.exchange.MediumExchangeFragment"
-        android:label="fragment_medium_exchange"
+        android:label="Exchange Medium"
         tools:layout="@layout/fragment_medium_exchange" />
+    <dialog
+        android:id="@+id/filterParameterBottomDialog"
+        android:name="dev.sanskar.transactions.ui.filter.FilterParameterBottomDialog"
+        android:label="Filter Transactions on Parameter"
+        tools:layout="@layout/fragment_filter_parameter_bottom_dialog">
+        <action
+            android:id="@+id/action_filterParameterBottomDialog_to_filterResultFragment"
+            app:destination="@id/filterResultFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/filterResultFragment"
+        android:name="dev.sanskar.transactions.ui.filter.FilterResultFragment"
+        android:label="Filtered Transactions"
+        tools:layout="@layout/fragment_filter_result" />
 </navigation>

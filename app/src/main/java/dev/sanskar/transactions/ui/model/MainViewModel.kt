@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import dev.sanskar.transactions.asFormattedDateTime
+import dev.sanskar.transactions.data.DBInstanceHolder
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.data.TransactionDatabase
 import kotlinx.coroutines.launch
@@ -22,6 +23,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     ).fallbackToDestructiveMigration()
         .allowMainThreadQueries()
         .build()
+
+    init {
+        DBInstanceHolder.db = this.db
+    }
 
     val transactions = db.transactionDao().getAllTransactions()
 

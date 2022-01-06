@@ -94,6 +94,9 @@ class HomeFragment : Fragment() {
                     .create()
                     .show()
             }
+            R.id.action_filter -> {
+                findNavController().navigate(R.id.action_homeFragment_to_filterParameterBottomDialog)
+            }
         }
 
         return true
