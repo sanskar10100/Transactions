@@ -9,10 +9,12 @@
         <entry key="app/src/main/res/drawable/ic_baseline_delete_sweep_24.xml" value="0.365625" />
         <entry key="app/src/main/res/drawable/ic_baseline_exchange_24.xml" value="0.365625" />
         <entry key="app/src/main/res/drawable/ic_baseline_feedback_24.xml" value="0.365625" />
+        <entry key="app/src/main/res/drawable/ic_baseline_filter_list_24.xml" value="0.365625" />
         <entry key="app/src/main/res/layout/activity_add_transaction.xml" value="0.3494791666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.29347826086956524" />
         <entry key="app/src/main/res/layout/fragment_add_transaction.xml" value="0.3494791666666667" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.3494791666666667" />
+        <entry key="app/src/main/res/layout/fragment_filter_parameter_bottom_dialog.xml" value="0.3494791666666667" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.29347826086956524" />
         <entry key="app/src/main/res/layout/fragment_medium_exchange.xml" value="0.3494791666666667" />
         <entry key="app/src/main/res/layout/layout_transaction.xml" value="0.29347826086956524" />
