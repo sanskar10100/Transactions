@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/ic_baseline_add_circle_colored_24.xml" value="0.365625" />
+        <entry key="app/src/main/res/drawable/ic_baseline_calendar_month_24.xml" value="0.365625" />
         <entry key="app/src/main/res/drawable/ic_baseline_currency_exchange_24.xml" value="0.365625" />
         <entry key="app/src/main/res/drawable/ic_baseline_currency_rupee_24.xml" value="0.365625" />
         <entry key="app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.365625" />
