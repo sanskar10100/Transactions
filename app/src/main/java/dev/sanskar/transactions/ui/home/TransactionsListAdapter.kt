@@ -44,15 +44,13 @@ class TransactionsListAdapter(private val context: Context, private val filterMo
 
             textViewSource.text = if (transaction.isDigital) "Digital" else "Cash"
 
-            if (!filterMode) {
-                root.setOnClickListener {
-                    if (!filterMode) {
-                        root.findNavController().navigate(
-                            HomeFragmentDirections.actionHomeFragmentToAddTransactionFragment(position)
-                        )
-                    } else {
-                        context.shortToast("Editing/Deletion in filtered transactions is not available yet!")
-                    }
+            root.setOnClickListener {
+                if (!filterMode) {
+                    root.findNavController().navigate(
+                        HomeFragmentDirections.actionHomeFragmentToAddTransactionFragment(position)
+                    )
+                } else {
+                    context.shortToast("Editing/Deletion in filtered transactions is not available yet!")
                 }
             }
         }
