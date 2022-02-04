@@ -98,7 +98,7 @@ class HomeFragment : Fragment() {
             R.id.action_filter -> {
                 findNavController().navigate(R.id.action_homeFragment_to_filterParameterBottomDialog)
             }
-            R.id.action_view_only -> {
+            R.id.action_view_by_medium -> {
                 findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToViewOnlyBottomSheet(model.selectedViewOption))
             }
         }
@@ -131,9 +131,9 @@ class HomeFragment : Fragment() {
         // View Options
         setFragmentResultListener(VIEW_OPTIONS_REQUEST_KEY) { _, bundle ->
             when(bundle.getSerializable(KEY_SELECTED_VIEW_OPTION)) {
-                ViewOnlyOptionEnum.CASH_ONLY -> model.cashOnly()
-                ViewOnlyOptionEnum.DIGITAL_ONLY -> model.digitalOnly()
-                ViewOnlyOptionEnum.ALL -> model.getAll()
+                ViewByMediumOptions.CASH_ONLY -> model.cashOnly()
+                ViewByMediumOptions.DIGITAL_ONLY -> model.digitalOnly()
+                ViewByMediumOptions.ALL -> model.getAll()
             }
         }
     }

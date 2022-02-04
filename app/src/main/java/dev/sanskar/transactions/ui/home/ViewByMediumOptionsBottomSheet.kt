@@ -10,45 +10,45 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dev.sanskar.transactions.KEY_SELECTED_VIEW_OPTION
 import dev.sanskar.transactions.VIEW_OPTIONS_REQUEST_KEY
-import dev.sanskar.transactions.databinding.FragmentViewOnlyBottomSheetBinding
+import dev.sanskar.transactions.databinding.FragmentViewByMediumOptionBinding
 
-class ViewOnlyBottomSheet : BottomSheetDialogFragment() {
-    private lateinit var binding: FragmentViewOnlyBottomSheetBinding
+class ViewByMediumOptionsBottomSheet : BottomSheetDialogFragment() {
+    private lateinit var binding: FragmentViewByMediumOptionBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentViewOnlyBottomSheetBinding.inflate(inflater, container, false)
+        binding = FragmentViewByMediumOptionBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val args by navArgs<ViewOnlyBottomSheetArgs>()
+        val args by navArgs<ViewByMediumOptionsBottomSheetArgs>()
 
         when (args.selectedViewOption) {
-            ViewOnlyOptionEnum.CASH_ONLY -> binding.textViewOptionCashOnly.isPressed = true
-            ViewOnlyOptionEnum.DIGITAL_ONLY -> binding.textViewOptionDigitalOnly.isPressed = true
-            ViewOnlyOptionEnum.ALL -> binding.textViewOptionCashAndDigital.isPressed = true
+            ViewByMediumOptions.CASH_ONLY -> binding.textViewOptionCashOnly.isPressed = true
+            ViewByMediumOptions.DIGITAL_ONLY -> binding.textViewOptionDigitalOnly.isPressed = true
+            ViewByMediumOptions.ALL -> binding.textViewOptionCashAndDigital.isPressed = true
         }
 
         binding.textViewOptionCashOnly.setOnClickListener {
-            setSelectedOption(ViewOnlyOptionEnum.CASH_ONLY)
+            setSelectedOption(ViewByMediumOptions.CASH_ONLY)
         }
 
         binding.textViewOptionDigitalOnly.setOnClickListener {
-            setSelectedOption(ViewOnlyOptionEnum.DIGITAL_ONLY)
+            setSelectedOption(ViewByMediumOptions.DIGITAL_ONLY)
         }
 
         binding.textViewOptionCashAndDigital.setOnClickListener {
-            setSelectedOption(ViewOnlyOptionEnum.ALL)
+            setSelectedOption(ViewByMediumOptions.ALL)
         }
     }
 
-    private fun setSelectedOption(option: ViewOnlyOptionEnum) {
+    private fun setSelectedOption(option: ViewByMediumOptions) {
         setFragmentResult(VIEW_OPTIONS_REQUEST_KEY, bundleOf(KEY_SELECTED_VIEW_OPTION to option))
         dismiss()
     }

@@ -10,7 +10,7 @@ import dev.sanskar.transactions.asFormattedDateTime
 import dev.sanskar.transactions.data.DBInstanceHolder
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.data.TransactionDatabase
-import dev.sanskar.transactions.ui.home.ViewOnlyOptionEnum
+import dev.sanskar.transactions.ui.home.ViewByMediumOptions
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -27,7 +27,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     ).allowMainThreadQueries()
         .build()
 
-    var selectedViewOption = ViewOnlyOptionEnum.ALL
+    var selectedViewOption = ViewByMediumOptions.ALL
     private var currentFlowJob: Job = Job()
 
     init {
@@ -39,7 +39,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getAll() {
         currentFlowJob.cancel() // Cancel any other transaction flows
-        selectedViewOption = ViewOnlyOptionEnum.ALL
+        selectedViewOption = ViewByMediumOptions.ALL
         currentFlowJob = viewModelScope.launch {
             db.transactionDao().getAllTransactions().collect {
                 Log.d(TAG, "getAll: Received all transactions flow")
@@ -130,7 +130,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun cashOnly() {
         currentFlowJob.cancel() // Cancel any other transaction flows
-        selectedViewOption = ViewOnlyOptionEnum.CASH_ONLY
+        selectedViewOption = ViewByMediumOptions.CASH_ONLY
         currentFlowJob = viewModelScope.launch {
             db.transactionDao().getCashTransactions().collect {
                 Log.d(TAG, "cashOnly: Received cash transactions flow")
@@ -141,7 +141,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun digitalOnly() {
         currentFlowJob.cancel() // Cancel any other transaction flows
-        selectedViewOption = ViewOnlyOptionEnum.DIGITAL_ONLY
+        selectedViewOption = ViewByMediumOptions.DIGITAL_ONLY
         currentFlowJob = viewModelScope.launch {
             db.transactionDao().getDigitalTransactions().collect {
                 Log.d(TAG, "digitalOnly: Received digital transactions flow")
