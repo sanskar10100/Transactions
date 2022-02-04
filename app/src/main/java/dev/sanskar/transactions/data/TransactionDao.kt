@@ -2,6 +2,7 @@ package dev.sanskar.transactions.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TransactionDao {
@@ -10,7 +11,7 @@ interface TransactionDao {
     suspend fun insertTransaction(transactions: Transaction)
 
     @Query("SELECT * FROM `transaction` ORDER BY timestamp")
-    fun getAllTransactions(): LiveData<List<Transaction>>
+    fun getAllTransactions(): Flow<List<Transaction>>
 
     @Query("SELECT * FROM `transaction` WHERE amount >= :amount ORDER BY amount DESC",)
     suspend fun filterOnTransactionAmountGreater(amount: Int): List<Transaction>
@@ -54,4 +55,9 @@ interface TransactionDao {
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND timestamp >= :timestamp")
     fun getThisWeekExpense(timestamp: Long): Int
 
+    @Query("SELECT * FROM `transaction` WHERE isDigital = 0")
+    fun getCashTransactions(): Flow<List<Transaction>>
+
+    @Query("SELECT * FROM `transaction` WHERE isDigital = 1")
+    fun getDigitalTransactions(): Flow<List<Transaction>>
 }
