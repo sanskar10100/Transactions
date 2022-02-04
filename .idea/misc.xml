@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/bg_rounded_rectangle_blue.xml" value="0.3155" />
         <entry key="app/src/main/res/drawable/bg_selection_view_option.xml" value="0.185" />
         <entry key="app/src/main/res/drawable/ic_baseline_add_circle_colored_24.xml" value="0.365625" />
         <entry key="app/src/main/res/drawable/ic_baseline_calendar_month_24.xml" value="0.365625" />

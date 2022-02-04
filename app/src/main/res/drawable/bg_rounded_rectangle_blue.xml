@@ -7,6 +7,6 @@
         android:bottomRightRadius="10dp"
         android:topLeftRadius="10dp"
         android:topRightRadius="10dp" />
-    <solid android:color="#4D0D47A1" />
+    <solid android:color="@color/option_selected_background" />
 
 </shape>

@@ -11,4 +11,5 @@
     <color name="income_green">#138808</color>
     <color name="digital_blue">#3F51B5</color>
     <color name="cash_orange">#F57F17</color>
+    <color name="option_selected_background">#4D0D47A1</color>
 </resources>
