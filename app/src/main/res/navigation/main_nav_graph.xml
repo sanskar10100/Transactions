@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_homeFragment_to_filterParameterBottomDialog"
             app:destination="@id/filterParameterBottomDialog" />
+        <action
+            android:id="@+id/action_homeFragment_to_viewOnlyBottomSheet"
+            app:destination="@id/viewOnlyBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/addTransactionFragment"
@@ -95,4 +98,13 @@
         android:name="dev.sanskar.transactions.ui.filter.FilterResultFragment"
         android:label="Filtered Transactions"
         tools:layout="@layout/fragment_filter_result" />
+    <dialog
+        android:id="@+id/viewOnlyBottomSheet"
+        android:name="dev.sanskar.transactions.ui.home.ViewOnlyBottomSheet"
+        android:label="fragment_view_only_bottom_sheet"
+        tools:layout="@layout/fragment_view_only_bottom_sheet" >
+        <argument
+            android:name="selectedViewOption"
+            app:argType="dev.sanskar.transactions.ui.home.ViewOnlyOptionEnum" />
+    </dialog>
 </navigation>
