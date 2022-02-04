@@ -1,5 +1,9 @@
 package dev.sanskar.transactions
 
+import android.content.Context
+import android.view.View
+import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import java.text.SimpleDateFormat
 import java.util.*
@@ -13,4 +17,12 @@ fun Long.asFormattedDateTime() : String {
 
 fun TextInputLayout.getText(): String {
     return this.editText?.text?.toString() ?: ""
+}
+
+fun View.shortSnackbar(message: String) {
+    Snackbar.make(this, message, Snackbar.LENGTH_SHORT).show()
+}
+
+fun Context.shortToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }

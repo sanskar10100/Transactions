@@ -13,7 +13,7 @@ class FilterResultFragment : Fragment() {
     private lateinit var binding: FragmentFilterResultBinding
     private val model by activityViewModels<FilterViewModel>()
     private val adapter by lazy {
-        TransactionsListAdapter(requireContext())
+        TransactionsListAdapter(requireContext(), filterMode = true)
     }
 
     override fun onCreateView(

@@ -20,8 +20,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         application,
         TransactionDatabase::class.java,
         "transactions"
-    ).fallbackToDestructiveMigration()
-        .allowMainThreadQueries()
+    ).allowMainThreadQueries()
         .build()
 
     init {
