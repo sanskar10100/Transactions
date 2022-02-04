@@ -21,6 +21,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_view_by_medium"
+        android:icon="@drawable/ic_baseline_view_by_medium_24"
+        android:title="View By Medium"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_exchange_medium"
         android:icon="@drawable/ic_baseline_currency_exchange_24"
         android:title="Exchange Medium"

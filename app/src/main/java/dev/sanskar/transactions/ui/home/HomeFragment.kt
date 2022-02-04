@@ -1,6 +1,5 @@
 package dev.sanskar.transactions.ui.home
 
-import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,15 +8,17 @@ import android.view.*
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.github.javiersantos.appupdater.AppUpdater
 import com.github.javiersantos.appupdater.enums.Display
 import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dev.sanskar.transactions.KEY_SELECTED_VIEW_OPTION
 import dev.sanskar.transactions.R
+import dev.sanskar.transactions.VIEW_OPTIONS_REQUEST_KEY
 import dev.sanskar.transactions.databinding.FragmentHomeBinding
 import dev.sanskar.transactions.ui.model.MainViewModel
-import kotlin.math.log
 
 private const val TAG = "HomeFragment"
 class HomeFragment : Fragment() {
@@ -97,6 +98,9 @@ class HomeFragment : Fragment() {
             R.id.action_filter -> {
                 findNavController().navigate(R.id.action_homeFragment_to_filterParameterBottomDialog)
             }
+            R.id.action_view_by_medium -> {
+                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToViewOnlyBottomSheet(model.selectedViewOption))
+            }
         }
 
         return true
@@ -115,6 +119,22 @@ class HomeFragment : Fragment() {
             adapter.submitList(it)
             binding.textViewCashBalance.text = "₹${model.getCashBalance()}"
             binding.textViewDigitalBalance.text = "₹${model.getDigitalBalance()}"
+        }
+
+        checkFragmentResults()
+    }
+
+    /**
+     * Checks if there are any returned results from any other fragments
+     */
+    private fun checkFragmentResults() {
+        // View Options
+        setFragmentResultListener(VIEW_OPTIONS_REQUEST_KEY) { _, bundle ->
+            when(bundle.getSerializable(KEY_SELECTED_VIEW_OPTION)) {
+                ViewByMediumOptions.CASH_ONLY -> model.cashOnly()
+                ViewByMediumOptions.DIGITAL_ONLY -> model.digitalOnly()
+                ViewByMediumOptions.ALL -> model.getAll()
+            }
         }
     }
 
