@@ -20,7 +20,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     object QueryConfig {
         var filterAmountChoice = FilterByAmountChoices.UNSPECIFIED
-        var filterAmountValue = 0
+        var filterAmountValue = -1
         var filterTypeChoice = FilterByTypeChoices.UNSPECIFIED
         var filterMediumChoice = FilterByMediumChoices.UNSPECIFIED
         var sortChoice = SortByChoices.UNSPECIFIED
@@ -172,5 +172,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         QueryConfig.filterMediumChoice = FilterByMediumChoices.values().find {
             it.ordinal == index
         } ?: FilterByMediumChoices.UNSPECIFIED
+    }
+
+    fun setFilterAmount(amount: Int, index: Int) {
+        QueryConfig.filterAmountChoice = FilterByAmountChoices.values().find {
+            it.ordinal == index
+        } ?: FilterByAmountChoices.UNSPECIFIED
+        QueryConfig.filterAmountValue = amount
     }
 }

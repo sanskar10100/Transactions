@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.github.javiersantos.appupdater.AppUpdater
 import com.github.javiersantos.appupdater.enums.Display
 import com.github.javiersantos.appupdater.enums.UpdateFrom
+import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.sanskar.transactions.*
 import dev.sanskar.transactions.data.FilterByMediumChoices
@@ -162,6 +163,7 @@ class HomeFragment : Fragment() {
             setFragmentResultListener(SORT_REQUEST_KEY) { _, bundle ->
                 val selected = bundle.getInt(KEY_SELECTED_OPTION_INDEX)
                 model.setSortMethod(selected)
+                (it as Chip).text = MainViewModel.QueryConfig.sortChoice.readableString
             }
         }
 
@@ -177,6 +179,7 @@ class HomeFragment : Fragment() {
             setFragmentResultListener(KEY_FILTER_BY_TYPE) { _, bundle ->
                 val selected = bundle.getInt(KEY_SELECTED_OPTION_INDEX)
                 model.setFilterType(selected)
+                (it as Chip).text = MainViewModel.QueryConfig.filterTypeChoice.readableString
             }
         }
 
@@ -192,6 +195,23 @@ class HomeFragment : Fragment() {
             setFragmentResultListener(KEY_FILTER_BY_MEDIUM) { _, bundle ->
                 val selected = bundle.getInt(KEY_SELECTED_OPTION_INDEX)
                 model.setFilterMedium(selected)
+                (it as Chip).text = MainViewModel.QueryConfig.filterMediumChoice.readableString
+            }
+        }
+
+        binding.chipFilterAmount.setOnClickListener {
+            val directions = HomeFragmentDirections.actionHomeFragmentToAmountFilterBottomSheet(
+                MainViewModel.QueryConfig.filterAmountValue,
+                MainViewModel.QueryConfig.filterAmountChoice.ordinal
+            )
+            findNavController().navigate(directions)
+            setFragmentResultListener(KEY_FILTER_BY_AMOUNT) { _, bundle ->
+                val amount = bundle.getInt(KEY_AMOUNT)
+                val index = bundle.getInt(KEY_SELECTED_OPTION_INDEX)
+                model.setFilterAmount(amount, index)
+                (it as Chip).text = if (amount != -1)
+                    "${MainViewModel.QueryConfig.filterAmountChoice.readableString} ${MainViewModel.QueryConfig.filterAmountValue}"
+                    else MainViewModel.QueryConfig.filterAmountChoice.readableString
             }
         }
     }

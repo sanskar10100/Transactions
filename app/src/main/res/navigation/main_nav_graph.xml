@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_homeFragment_to_optionsBottomSheet"
             app:destination="@id/optionsBottomSheet" />
+        <action
+            android:id="@+id/action_homeFragment_to_amountFilterBottomSheet"
+            app:destination="@id/amountFilterBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/addTransactionFragment"
@@ -123,6 +126,18 @@
             app:argType="string" />
         <argument
             android:name="selectedItemIndex"
+            app:argType="integer" />
+    </dialog>
+    <dialog
+        android:id="@+id/amountFilterBottomSheet"
+        android:name="dev.sanskar.transactions.ui.AmountFilterBottomSheet"
+        android:label="fragment_amount_filter_bottom_sheet"
+        tools:layout="@layout/fragment_amount_filter_bottom_sheet" >
+        <argument
+            android:name="amount"
+            app:argType="integer" />
+        <argument
+            android:name="selectedIndex"
             app:argType="integer" />
     </dialog>
 </navigation>
