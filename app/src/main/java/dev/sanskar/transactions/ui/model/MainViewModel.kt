@@ -194,6 +194,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             filterAmountValue = -1
             filterTypeChoice = FilterByTypeChoices.UNSPECIFIED
             filterMediumChoice = FilterByMediumChoices.UNSPECIFIED
+            sortChoice = SortByChoices.UNSPECIFIED
         }
         executeConfig()
     }
