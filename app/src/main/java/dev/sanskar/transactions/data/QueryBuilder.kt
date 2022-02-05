@@ -2,22 +2,22 @@ package dev.sanskar.transactions.data
 
 import androidx.sqlite.db.SimpleSQLiteQuery
 
-enum class FilterByAmountChoices {
-    GREATER_THAN,
-    LESSER_THAN,
-    UNSPECIFIED
+enum class FilterByAmountChoices(val readableString: String) {
+    GREATER_THAN("Amount Greater Than"),
+    LESSER_THAN("Amount Lesser Than"),
+    UNSPECIFIED("Any Amount")
 }
 
-enum class FilterByTypeChoices {
-    INCOME,
-    EXPENSE,
-    UNSPECIFIED
+enum class FilterByTypeChoices(val readableString: String) {
+    INCOME("Income Only"),
+    EXPENSE("Expense Only"),
+    UNSPECIFIED("Both")
 }
 
-enum class FilterByMediumChoices {
-    CASH,
-    DIGITAL,
-    UNSPECIFIED
+enum class FilterByMediumChoices(val readableString: String) {
+    CASH("Cash Only"),
+    DIGITAL("Digital Only"),
+    UNSPECIFIED("Both")
 }
 
 enum class FilterByTimeChoices {
@@ -25,12 +25,12 @@ enum class FilterByTimeChoices {
     UNSPECIFIED
 }
 
-enum class SortByChoices {
-    AMOUNT_HIGHEST_FIRST,
-    AMOUNT_LOWEST_FIRST,
-    TIME_EARLIEST_FIRST,
-    TIME_NEWEST_FIRST,
-    UNSPECIFIED
+enum class SortByChoices(val readableString: String) {
+    AMOUNT_HIGHEST_FIRST("Highest Amount First"),
+    AMOUNT_LOWEST_FIRST("Lowest Amount First"),
+    TIME_EARLIEST_FIRST("Earliest Transaction First"),
+    TIME_NEWEST_FIRST("Latest Transaction First"),
+    UNSPECIFIED("Default Order")
 }
 
 class QueryBuilder {
