@@ -46,7 +46,6 @@ class OptionsBottomSheet : BottomSheetDialogFragment() {
                 setBackgroundResource(R.drawable.selector_view_by_medium_option)
                 textSize = 16f
                 setOnClickListener {
-                    dismiss()
                     optionIndexSelected(index)
                 }
                 if (index == args.selectedItemIndex) this.isPressed = true
@@ -60,5 +59,6 @@ class OptionsBottomSheet : BottomSheetDialogFragment() {
             KEY_SELECTED_OPTION_INDEX to optionIndex,
             KEY_SELECTED_OPTION to args.options[optionIndex]
         ))
+        dismiss()
     }
 }
