@@ -155,4 +155,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
+    fun setSortMethod(index: Int) {
+        QueryConfig.sortChoice = SortByChoices.values().find {
+            it.ordinal == index
+        } ?: SortByChoices.UNSPECIFIED
+    }
+
+    fun setFilterType(index: Int) {
+        QueryConfig.filterTypeChoice = FilterByTypeChoices.values().find {
+            it.ordinal == index
+        } ?: FilterByTypeChoices.UNSPECIFIED
+    }
+
+    fun setFilterMedium(index: Int) {
+        QueryConfig.filterMediumChoice = FilterByMediumChoices.values().find {
+            it.ordinal == index
+        } ?: FilterByMediumChoices.UNSPECIFIED
+    }
 }

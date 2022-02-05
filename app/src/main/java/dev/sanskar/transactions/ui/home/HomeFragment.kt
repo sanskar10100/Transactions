@@ -9,14 +9,16 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.github.javiersantos.appupdater.AppUpdater
 import com.github.javiersantos.appupdater.enums.Display
 import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import dev.sanskar.transactions.KEY_SELECTED_VIEW_OPTION
-import dev.sanskar.transactions.R
-import dev.sanskar.transactions.VIEW_OPTIONS_REQUEST_KEY
+import dev.sanskar.transactions.*
+import dev.sanskar.transactions.data.FilterByMediumChoices
+import dev.sanskar.transactions.data.FilterByTypeChoices
+import dev.sanskar.transactions.data.SortByChoices
 import dev.sanskar.transactions.databinding.FragmentHomeBinding
 import dev.sanskar.transactions.ui.model.MainViewModel
 
@@ -148,8 +150,53 @@ class HomeFragment : Fragment() {
     }
 
     private fun setChipListeners() {
+        // Sort Chip
         binding.chipSort.setOnClickListener {
-            // Open dialog
+            findNavController().navigate(
+                generateOptionsDirection(
+                    SortByChoices.values().map {
+                        it.readableString
+                    }.toTypedArray(), SORT_REQUEST_KEY, MainViewModel.QueryConfig.sortChoice.ordinal
+                )
+            )
+            setFragmentResultListener(SORT_REQUEST_KEY) { _, bundle ->
+                val selected = bundle.getInt(KEY_SELECTED_OPTION_INDEX)
+                model.setSortMethod(selected)
+            }
         }
+
+        // Filter by Type Chip
+        binding.chipFilterType.setOnClickListener {
+            findNavController().navigate(
+                generateOptionsDirection(
+                    FilterByTypeChoices.values().map {
+                        it.readableString
+                    }.toTypedArray(), KEY_FILTER_BY_TYPE, MainViewModel.QueryConfig.filterTypeChoice.ordinal
+                )
+            )
+            setFragmentResultListener(KEY_FILTER_BY_TYPE) { _, bundle ->
+                val selected = bundle.getInt(KEY_SELECTED_OPTION_INDEX)
+                model.setFilterType(selected)
+            }
+        }
+
+        // Filter by Medium Chip
+        binding.chipFilterMedium.setOnClickListener {
+            findNavController().navigate(
+                generateOptionsDirection(
+                    FilterByMediumChoices.values().map {
+                        it.readableString
+                    }.toTypedArray(), KEY_FILTER_BY_MEDIUM, MainViewModel.QueryConfig.filterMediumChoice.ordinal
+                )
+            )
+            setFragmentResultListener(KEY_FILTER_BY_MEDIUM) { _, bundle ->
+                val selected = bundle.getInt(KEY_SELECTED_OPTION_INDEX)
+                model.setFilterMedium(selected)
+            }
+        }
+    }
+
+    private fun generateOptionsDirection(options: Array<String>, key: String, selectedIndex: Int): NavDirections {
+        return HomeFragmentDirections.actionHomeFragmentToOptionsBottomSheet(options, key, selectedIndex)
     }
 }
