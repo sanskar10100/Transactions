@@ -22,6 +22,9 @@ import dev.sanskar.transactions.data.SortByChoices
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.FragmentHomeBinding
 import dev.sanskar.transactions.ui.model.MainViewModel
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 
 private const val TAG = "HomeFragment"
 class HomeFragment : Fragment() {
@@ -70,6 +73,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.listTransactions.adapter = adapter
         recyclerViewSwipeToDelete()
+        onboard()
 
         binding.fabAddTransaction.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_addTransactionFragment)
@@ -271,5 +275,26 @@ class HomeFragment : Fragment() {
     private fun clearFilters() {
         model.resetQueryConfig()
         setChipTitles()
+    }
+
+    /**
+     * Shows a bunch of showcase views to let user know how to use the app
+     */
+    private fun onboard() {
+        MaterialShowcaseSequence(requireActivity(), "0000").apply {
+            setConfig(ShowcaseConfig().also { it.delay = 500 })
+            addSequenceItem(MaterialShowcaseView.Builder(requireActivity())
+                .setTarget(binding.fabAddTransaction)
+                .setSkipText("Skip")
+                .setDismissText("Got It")
+                .setContentText("Click here to add a new transactions")
+                .withRectangleShape()
+                .build())
+            addSequenceItem(binding.textViewCashBalance, "You can see your current cash balance here", "Got it")
+            addSequenceItem(binding.textViewDigitalBalance, "You can see your current digital balance here", "Got it")
+            addSequenceItem(binding.chipSort, "Sort your transactions by clicking here", "Got it")
+            addSequenceItem(binding.chipFilterType, "Click this to filter your transactions by type or swipe right to see more options", "Got it")
+            start()
+        }
     }
 }

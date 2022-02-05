@@ -14,6 +14,9 @@ import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.FragmentAddTransactionBinding
 import dev.sanskar.transactions.shortSnackbarWithUndo
 import dev.sanskar.transactions.ui.model.MainViewModel
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 
 class AddTransactionFragment : Fragment() {
     private val model by activityViewModels<MainViewModel>()
@@ -56,6 +59,7 @@ class AddTransactionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        onboard()
         if (editMode) {
             // Set received values in case of edit mode
             val transaction = model.transactions.value?.get(args.transactionIndex)
@@ -164,5 +168,29 @@ class AddTransactionFragment : Fragment() {
         binding.buttonAdd.text = "Update"
 
         localModel.timestamp = transaction.timestamp
+    }
+
+    private fun onboard() {
+        MaterialShowcaseSequence(requireActivity(), "1111").apply {
+            setConfig(ShowcaseConfig().also { it.delay = 500 })
+            addSequenceItem(MaterialShowcaseView.Builder(requireActivity())
+                .setTarget(binding.chipGroupSource)
+                .setSkipText("Skip")
+                .setDismissText("Got it")
+                .setContentText("Select medium of transaction. Default is digital.")
+                .withRectangleShape()
+                .build())
+            addSequenceItem(MaterialShowcaseView.Builder(requireActivity())
+                .setTarget(binding.chipGroupCategory)
+                .setDismissText("Got it")
+                .setContentText("Select type of transaction. Default is expense.")
+                .withRectangleShape()
+                .build())
+            addSequenceItem(binding.buttonSetTime, "Click here to set time", "Got it")
+            addSequenceItem(binding.buttonSetDate, "Click here to set date", "Got it")
+            addSequenceItem(binding.textViewTime, "Current time is automatically set as default", "Got it")
+            addSequenceItem(binding.buttonAdd, "When done, click here to add the transaction", "Got it")
+            start()
+        }
     }
 }
