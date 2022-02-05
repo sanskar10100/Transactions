@@ -133,14 +133,6 @@ class HomeFragment : Fragment() {
         binding.chipFilterAmount.text = MainViewModel.QueryConfig.filterAmountChoice.readableString
     }
 
-    private fun checkAppUpdate() {
-        AppUpdater(context)
-            .setUpdateFrom(UpdateFrom.GITHUB)
-            .setGitHubUserAndRepo("sanskar10100", "Transactions")
-            .setDisplay(Display.DIALOG)
-            .start()
-    }
-
     private fun setChipListeners() {
         // Sort Chip
         binding.chipSort.setOnClickListener {

@@ -8,9 +8,6 @@ import com.google.android.material.textfield.TextInputLayout
 import java.text.SimpleDateFormat
 import java.util.*
 
-const val VIEW_OPTIONS_REQUEST_KEY = "view_options_request_key"
-const val KEY_SELECTED_VIEW_OPTION = "selected"
-
 const val KEY_SELECTED_OPTION = "selected_option"
 const val KEY_SELECTED_OPTION_INDEX = "selected_option_index"
 const val SORT_REQUEST_KEY = "sort_request"

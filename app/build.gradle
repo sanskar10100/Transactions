@@ -69,7 +69,6 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
 
     // Community
-    implementation 'com.github.javiersantos:AppUpdater:2.7'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     // Chrome Custom Tabs

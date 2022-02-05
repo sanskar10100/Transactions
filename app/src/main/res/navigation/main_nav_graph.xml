@@ -86,7 +86,7 @@
         tools:layout="@layout/fragment_medium_exchange" />
     <dialog
         android:id="@+id/optionsBottomSheet"
-        android:name="dev.sanskar.transactions.OptionsBottomSheet"
+        android:name="dev.sanskar.transactions.ui.bottomdialogs.OptionsBottomSheet"
         android:label="fragment_options_bottom_sheet"
         tools:layout="@layout/fragment_options_bottom_sheet" >
         <argument
@@ -101,7 +101,7 @@
     </dialog>
     <dialog
         android:id="@+id/amountFilterBottomSheet"
-        android:name="dev.sanskar.transactions.ui.AmountFilterBottomSheet"
+        android:name="dev.sanskar.transactions.ui.bottomdialogs.AmountFilterBottomSheet"
         android:label="fragment_amount_filter_bottom_sheet"
         tools:layout="@layout/fragment_amount_filter_bottom_sheet" >
         <argument
