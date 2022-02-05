@@ -87,9 +87,17 @@ class HomeFragment : Fragment() {
     }
 
     private fun onNewTransactionListReceived(transactions: List<Transaction>) {
-        adapter.submitList(transactions)
-        binding.textViewCashBalance.text = "₹${model.getCashBalance()}"
-        binding.textViewDigitalBalance.text = "₹${model.getDigitalBalance()}"
+        if (transactions.isNullOrEmpty()) {
+            binding.listTransactions.visibility = View.GONE
+            binding.lottieEmpty.visibility = View.VISIBLE
+            return
+        } else {
+            binding.listTransactions.visibility = View.VISIBLE
+            binding.lottieEmpty.visibility = View.GONE
+            adapter.submitList(transactions)
+            binding.textViewCashBalance.text = "₹${model.getCashBalance()}"
+            binding.textViewDigitalBalance.text = "₹${model.getDigitalBalance()}"
+        }
     }
 
     /**
