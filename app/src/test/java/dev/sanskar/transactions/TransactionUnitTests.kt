@@ -16,7 +16,7 @@ class TransactionUnitTests {
             .setFilterAmount(FilterByAmountChoices.GREATER_THAN, 100)
             .setFilterType(FilterByTypeChoices.INCOME)
             .build()
-        assertEquals("SELECT * FROM `transactions` WHERE amount >= 100 AND isExpense = 0", query.sql)
+        assertEquals("SELECT * FROM `transaction` WHERE amount >= 100 AND isExpense = 0", query.sql)
     }
 
     @Test
@@ -26,7 +26,7 @@ class TransactionUnitTests {
             .setFilterType(FilterByTypeChoices.INCOME)
             .setFilterMedium(FilterByMediumChoices.DIGITAL)
             .build()
-        assertEquals("SELECT * FROM `transactions` WHERE amount >= 100 AND isExpense = 0 AND isDigital = 1", query.sql)
+        assertEquals("SELECT * FROM `transaction` WHERE amount >= 100 AND isExpense = 0 AND isDigital = 1", query.sql)
     }
 
     @Test
@@ -37,37 +37,37 @@ class TransactionUnitTests {
             .setFilterMedium(FilterByMediumChoices.DIGITAL)
             .setSortingChoice(SortByChoices.TIME_EARLIEST_FIRST)
             .build()
-        assertEquals("SELECT * FROM `transactions` WHERE amount >= 100 AND isExpense = 0 AND isDigital = 1 SORT BY timestamp ASC", query.sql)
+        assertEquals("SELECT * FROM `transaction` WHERE amount >= 100 AND isExpense = 0 AND isDigital = 1 ORDER BY timestamp ASC", query.sql)
     }
 
     @Test
     fun query_filter_type_income_only() {
         val query = QueryBuilder().setFilterType(FilterByTypeChoices.INCOME).build()
-        assertEquals("SELECT * FROM `transactions` WHERE isExpense = 0", query.sql)
+        assertEquals("SELECT * FROM `transaction` WHERE isExpense = 0", query.sql)
     }
 
     @Test
     fun query_filter_type_expense_only() {
         val query = QueryBuilder().setFilterType(FilterByTypeChoices.EXPENSE).build()
-        assertEquals("SELECT * FROM `transactions` WHERE isExpense = 1", query.sql)
+        assertEquals("SELECT * FROM `transaction` WHERE isExpense = 1", query.sql)
     }
 
     @Test
     fun query_medium_cash_only() {
         val query = QueryBuilder().setFilterMedium(FilterByMediumChoices.CASH).build()
-        assertEquals("SELECT * FROM `transactions` WHERE isDigital = 0", query.sql)
+        assertEquals("SELECT * FROM `transaction` WHERE isDigital = 0", query.sql)
     }
 
     @Test
     fun query_medium_digital_only() {
         val query = QueryBuilder().setFilterMedium(FilterByMediumChoices.DIGITAL).build()
-        assertEquals("SELECT * FROM `transactions` WHERE isDigital = 1", query.sql)
+        assertEquals("SELECT * FROM `transaction` WHERE isDigital = 1", query.sql)
     }
 
     @Test
     fun query_all() {
         val query = QueryBuilder().build()
-        assertEquals("SELECT * FROM `transactions`", query.sql)
+        assertEquals("SELECT * FROM `transaction`", query.sql)
     }
 
     @Test
@@ -75,6 +75,6 @@ class TransactionUnitTests {
         val query = QueryBuilder()
             .setSortingChoice(SortByChoices.AMOUNT_HIGHEST_FIRST)
             .build()
-        assertEquals("SELECT * FROM `transactions` SORT BY amount DESC", query.sql)
+        assertEquals("SELECT * FROM `transaction` ORDER BY amount DESC", query.sql)
     }
 }

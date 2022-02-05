@@ -43,26 +43,32 @@ class QueryBuilder {
     private var filterTimeChoice = FilterByTimeChoices.UNSPECIFIED
     private var fromTime = 0L
     private var toTime = 0L
-    private var filterCount = 0
+    private var filterEnabled = false
 
     private var sortChoice = SortByChoices.UNSPECIFIED
 
     fun setFilterAmount(filterAmountChoice: FilterByAmountChoices, amount: Int): QueryBuilder {
-        this.filterAmountChoice = filterAmountChoice
-        this.filterAmountValue = amount
-        filterCount++
+        if (filterAmountChoice != FilterByAmountChoices.UNSPECIFIED) {
+            this.filterAmountChoice = filterAmountChoice
+            this.filterAmountValue = amount
+            this.filterEnabled = true
+        }
         return this
     }
 
     fun setFilterType(filterTypeChoice: FilterByTypeChoices): QueryBuilder {
-        this.filterTypeChoice = filterTypeChoice
-        filterCount++
+        if (filterTypeChoice != FilterByTypeChoices.UNSPECIFIED) {
+            this.filterTypeChoice = filterTypeChoice
+            this.filterEnabled = true
+        }
         return this
     }
 
     fun setFilterMedium(filterMediumChoice: FilterByMediumChoices): QueryBuilder {
-        this.filterMediumChoice = filterMediumChoice
-        filterCount++
+        if (filterMediumChoice != FilterByMediumChoices.UNSPECIFIED) {
+            this.filterMediumChoice = filterMediumChoice
+            this.filterEnabled = true
+        }
         return this
     }
 
@@ -82,8 +88,8 @@ class QueryBuilder {
     private var previousFilterExists = false
 
     fun build(): SimpleSQLiteQuery {
-        val query = StringBuilder("SELECT * FROM `transactions`")
-        if (filterCount > 0) {
+        val query = StringBuilder("SELECT * FROM `transaction`")
+        if (filterEnabled) {
             query.append(" WHERE")
         }
 
@@ -133,7 +139,7 @@ class QueryBuilder {
 
         // Sort
         if (sortChoice != SortByChoices.UNSPECIFIED) {
-            query.append(" SORT BY")
+            query.append(" ORDER BY")
             val sort = when(sortChoice) {
                 SortByChoices.AMOUNT_HIGHEST_FIRST -> "amount DESC"
                 SortByChoices.AMOUNT_LOWEST_FIRST -> "amount ASC"

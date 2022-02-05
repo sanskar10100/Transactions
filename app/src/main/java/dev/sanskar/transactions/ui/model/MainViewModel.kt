@@ -38,21 +38,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         DBInstanceHolder.db = this.db
-        getAll()
+//        getAll()
+        executeConfig()
     }
 
     val transactions = MutableLiveData<List<Transaction>>()
 
-    fun getAll() {
-        currentFlowJob.cancel() // Cancel any other transaction flows
-        selectedViewOption = ViewByMediumOptions.ALL
-        currentFlowJob = viewModelScope.launch {
-            db.transactionDao().getAllTransactions().collect {
-                Log.d(TAG, "getAll: Received all transactions flow")
-                transactions.value = it
-            }
-        }
-    }
+//    fun getAll() {
+//        currentFlowJob.cancel() // Cancel any other transaction flows
+//        selectedViewOption = ViewByMediumOptions.ALL
+//        currentFlowJob = viewModelScope.launch {
+//            db.transactionDao().getAllTransactions().collect {
+//                Log.d(TAG, "getAll: Received all transactions flow")
+//                transactions.value = it
+//            }
+//        }
+//    }
 
     fun addTransaction(
         amount: Int,
@@ -160,18 +161,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         QueryConfig.sortChoice = SortByChoices.values().find {
             it.ordinal == index
         } ?: SortByChoices.UNSPECIFIED
+        executeConfig()
     }
 
     fun setFilterType(index: Int) {
         QueryConfig.filterTypeChoice = FilterByTypeChoices.values().find {
             it.ordinal == index
         } ?: FilterByTypeChoices.UNSPECIFIED
+        executeConfig()
     }
 
     fun setFilterMedium(index: Int) {
         QueryConfig.filterMediumChoice = FilterByMediumChoices.values().find {
             it.ordinal == index
         } ?: FilterByMediumChoices.UNSPECIFIED
+        executeConfig()
     }
 
     fun setFilterAmount(amount: Int, index: Int) {
@@ -179,5 +183,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             it.ordinal == index
         } ?: FilterByAmountChoices.UNSPECIFIED
         QueryConfig.filterAmountValue = amount
+        executeConfig()
+    }
+
+    private fun executeConfig() {
+        val query = QueryBuilder()
+            .setFilterAmount(QueryConfig.filterAmountChoice, QueryConfig.filterAmountValue)
+            .setFilterType(QueryConfig.filterTypeChoice)
+            .setFilterMedium(QueryConfig.filterMediumChoice)
+            .setSortingChoice(QueryConfig.sortChoice)
+            .build()
+        viewModelScope.launch {
+            db.transactionDao().customTransactionQuery(query).collect {
+                transactions.value = it
+            }
+        }
     }
 }

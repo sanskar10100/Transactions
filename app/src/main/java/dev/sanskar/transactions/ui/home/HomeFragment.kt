@@ -137,7 +137,7 @@ class HomeFragment : Fragment() {
             when(bundle.getSerializable(KEY_SELECTED_VIEW_OPTION)) {
                 ViewByMediumOptions.CASH_ONLY -> model.cashOnly()
                 ViewByMediumOptions.DIGITAL_ONLY -> model.digitalOnly()
-                ViewByMediumOptions.ALL -> model.getAll()
+                ViewByMediumOptions.ALL -> {}
             }
         }
     }
