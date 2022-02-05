@@ -14,6 +14,8 @@ A transaction manager for Android which helps you track your income and expenses
 - App Shortcuts for directly opening Transaction Add Screen or Dashboard
 - Filter by amount, medium, type or time
 - Sort by amount, time and insertion order
+- Easy onboarding for first time users
+- Swipe from right to delete a transaction
 
 ### What is being used in building this app
 - Kotlin
@@ -27,6 +29,9 @@ A transaction manager for Android which helps you track your income and expenses
 - Single Activity Architecture
 - Navigation Component with SafeArgs plugin
 - FragmentResults API
+- Firebase Crashlytics
+- [Lottie](https://github.com/airbnb/lottie-android)
+- [MaterialShowcaseView](https://github.com/deano2390/MaterialShowcaseView)
 - [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
 
 ### Light Mode
