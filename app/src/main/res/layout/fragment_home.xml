@@ -66,25 +66,29 @@
                 android:id="@+id/chip_sort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sort by" />
+                android:text="Sort by"
+                app:chipIcon="@drawable/ic_baseline_sort_24" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_filter_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Income and Expense" />
+                android:text="Income and Expense"
+                app:chipIcon="@drawable/ic_baseline_filter_list_24" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_filter_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cash and Digital" />
+                android:text="Cash and Digital"
+                app:chipIcon="@drawable/ic_baseline_cash_24" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_filter_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Any Amount" />
+                android:text="Any Amount"
+                app:chipIcon="@drawable/ic_baseline_currency_rupee_24" />
 
         </com.google.android.material.chip.ChipGroup>
 

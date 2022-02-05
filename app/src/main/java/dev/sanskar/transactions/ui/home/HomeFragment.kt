@@ -17,6 +17,7 @@ import dev.sanskar.transactions.*
 import dev.sanskar.transactions.data.FilterByMediumChoices
 import dev.sanskar.transactions.data.FilterByTypeChoices
 import dev.sanskar.transactions.data.SortByChoices
+import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.FragmentHomeBinding
 import dev.sanskar.transactions.ui.model.MainViewModel
 
@@ -49,52 +50,15 @@ class HomeFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_clear_transactions -> {
-                // Clear transactions on dialog confirmation
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Are you sure?")
-                    .setMessage("Are you sure you want to delete all transactions to date?")
-                    .setPositiveButton("Yes") { _, _ ->
-                        model.clearTransactions()
-                    }
-                    .setNegativeButton("No") { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .show()
-            }
+            R.id.action_clear_transactions -> clearAllTransactionsDialog()
             R.id.action_dashboard -> {
                 findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDashboardFragment())
             }
             R.id.action_exchange_medium -> {
                 findNavController().navigate(R.id.action_homeFragment_to_mediumExchangeFragment)
             }
-            R.id.action_send_feedback -> {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setItems(arrayOf("GitHub", "Gmail")) { _, which ->
-                        Log.d(TAG, "onOptionsItemSelected: $which")
-                        when (which) {
-                            0 -> {
-                                Log.d(
-                                    TAG,
-                                    "onOptionsItemSelected: Attempting to create and launch a custom tab"
-                                )
-                            CustomTabsIntent.Builder()
-                                .build()
-                                .launchUrl(requireContext(), Uri.parse("https://github.com/sanskar10100/Transactions/issues/new"))
-                            }
-                            1 -> {
-                                val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                    data = Uri.parse("mailto:")
-                                    putExtra(Intent.EXTRA_EMAIL, arrayOf("sanskar10100@gmail.com"))
-                                    putExtra(Intent.EXTRA_SUBJECT, "Feedback - Transactions")
-                                }
-                                startActivity(Intent.createChooser(intent, "Send Feedback"))
-                            }
-                        }
-                    }
-                    .create()
-                    .show()
-            }
+            R.id.action_send_feedback -> sendFeedbackDialog()
+            R.id.action_clear_all_filters -> clearFilters()
         }
 
         return true
@@ -108,21 +72,30 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_addTransactionFragment)
         }
 
-        model.transactions.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-            binding.textViewCashBalance.text = "₹${model.getCashBalance()}"
-            binding.textViewDigitalBalance.text = "₹${model.getDigitalBalance()}"
-        }
+        model.transactions.observe(viewLifecycleOwner) { onNewTransactionListReceived(it) }
 
         setChipListeners()
     }
 
+    /**
+     * Set chip titles.
+     * TODO fix through LiveData
+     */
     override fun onResume() {
         super.onResume()
-        setInitialChipTitles()
+        setChipTitles()
     }
 
-    private fun setInitialChipTitles() {
+    private fun onNewTransactionListReceived(transactions: List<Transaction>) {
+        adapter.submitList(transactions)
+        binding.textViewCashBalance.text = "₹${model.getCashBalance()}"
+        binding.textViewDigitalBalance.text = "₹${model.getDigitalBalance()}"
+    }
+
+    /**
+     * Resets chip titles to their default states
+     */
+    private fun setChipTitles() {
         binding.chipSort.text = MainViewModel.QueryConfig.sortChoice.readableString
         binding.chipFilterType.text = MainViewModel.QueryConfig.filterTypeChoice.readableString
         binding.chipFilterMedium.text = MainViewModel.QueryConfig.filterMediumChoice.readableString
@@ -130,7 +103,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setChipListeners() {
-        // Sort Chip
+        // Sort by Chip
         binding.chipSort.setOnClickListener {
             findNavController().navigate(
                 generateOptionsDirection(
@@ -178,6 +151,7 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // Filter by amount chip
         binding.chipFilterAmount.setOnClickListener {
             val directions = HomeFragmentDirections.actionHomeFragmentToAmountFilterBottomSheet(
                 MainViewModel.QueryConfig.filterAmountValue,
@@ -195,7 +169,67 @@ class HomeFragment : Fragment() {
         }
     }
 
+    /**
+     * Returns generated directions for the OptionsBottomSheetDialogFragment
+     */
     private fun generateOptionsDirection(options: Array<String>, key: String, selectedIndex: Int): NavDirections {
         return HomeFragmentDirections.actionHomeFragmentToOptionsBottomSheet(options, key, selectedIndex)
+    }
+
+    /**
+     * Prompts for clearing all transactions
+     */
+    private fun clearAllTransactionsDialog() {
+        // Clear transactions on dialog confirmation
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Are you sure?")
+            .setMessage("Are you sure you want to delete all of your transactions records? This action is irreversible.")
+            .setPositiveButton("Yes") { _, _ ->
+                model.clearAllTransactions()
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    /**
+     * Shows a feedback dialog with options for sending feedback through
+     * Gmail or GitHub
+     */
+    private fun sendFeedbackDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setItems(arrayOf("GitHub", "Gmail")) { _, which ->
+                Log.d(TAG, "onOptionsItemSelected: $which")
+                when (which) {
+                    0 -> {
+                        Log.d(
+                            TAG,
+                            "onOptionsItemSelected: Attempting to create and launch a custom tab"
+                        )
+                        CustomTabsIntent.Builder()
+                            .build()
+                            .launchUrl(requireContext(), Uri.parse("https://github.com/sanskar10100/Transactions/issues/new"))
+                    }
+                    1 -> {
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = Uri.parse("mailto:")
+                            putExtra(Intent.EXTRA_EMAIL, arrayOf("sanskar10100@gmail.com"))
+                            putExtra(Intent.EXTRA_SUBJECT, "Feedback - Transactions")
+                        }
+                        startActivity(Intent.createChooser(intent, "Send Feedback"))
+                    }
+                }
+            }
+            .create()
+            .show()
+    }
+
+    /**
+     * Clears all applied filters and resets the chip text
+     */
+    private fun clearFilters() {
+        model.resetQueryConfig()
+        setChipTitles()
     }
 }

@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="dev.sanskar.transactions.ui.home.HomeFragment"
-        android:label="All Transactions"
+        android:label="Transactions"
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_addTransactionFragment"

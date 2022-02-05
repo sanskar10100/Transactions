@@ -25,4 +25,10 @@
         android:icon="@drawable/ic_baseline_feedback_24"
         android:title="Send Feedback"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_clear_all_filters"
+        android:icon="@drawable/ic_baseline_clear_24"
+        android:title="Clear Filters"
+        app:showAsAction="ifRoom"/>
 </menu>
