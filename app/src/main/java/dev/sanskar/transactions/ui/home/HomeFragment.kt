@@ -184,8 +184,18 @@ class HomeFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Are you sure?")
             .setMessage("Are you sure you want to delete all of your transactions records? This action is irreversible.")
-            .setPositiveButton("Yes") { _, _ ->
-                model.clearAllTransactions()
+            .setPositiveButton("Yes") { dialog, _ ->
+                dialog.dismiss()
+                // Re-prompt
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Are you really sure?")
+                    .setMessage("THIS ACTION IS IRREVERSIBLE!!")
+                    .setPositiveButton("Delete Everything") { _, _ ->
+                        model.clearAllTransactions()
+                        binding.root.shortSnackbar("Deleted Everything!")
+                    }
+                    .setNegativeButton("Cancel") {_, _ -> }
+                    .show()
             }
             .setNegativeButton("No") { dialog, _ ->
                 dialog.dismiss()
