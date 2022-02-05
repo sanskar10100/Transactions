@@ -1,7 +1,7 @@
 package dev.sanskar.transactions.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -60,4 +60,7 @@ interface TransactionDao {
 
     @Query("SELECT * FROM `transaction` WHERE isDigital = 1")
     fun getDigitalTransactions(): Flow<List<Transaction>>
+
+    @RawQuery(observedEntities = [Transaction::class])
+    fun customTransactionQuery(query: SupportSQLiteQuery): Flow<List<Transaction>>
 }

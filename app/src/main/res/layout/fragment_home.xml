@@ -47,6 +47,49 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <HorizontalScrollView
+        android:id="@+id/scrollView_query_config"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView_cash_balance">
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_sort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sort by" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_filter_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Income and Expense" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_filter_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cash and Digital" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_filter_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Amount" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </HorizontalScrollView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_transactions"
         android:layout_width="0dp"
@@ -61,14 +104,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView_cash_balance" />
+        app:layout_constraintTop_toBottomOf="@id/scrollView_query_config" />
 
     <View
         android:id="@+id/divider"
         android:layout_width="2dp"
         android:layout_height="0dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toTopOf="@+id/list_transactions"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView_query_config"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

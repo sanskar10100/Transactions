@@ -122,6 +122,7 @@ class HomeFragment : Fragment() {
         }
 
         checkFragmentResults()
+        setChipListeners()
     }
 
     /**
@@ -144,5 +145,11 @@ class HomeFragment : Fragment() {
             .setGitHubUserAndRepo("sanskar10100", "Transactions")
             .setDisplay(Display.DIALOG)
             .start()
+    }
+
+    private fun setChipListeners() {
+        binding.chipSort.setOnClickListener {
+            // Open dialog
+        }
     }
 }

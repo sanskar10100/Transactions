@@ -7,9 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import dev.sanskar.transactions.asFormattedDateTime
-import dev.sanskar.transactions.data.DBInstanceHolder
-import dev.sanskar.transactions.data.Transaction
-import dev.sanskar.transactions.data.TransactionDatabase
+import dev.sanskar.transactions.data.*
 import dev.sanskar.transactions.ui.home.ViewByMediumOptions
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
@@ -19,6 +17,14 @@ import java.util.*
 private const val TAG = "MainViewModel"
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
+
+    object QueryConfig {
+        var filterAmountChoice = FilterByAmountChoices.UNSPECIFIED
+        var filterAmountValue = 0
+        var filterTypeChoice = FilterByTypeChoices.UNSPECIFIED
+        var filterMediumChoice = FilterByMediumChoices.UNSPECIFIED
+        var sortChoice = SortByChoices.UNSPECIFIED
+    }
 
     private var db = Room.databaseBuilder(
         application,
