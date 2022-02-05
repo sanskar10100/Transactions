@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="dev.sanskar.transactions.ui.home.HomeFragment"
-        android:label="All Transactions"
+        android:label="Transactions"
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_addTransactionFragment"
@@ -28,11 +28,11 @@
             android:id="@+id/action_homeFragment_to_mediumExchangeFragment"
             app:destination="@id/mediumExchangeFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_filterParameterBottomDialog"
-            app:destination="@id/filterParameterBottomDialog" />
+            android:id="@+id/action_homeFragment_to_optionsBottomSheet"
+            app:destination="@id/optionsBottomSheet" />
         <action
-            android:id="@+id/action_homeFragment_to_viewOnlyBottomSheet"
-            app:destination="@id/viewByMediumOptionsBottomSheet" />
+            android:id="@+id/action_homeFragment_to_amountFilterBottomSheet"
+            app:destination="@id/amountFilterBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/addTransactionFragment"
@@ -85,26 +85,30 @@
         android:label="Exchange Medium"
         tools:layout="@layout/fragment_medium_exchange" />
     <dialog
-        android:id="@+id/filterParameterBottomDialog"
-        android:name="dev.sanskar.transactions.ui.filter.FilterParameterBottomDialog"
-        android:label="Filter Transactions on Parameter"
-        tools:layout="@layout/fragment_filter_parameter_bottom_dialog">
-        <action
-            android:id="@+id/action_filterParameterBottomDialog_to_filterResultFragment"
-            app:destination="@id/filterResultFragment" />
-    </dialog>
-    <fragment
-        android:id="@+id/filterResultFragment"
-        android:name="dev.sanskar.transactions.ui.filter.FilterResultFragment"
-        android:label="Filtered Transactions"
-        tools:layout="@layout/fragment_filter_result" />
-    <dialog
-        android:id="@+id/viewByMediumOptionsBottomSheet"
-        android:name="dev.sanskar.transactions.ui.home.ViewByMediumOptionsBottomSheet"
-        android:label="fragment_view_only_bottom_sheet"
-        tools:layout="@layout/fragment_view_by_medium_option" >
+        android:id="@+id/optionsBottomSheet"
+        android:name="dev.sanskar.transactions.ui.bottomdialogs.OptionsBottomSheet"
+        android:label="fragment_options_bottom_sheet"
+        tools:layout="@layout/fragment_options_bottom_sheet" >
         <argument
-            android:name="selectedViewOption"
-            app:argType="dev.sanskar.transactions.ui.home.ViewByMediumOptions" />
+            android:name="options"
+            app:argType="string[]" />
+        <argument
+            android:name="requestKey"
+            app:argType="string" />
+        <argument
+            android:name="selectedItemIndex"
+            app:argType="integer" />
+    </dialog>
+    <dialog
+        android:id="@+id/amountFilterBottomSheet"
+        android:name="dev.sanskar.transactions.ui.bottomdialogs.AmountFilterBottomSheet"
+        android:label="fragment_amount_filter_bottom_sheet"
+        tools:layout="@layout/fragment_amount_filter_bottom_sheet" >
+        <argument
+            android:name="amount"
+            app:argType="integer" />
+        <argument
+            android:name="selectedIndex"
+            app:argType="integer" />
     </dialog>
 </navigation>

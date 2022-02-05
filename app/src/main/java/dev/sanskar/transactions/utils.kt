@@ -8,8 +8,13 @@ import com.google.android.material.textfield.TextInputLayout
 import java.text.SimpleDateFormat
 import java.util.*
 
-const val VIEW_OPTIONS_REQUEST_KEY = "view_options_request_key"
-const val KEY_SELECTED_VIEW_OPTION = "selected"
+const val KEY_SELECTED_OPTION = "selected_option"
+const val KEY_SELECTED_OPTION_INDEX = "selected_option_index"
+const val SORT_REQUEST_KEY = "sort_request"
+const val KEY_FILTER_BY_TYPE = "key_filter_by_type"
+const val KEY_FILTER_BY_MEDIUM = "key_filter_by_medium"
+const val KEY_FILTER_BY_AMOUNT = "key_filter_by_amount"
+const val KEY_AMOUNT = "key_amount"
 
 fun Long.asFormattedDateTime() : String {
     return SimpleDateFormat(

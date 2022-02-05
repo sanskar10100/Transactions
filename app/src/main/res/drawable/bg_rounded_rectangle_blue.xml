@@ -4,9 +4,9 @@
 
     <corners
         android:bottomLeftRadius="10dp"
-        android:bottomRightRadius="10dp"
+        android:bottomRightRadius="50dp"
         android:topLeftRadius="10dp"
-        android:topRightRadius="10dp" />
+        android:topRightRadius="50dp" />
     <solid android:color="@color/option_selected_background" />
 
 </shape>
