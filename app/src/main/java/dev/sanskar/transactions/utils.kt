@@ -35,7 +35,7 @@ fun Context.shortToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
-fun View.shortSnackbarWithAction(message: String, onAction: () -> Unit) {
+fun View.shortSnackbarWithUndo(message: String, onAction: () -> Unit) {
     Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
         .setAction("UNDO") { onAction() }
         .show()

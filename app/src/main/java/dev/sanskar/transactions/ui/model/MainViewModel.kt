@@ -203,6 +203,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
+     * Finds and deletes a transaction
+     */
+    fun deleteTransaction(index: Int) {
+        val transactionToDelete = transactions.value?.get(index)
+        if (transactionToDelete != null) {
+            deleteTransaction(transactionToDelete)
+        }
+    }
+
+    /**
      * Restores any deleted transactions
      */
     fun undoTransactionDelete() {

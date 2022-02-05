@@ -11,6 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.sanskar.transactions.*
@@ -67,6 +69,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.listTransactions.adapter = adapter
+        recyclerViewSwipeToDelete()
 
         binding.fabAddTransaction.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_addTransactionFragment)
@@ -78,6 +81,21 @@ class HomeFragment : Fragment() {
     }
 
     /**
+     * Sets swipe to delete action on recyclerview items.
+     * Swiping on any item from the right results in the item being deleted
+     */
+    private fun recyclerViewSwipeToDelete() {
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder) = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                model.deleteTransaction(viewHolder.adapterPosition)
+                binding.root.shortSnackbarWithUndo("Transaction deleted!", model::undoTransactionDelete)
+            }
+        }).attachToRecyclerView(binding.listTransactions)
+    }
+
+    /**
      * Set chip titles.
      * TODO fix through LiveData
      */
@@ -86,6 +104,10 @@ class HomeFragment : Fragment() {
         setChipTitles()
     }
 
+    /**
+     * Called whenever a new transactions list is received from the VM.
+     * If the transactions are empty (result of a filter or new install), then the empty lottie view is shown.
+     */
     private fun onNewTransactionListReceived(transactions: List<Transaction>) {
         if (transactions.isNullOrEmpty()) {
             binding.listTransactions.visibility = View.GONE
