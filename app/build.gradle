@@ -75,6 +75,9 @@ dependencies {
     // Community
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
+    // Lottie
+    implementation 'com.airbnb.android:lottie:4.2.2'
+
     // Chrome Custom Tabs
     implementation "androidx.browser:browser:1.4.0"
 
