@@ -85,7 +85,12 @@ class AddTransactionFragment : Fragment() {
                     ).show()
                     return@setOnClickListener
                 } else {
-                    amount = this.toInt()
+                    amount = try {
+                        this.toInt()
+                    } catch (e: NumberFormatException) {
+                        // A floating point value was input
+                        this.toFloat().toInt()
+                    }
                 }
             }
             binding.textFieldDescription.editText?.text.toString().run {
