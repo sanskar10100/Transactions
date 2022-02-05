@@ -128,6 +128,18 @@ class HomeFragment : Fragment() {
         setChipListeners()
     }
 
+    override fun onResume() {
+        super.onResume()
+        setInitialChipTitles()
+    }
+
+    private fun setInitialChipTitles() {
+        binding.chipSort.text = MainViewModel.QueryConfig.sortChoice.readableString
+        binding.chipFilterType.text = MainViewModel.QueryConfig.filterTypeChoice.readableString
+        binding.chipFilterMedium.text = MainViewModel.QueryConfig.filterMediumChoice.readableString
+        binding.chipFilterAmount.text = MainViewModel.QueryConfig.filterAmountChoice.readableString
+    }
+
     /**
      * Checks if there are any returned results from any other fragments
      */
