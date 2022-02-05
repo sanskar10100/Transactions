@@ -11,13 +11,13 @@ enum class FilterByAmountChoices(val readableString: String) {
 enum class FilterByTypeChoices(val readableString: String) {
     INCOME("Income Only"),
     EXPENSE("Expense Only"),
-    UNSPECIFIED("Both")
+    UNSPECIFIED("Income and Expense")
 }
 
 enum class FilterByMediumChoices(val readableString: String) {
     CASH("Cash Only"),
     DIGITAL("Digital Only"),
-    UNSPECIFIED("Both")
+    UNSPECIFIED("Cash and Digital")
 }
 
 enum class FilterByTimeChoices {
