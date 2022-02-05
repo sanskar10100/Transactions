@@ -12,6 +12,7 @@ import dev.sanskar.transactions.KEY_AMOUNT
 import dev.sanskar.transactions.KEY_FILTER_BY_AMOUNT
 import dev.sanskar.transactions.KEY_SELECTED_OPTION_INDEX
 import dev.sanskar.transactions.databinding.FragmentAmountFilterBottomSheetBinding
+import dev.sanskar.transactions.getText
 
 class AmountFilterBottomSheet : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentAmountFilterBottomSheetBinding
