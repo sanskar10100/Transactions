@@ -12,7 +12,7 @@ import dev.sanskar.transactions.R
 import dev.sanskar.transactions.asFormattedDateTime
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.FragmentAddTransactionBinding
-import dev.sanskar.transactions.shortSnackbarWithAction
+import dev.sanskar.transactions.shortSnackbarWithUndo
 import dev.sanskar.transactions.ui.model.MainViewModel
 
 class AddTransactionFragment : Fragment() {
@@ -47,7 +47,7 @@ class AddTransactionFragment : Fragment() {
             val transaction = model.transactions.value?.get(args.transactionIndex)
             if (transaction != null) {
                 model.deleteTransaction(transaction)
-                binding.root.shortSnackbarWithAction("Transaction deleted!", model::undoTransactionDelete)
+                binding.root.shortSnackbarWithUndo("Transaction deleted!", model::undoTransactionDelete)
                 findNavController().popBackStack()
             }
         }
