@@ -78,6 +78,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:hint="Amount"
+            app:startIconDrawable="@drawable/ic_baseline_currency_rupee_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chipGroup_category">
@@ -98,6 +99,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="24dp"
             android:hint="Description"
+            app:startIconDrawable="@drawable/ic_baseline_description_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textField_amount">
