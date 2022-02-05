@@ -96,16 +96,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * Deletes a transaction from the database. Matched through ID
-     */
-    fun deleteTransaction(transaction: Transaction) {
-        viewModelScope.launch {
-            db.transactionDao().deleteTransaction(transaction)
-        }
-        Log.d(TAG, "deleteTransaction: deleted $transaction")
-    }
-
-    /**
      * Purges the transaction record from the database. Use very cautiously.
      */
     fun clearAllTransactions() {
@@ -197,5 +187,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             sortChoice = SortByChoices.UNSPECIFIED
         }
         executeConfig()
+    }
+
+    private var clearedTransaction: Transaction? = null
+
+    /**
+    * Deletes a transaction from the database. Matched through ID
+    */
+    fun deleteTransaction(transaction: Transaction) {
+        clearedTransaction = transaction
+        viewModelScope.launch {
+            db.transactionDao().deleteTransaction(transaction)
+        }
+        Log.d(TAG, "deleteTransaction: deleted $transaction")
+    }
+
+    /**
+     * Restores any deleted transactions
+     */
+    fun undoTransactionDelete() {
+        if (clearedTransaction != null) {
+            viewModelScope.launch {
+                db.transactionDao().insertTransaction(clearedTransaction!!)
+                clearedTransaction = null
+            }
+        }
     }
 }
