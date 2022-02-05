@@ -17,3 +17,4 @@ local.properties
 credentials.json
 /.idea/icon.png
 /.idea/icon_dark.png
+/app/google-services.json
