@@ -8,8 +8,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import dev.sanskar.transactions.asFormattedDateTime
 import dev.sanskar.transactions.data.*
-import dev.sanskar.transactions.ui.home.ViewByMediumOptions
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
@@ -33,8 +31,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     ).allowMainThreadQueries()
         .build()
 
-    var selectedViewOption = ViewByMediumOptions.ALL
-    private var currentFlowJob: Job = Job()
 
     init {
         DBInstanceHolder.db = this.db
@@ -43,17 +39,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     val transactions = MutableLiveData<List<Transaction>>()
-
-//    fun getAll() {
-//        currentFlowJob.cancel() // Cancel any other transaction flows
-//        selectedViewOption = ViewByMediumOptions.ALL
-//        currentFlowJob = viewModelScope.launch {
-//            db.transactionDao().getAllTransactions().collect {
-//                Log.d(TAG, "getAll: Received all transactions flow")
-//                transactions.value = it
-//            }
-//        }
-//    }
 
     fun addTransaction(
         amount: Int,
@@ -132,28 +117,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             this.set(Calendar.MINUTE, 0)
             Log.d(TAG, "getThisWeekExpense: ${this.timeInMillis.asFormattedDateTime()}")
             return db.transactionDao().getThisWeekExpense(this.timeInMillis)
-        }
-    }
-
-    fun cashOnly() {
-        currentFlowJob.cancel() // Cancel any other transaction flows
-        selectedViewOption = ViewByMediumOptions.CASH_ONLY
-        currentFlowJob = viewModelScope.launch {
-            db.transactionDao().getCashTransactions().collect {
-                Log.d(TAG, "cashOnly: Received cash transactions flow")
-                transactions.value = it
-            }
-        }
-    }
-
-    fun digitalOnly() {
-        currentFlowJob.cancel() // Cancel any other transaction flows
-        selectedViewOption = ViewByMediumOptions.DIGITAL_ONLY
-        currentFlowJob = viewModelScope.launch {
-            db.transactionDao().getDigitalTransactions().collect {
-                Log.d(TAG, "digitalOnly: Received digital transactions flow")
-                transactions.value = it
-            }
         }
     }
 

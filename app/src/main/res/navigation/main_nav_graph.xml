@@ -28,12 +28,6 @@
             android:id="@+id/action_homeFragment_to_mediumExchangeFragment"
             app:destination="@id/mediumExchangeFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_filterParameterBottomDialog"
-            app:destination="@id/filterParameterBottomDialog" />
-        <action
-            android:id="@+id/action_homeFragment_to_viewOnlyBottomSheet"
-            app:destination="@id/viewByMediumOptionsBottomSheet" />
-        <action
             android:id="@+id/action_homeFragment_to_optionsBottomSheet"
             app:destination="@id/optionsBottomSheet" />
         <action
@@ -90,29 +84,6 @@
         android:name="dev.sanskar.transactions.ui.exchange.MediumExchangeFragment"
         android:label="Exchange Medium"
         tools:layout="@layout/fragment_medium_exchange" />
-    <dialog
-        android:id="@+id/filterParameterBottomDialog"
-        android:name="dev.sanskar.transactions.ui.filter.FilterParameterBottomDialog"
-        android:label="Filter Transactions on Parameter"
-        tools:layout="@layout/fragment_filter_parameter_bottom_dialog">
-        <action
-            android:id="@+id/action_filterParameterBottomDialog_to_filterResultFragment"
-            app:destination="@id/filterResultFragment" />
-    </dialog>
-    <fragment
-        android:id="@+id/filterResultFragment"
-        android:name="dev.sanskar.transactions.ui.filter.FilterResultFragment"
-        android:label="Filtered Transactions"
-        tools:layout="@layout/fragment_filter_result" />
-    <dialog
-        android:id="@+id/viewByMediumOptionsBottomSheet"
-        android:name="dev.sanskar.transactions.ui.home.ViewByMediumOptionsBottomSheet"
-        android:label="fragment_view_only_bottom_sheet"
-        tools:layout="@layout/fragment_view_by_medium_option" >
-        <argument
-            android:name="selectedViewOption"
-            app:argType="dev.sanskar.transactions.ui.home.ViewByMediumOptions" />
-    </dialog>
     <dialog
         android:id="@+id/optionsBottomSheet"
         android:name="dev.sanskar.transactions.OptionsBottomSheet"

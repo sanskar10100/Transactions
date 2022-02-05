@@ -10,21 +10,6 @@ interface TransactionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transactions: Transaction)
 
-    @Query("SELECT * FROM `transaction` ORDER BY timestamp")
-    fun getAllTransactions(): Flow<List<Transaction>>
-
-    @Query("SELECT * FROM `transaction` WHERE amount >= :amount ORDER BY amount DESC",)
-    suspend fun filterOnTransactionAmountGreater(amount: Int): List<Transaction>
-
-    @Query("SELECT * FROM `transaction` WHERE amount <= :amount ORDER BY amount DESC",)
-    suspend fun filterOnTransactionAmountLesser(amount: Int): List<Transaction>
-
-    @Query("SELECT * FROM `transaction` WHERE amount <= :amount AND isExpense=1 ORDER BY amount DESC",)
-    suspend fun filterOnExpenseAmountLesser(amount: Int): List<Transaction>
-
-    @Query("SELECT * FROM `transaction` WHERE amount >= :amount AND isExpense=1 ORDER BY amount DESC",)
-    suspend fun filterOnExpenseAmountGreater(amount: Int): List<Transaction>
-
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND isDigital = 0")
     fun getTotalCashExpenses(): Int
 

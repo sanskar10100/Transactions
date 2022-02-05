@@ -98,12 +98,6 @@ class HomeFragment : Fragment() {
                     .create()
                     .show()
             }
-            R.id.action_filter -> {
-                findNavController().navigate(R.id.action_homeFragment_to_filterParameterBottomDialog)
-            }
-            R.id.action_view_by_medium -> {
-                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToViewOnlyBottomSheet(model.selectedViewOption))
-            }
         }
 
         return true
@@ -124,7 +118,6 @@ class HomeFragment : Fragment() {
             binding.textViewDigitalBalance.text = "₹${model.getDigitalBalance()}"
         }
 
-        checkFragmentResults()
         setChipListeners()
     }
 
@@ -138,20 +131,6 @@ class HomeFragment : Fragment() {
         binding.chipFilterType.text = MainViewModel.QueryConfig.filterTypeChoice.readableString
         binding.chipFilterMedium.text = MainViewModel.QueryConfig.filterMediumChoice.readableString
         binding.chipFilterAmount.text = MainViewModel.QueryConfig.filterAmountChoice.readableString
-    }
-
-    /**
-     * Checks if there are any returned results from any other fragments
-     */
-    private fun checkFragmentResults() {
-        // View Options
-        setFragmentResultListener(VIEW_OPTIONS_REQUEST_KEY) { _, bundle ->
-            when(bundle.getSerializable(KEY_SELECTED_VIEW_OPTION)) {
-                ViewByMediumOptions.CASH_ONLY -> model.cashOnly()
-                ViewByMediumOptions.DIGITAL_ONLY -> model.digitalOnly()
-                ViewByMediumOptions.ALL -> {}
-            }
-        }
     }
 
     private fun checkAppUpdate() {
