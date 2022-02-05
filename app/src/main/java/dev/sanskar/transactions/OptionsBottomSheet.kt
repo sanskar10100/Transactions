@@ -38,8 +38,8 @@ class OptionsBottomSheet : BottomSheetDialogFragment() {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 ).apply {
-                    setMargins(8)
-                    setPadding(16)
+                    setMargins(16)
+                    setPadding(32)
                 }
                 text = s
                 setTypeface(null, Typeface.BOLD)
