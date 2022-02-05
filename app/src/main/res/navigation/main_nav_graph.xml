@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_homeFragment_to_viewOnlyBottomSheet"
             app:destination="@id/viewByMediumOptionsBottomSheet" />
+        <action
+            android:id="@+id/action_homeFragment_to_optionsBottomSheet"
+            app:destination="@id/optionsBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/addTransactionFragment"
@@ -106,5 +109,20 @@
         <argument
             android:name="selectedViewOption"
             app:argType="dev.sanskar.transactions.ui.home.ViewByMediumOptions" />
+    </dialog>
+    <dialog
+        android:id="@+id/optionsBottomSheet"
+        android:name="dev.sanskar.transactions.OptionsBottomSheet"
+        android:label="fragment_options_bottom_sheet"
+        tools:layout="@layout/fragment_options_bottom_sheet" >
+        <argument
+            android:name="options"
+            app:argType="string[]" />
+        <argument
+            android:name="requestKey"
+            app:argType="string" />
+        <argument
+            android:name="selectedItemIndex"
+            app:argType="integer" />
     </dialog>
 </navigation>
