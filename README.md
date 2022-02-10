@@ -42,6 +42,14 @@ A fast and easy zero-config transaction manager for Android which helps you trac
 
 ---
 
-Transactions is built and published on the Play Store at https://play.google.com/store/apps/details?id=dev.sanskar.transactions.
+## Related Articles
+- https://sanskar10100.hashnode.dev/querybuilder-how-i-wrote-a-runtime-sql-query-generator-for-an-android-app
+
+---
+
+<a href='https://play.google.com/store/apps/details?id=dev.sanskar.transactions&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+
+---
+<br>
 
 Please open an [issue](https://github.com/sanskar10100/Transactions/issues/new) for any feedback! Thanks
