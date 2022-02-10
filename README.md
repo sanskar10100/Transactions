@@ -1,6 +1,6 @@
 # Transactions
 
-A transaction manager for Android which helps you track your income and expenses. Specifically designed to cater to the needs of the **hostelers and students** with features like an intuitive, color coded UI, app shortcuts, medium exchange, filtering (coming soon) and linked income(coming soon)
+A fast and easy zero-config transaction manager for Android which helps you track your income and expenses generated through cash or digital mediums. Specifically designed to cater to the needs of **hostelers and students** with features like an intuitive, color coded UI, app shortcuts, medium exchange and incremental filtering.
 
 ### Features:
 - Fields for amount, description
@@ -41,5 +41,7 @@ A transaction manager for Android which helps you track your income and expenses
 ![Transactions-Dark](./assets/transactions_dark.jpeg)
 
 ---
+
+Transactions is built and published on the Play Store at https://play.google.com/store/apps/details?id=dev.sanskar.transactions.
 
 Please open an [issue](https://github.com/sanskar10100/Transactions/issues/new) for any feedback! Thanks
