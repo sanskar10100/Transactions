@@ -223,4 +223,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
+    val searchResults = MutableLiveData<List<Transaction>>()
+
+    /**
+     * Generates search results bases on the query
+     */
+    fun search(searchQuery: String) {
+        viewModelScope.launch {
+            searchResults.value = db.transactionDao().search("%$searchQuery%")
+        }
+    }
 }

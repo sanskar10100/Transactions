@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dev.sanskar.transactions.databinding.FragmentMediumExchangeBinding
-import dev.sanskar.transactions.getText
+import dev.sanskar.transactions.text
 import dev.sanskar.transactions.ui.model.MainViewModel
 
 class MediumExchangeFragment : BottomSheetDialogFragment() {
@@ -43,11 +43,11 @@ class MediumExchangeFragment : BottomSheetDialogFragment() {
 
 
         binding.buttonAdd.setOnClickListener {
-            if (binding.textFieldAmount.getText().isEmpty()) {
+            if (binding.textFieldAmount.text.isEmpty()) {
                 binding.textFieldAmount.error = "Amount cannot be empty!"
                 return@setOnClickListener
             } else {
-                val amount = binding.textFieldAmount.getText().toInt();
+                val amount = binding.textFieldAmount.text.toInt();
                 if (binding.chipCashSource.isChecked) {
                     // Remove from cash and add to digital
                     model.addTransaction(amount, "Currency Medium Exchange", System.currentTimeMillis(), false, true)

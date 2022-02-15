@@ -23,8 +23,9 @@ fun Long.asFormattedDateTime() : String {
     ).format(Date(this))
 }
 
-fun TextInputLayout.getText(): String {
-    return this.editText?.text?.toString() ?: ""
+val TextInputLayout.text: String
+get() {
+    return this.editText?.text.toString() ?: ""
 }
 
 fun View.shortSnackbar(message: String) {
@@ -39,4 +40,12 @@ fun View.shortSnackbarWithUndo(message: String, onAction: () -> Unit) {
     Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
         .setAction("UNDO") { onAction() }
         .show()
+}
+
+fun View.show() {
+    this.visibility = View.VISIBLE
+}
+
+fun View.hide() {
+    this.visibility = View.GONE
 }
