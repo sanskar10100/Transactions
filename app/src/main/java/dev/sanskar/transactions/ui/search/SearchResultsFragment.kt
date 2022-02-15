@@ -28,7 +28,7 @@ class SearchResultsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = TransactionsListAdapter(requireContext())
+        val adapter = TransactionsListAdapter(requireContext(), searchMode = true)
         binding.listSearchResults.adapter = adapter
         model.searchResults.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {

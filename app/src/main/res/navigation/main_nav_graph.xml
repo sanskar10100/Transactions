@@ -127,5 +127,9 @@
         android:id="@+id/searchResultsFragment"
         android:name="dev.sanskar.transactions.ui.search.SearchResultsFragment"
         android:label="Search Results"
-        tools:layout="@layout/fragment_search_results" />
+        tools:layout="@layout/fragment_search_results" >
+        <action
+            android:id="@+id/action_searchResultsFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
+    </fragment>
 </navigation>

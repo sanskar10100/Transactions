@@ -12,9 +12,8 @@ import dev.sanskar.transactions.R
 import dev.sanskar.transactions.asFormattedDateTime
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.LayoutTransactionBinding
-import dev.sanskar.transactions.shortToast
 
-class TransactionsListAdapter(private val context: Context, private val filterMode: Boolean = false) :
+class TransactionsListAdapter(private val context: Context, private val searchMode: Boolean = false) :
     ListAdapter<Transaction, TransactionsListAdapter.ViewHolder>(TransactionDiffCallback()) {
 
     class ViewHolder(val binding: LayoutTransactionBinding) : RecyclerView.ViewHolder(binding.root)
@@ -45,13 +44,9 @@ class TransactionsListAdapter(private val context: Context, private val filterMo
             textViewSource.text = if (transaction.isDigital) "Digital" else "Cash"
 
             root.setOnClickListener {
-                if (!filterMode) {
-                    root.findNavController().navigate(
-                        HomeFragmentDirections.actionHomeFragmentToAddTransactionFragment(position)
-                    )
-                } else {
-                    context.shortToast("Editing/Deletion in filtered transactions is not available yet!")
-                }
+                if (!searchMode) root.findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToAddTransactionFragment(position)
+                )
             }
         }
     }
