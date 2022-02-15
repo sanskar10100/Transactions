@@ -72,7 +72,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.listTransactions.adapter = adapter
-        recyclerViewSwipeToDelete()
+        setupRecyclerViewSwipe()
         onboard()
 
         binding.fabAddTransaction.setOnClickListener {
@@ -88,13 +88,23 @@ class HomeFragment : Fragment() {
      * Sets swipe to delete action on recyclerview items.
      * Swiping on any item from the right results in the item being deleted
      */
-    private fun recyclerViewSwipeToDelete() {
+    private fun setupRecyclerViewSwipe() {
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder) = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 model.deleteTransaction(viewHolder.adapterPosition)
                 binding.root.shortSnackbarWithUndo("Transaction deleted!", model::undoTransactionDelete)
+            }
+        }).attachToRecyclerView(binding.listTransactions)
+
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder) = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToAddTransactionFragment(viewHolder.adapterPosition)
+                )
             }
         }).attachToRecyclerView(binding.listTransactions)
     }
