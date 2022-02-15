@@ -116,7 +116,16 @@
     </dialog>
     <dialog
         android:id="@+id/searchQueryBottomSheet"
-        android:name="dev.sanskar.transactions.ui.SearchQueryBottomSheet"
+        android:name="dev.sanskar.transactions.ui.search.SearchQueryBottomSheet"
         android:label="fragment_search_query_bottom_sheet"
-        tools:layout="@layout/fragment_search_query_bottom_sheet" />
+        tools:layout="@layout/fragment_search_query_bottom_sheet" >
+        <action
+            android:id="@+id/action_searchQueryBottomSheet_to_searchResultsFragment"
+            app:destination="@id/searchResultsFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/searchResultsFragment"
+        android:name="dev.sanskar.transactions.ui.search.SearchResultsFragment"
+        android:label="fragment_search_results"
+        tools:layout="@layout/fragment_search_results" />
 </navigation>

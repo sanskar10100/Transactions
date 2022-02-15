@@ -1,4 +1,4 @@
-package dev.sanskar.transactions.ui
+package dev.sanskar.transactions.ui.search
 
 import android.content.Context
 import android.os.Bundle
@@ -6,8 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dev.sanskar.transactions.R
 import dev.sanskar.transactions.databinding.FragmentSearchQueryBottomSheetBinding
+import dev.sanskar.transactions.text
+import dev.sanskar.transactions.ui.model.MainViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -15,6 +20,8 @@ import kotlinx.coroutines.launch
 
 class SearchQueryBottomSheet : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentSearchQueryBottomSheetBinding
+
+    private val model by activityViewModels<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,6 +46,16 @@ class SearchQueryBottomSheet : BottomSheetDialogFragment() {
                 binding.textFieldSearchQuery.editText?.applicationWindowToken,
                 InputMethodManager.SHOW_IMPLICIT, 0
             )
+        }
+
+        binding.buttonSearch.setOnClickListener {
+            val searchQuery = binding.textFieldSearchQuery.text
+            if (searchQuery.isEmpty()) {
+                binding.textFieldSearchQuery.error = "Empty Query!"
+            } else {
+                model.search(searchQuery)
+                findNavController().navigate(R.id.action_searchQueryBottomSheet_to_searchResultsFragment)
+            }
         }
     }
 }
