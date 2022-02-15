@@ -1,6 +1,7 @@
 package dev.sanskar.transactions
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
@@ -48,4 +49,9 @@ fun View.show() {
 
 fun View.hide() {
     this.visibility = View.GONE
+}
+
+fun log(message: String) {
+    if (BuildConfig.DEBUG || BuildConfig.BUILD_TYPE.lowercase().contains("debug"))
+        Log.d("TransactionsDebug", message)
 }
