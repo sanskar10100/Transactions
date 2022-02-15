@@ -3,7 +3,6 @@ package dev.sanskar.transactions.ui.home
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
@@ -245,13 +244,10 @@ class HomeFragment : Fragment() {
     private fun sendFeedbackDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setItems(arrayOf("GitHub", "Gmail")) { _, which ->
-                Log.d(TAG, "onOptionsItemSelected: $which")
+                log("onOptionsItemSelected: $which")
                 when (which) {
                     0 -> {
-                        Log.d(
-                            TAG,
-                            "onOptionsItemSelected: Attempting to create and launch a custom tab"
-                        )
+                        log("onOptionsItemSelected: Attempting to create and launch a custom tab")
                         CustomTabsIntent.Builder()
                             .build()
                             .launchUrl(requireContext(), Uri.parse("https://github.com/sanskar10100/Transactions/issues/new"))

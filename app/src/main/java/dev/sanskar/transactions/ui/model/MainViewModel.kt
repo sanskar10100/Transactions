@@ -1,12 +1,12 @@
 package dev.sanskar.transactions.ui.model
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import dev.sanskar.transactions.data.*
+import dev.sanskar.transactions.log
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -66,7 +66,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             db.transactionDao().insertTransaction(transaction)
         }
-        Log.d(TAG, "addTransaction: added $transaction")
+        log("addTransaction: added $transaction")
     }
 
     /**
@@ -92,7 +92,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             db.transactionDao().updateTransaction(transaction)
         }
-        Log.d(TAG, "updateTransaction: updated $transaction")
+        log("updateTransaction: updated $transaction")
     }
 
     /**
@@ -103,7 +103,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             db.transactionDao().clearTransactions()
         }
 
-        Log.d(TAG, "clearTransactions: all transactions cleared!")
+        log("clearTransactions: all transactions cleared!")
     }
 
     fun getDigitalBalance() = db.transactionDao().getTotalDigitalIncome() - db.transactionDao().getTotalDigitalExpenses()
@@ -199,7 +199,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             db.transactionDao().deleteTransaction(transaction)
         }
-        Log.d(TAG, "deleteTransaction: deleted $transaction")
+        log("deleteTransaction: deleted $transaction")
     }
 
     /**

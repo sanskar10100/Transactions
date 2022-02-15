@@ -1,10 +1,8 @@
 package dev.sanskar.transactions.ui.add
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
+import dev.sanskar.transactions.log
 import java.util.*
-
-private const val TAG = "AddTransactionFragmentM"
 
 class AddTransactionFragmentModel : ViewModel() {
     var timestamp: Long
@@ -42,6 +40,6 @@ class AddTransactionFragmentModel : ViewModel() {
         hour = cal.get(Calendar.HOUR_OF_DAY)
         minute = cal.get(Calendar.MINUTE)
 
-        Log.d(TAG, "updateComponents: Received timestamp: $timestamp, $cal")
+        log("updateComponents: Received timestamp: $timestamp, $cal")
     }
 }
