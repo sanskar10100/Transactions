@@ -41,3 +41,11 @@ fun View.shortSnackbarWithUndo(message: String, onAction: () -> Unit) {
         .setAction("UNDO") { onAction() }
         .show()
 }
+
+fun View.show() {
+    this.visibility = View.VISIBLE
+}
+
+fun View.hide() {
+    this.visibility = View.GONE
+}

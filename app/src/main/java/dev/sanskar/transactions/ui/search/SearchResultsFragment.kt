@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import dev.sanskar.transactions.databinding.FragmentSearchResultsBinding
+import dev.sanskar.transactions.hide
+import dev.sanskar.transactions.show
 import dev.sanskar.transactions.ui.home.TransactionsListAdapter
 import dev.sanskar.transactions.ui.model.MainViewModel
 
@@ -29,7 +31,14 @@ class SearchResultsFragment : Fragment() {
         val adapter = TransactionsListAdapter(requireContext())
         binding.listSearchResults.adapter = adapter
         model.searchResults.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            if (it.isEmpty()) {
+                binding.textViewNoMatches.show()
+                binding.lottieEmpty.show()
+            } else {
+                adapter.submitList(it)
+                binding.lottieEmpty.hide()
+                binding.textViewNoMatches.hide()
+            }
         }
     }
 }
