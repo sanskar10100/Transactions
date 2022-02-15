@@ -12,7 +12,7 @@ import dev.sanskar.transactions.KEY_AMOUNT
 import dev.sanskar.transactions.KEY_FILTER_BY_AMOUNT
 import dev.sanskar.transactions.KEY_SELECTED_OPTION_INDEX
 import dev.sanskar.transactions.databinding.FragmentAmountFilterBottomSheetBinding
-import dev.sanskar.transactions.getText
+import dev.sanskar.transactions.text
 
 class AmountFilterBottomSheet : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentAmountFilterBottomSheetBinding
@@ -32,14 +32,14 @@ class AmountFilterBottomSheet : BottomSheetDialogFragment() {
         setInitial()
 
         binding.buttonFilter.setOnClickListener {
-            if (binding.textFieldAmount.getText().isEmpty()) {
+            if (binding.textFieldAmount.text.isEmpty()) {
                 binding.textFieldAmount.error = "Empty Amount!"
                 return@setOnClickListener
             }
             val amount = try {
-                binding.textFieldAmount.getText().toInt()
+                binding.textFieldAmount.text.toInt()
             } catch (e: NumberFormatException) {
-                binding.textFieldAmount.getText().toFloat().toInt()
+                binding.textFieldAmount.text.toFloat().toInt()
             }
             val optionIndex = if (binding.chipGreaterThan.isChecked) 0 else 1
             returnResult(amount, optionIndex)
