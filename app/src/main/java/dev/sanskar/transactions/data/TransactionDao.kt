@@ -51,4 +51,7 @@ interface TransactionDao {
 
     @Query("SELECT * FROM `transaction` WHERE description LIKE :query")
     suspend fun search(query: String): List<Transaction>
+
+    @Query("SELECT * FROM `transaction` WHERE id = :id")
+    suspend fun getTransactionFromId(id: Int): Transaction?
 }

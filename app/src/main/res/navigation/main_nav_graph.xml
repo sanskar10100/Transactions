@@ -43,7 +43,7 @@
         android:label="Add Transaction"
         tools:layout="@layout/fragment_add_transaction" >
         <argument
-            android:name="transaction_index"
+            android:name="transaction_id"
             app:argType="integer"
             android:defaultValue="-1" />
         <action

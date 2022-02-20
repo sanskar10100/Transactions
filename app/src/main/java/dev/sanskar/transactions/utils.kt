@@ -17,6 +17,9 @@ const val KEY_FILTER_BY_MEDIUM = "key_filter_by_medium"
 const val KEY_FILTER_BY_AMOUNT = "key_filter_by_amount"
 const val KEY_AMOUNT = "key_amount"
 
+const val KEY_DELETE_REQUEST = "key_delete_request"
+const val KEY_DELETE_TRANSACTION_ID = "key_delete_transaction_id"
+
 fun Long.asFormattedDateTime() : String {
     return SimpleDateFormat(
         "dd/MM/yy hh:mm aaa",

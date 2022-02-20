@@ -82,6 +82,13 @@ class HomeFragment : Fragment() {
         model.transactions.observe(viewLifecycleOwner) { onNewTransactionListReceived(it) }
 
         setChipListeners()
+
+        // Delete event received from AddTransactionFragment
+        setFragmentResultListener(KEY_DELETE_REQUEST) { _, bundle ->
+            val id = bundle.getInt(KEY_DELETE_TRANSACTION_ID)
+            model.deleteTransaction(id)
+            binding.root.shortSnackbarWithUndo("Transaction Deleted!", model::undoTransactionDelete)
+        }
     }
 
     /**
