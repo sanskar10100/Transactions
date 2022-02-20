@@ -4,4 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.bottomdialogs.OptionsBottomSheet"
-    android:orientation="vertical"/>
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView_menu_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="Menu Title" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#242424"
+        android:layout_margin="8dp"/>
+
+</LinearLayout>

@@ -34,6 +34,8 @@ class OptionsBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.textViewMenuTitle.text = args.menuTitle
+
         val options = args.options
         options.forEachIndexed { index, s ->
             val optionTextView = TextView(context).apply {
