@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dev.sanskar.transactions.databinding.FragmentMediumExchangeBinding
 import dev.sanskar.transactions.text
-import dev.sanskar.transactions.ui.model.MainViewModel
+import dev.sanskar.transactions.ui.add.AddViewModel
 
 class MediumExchangeFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentMediumExchangeBinding
-    private val model by activityViewModels<MainViewModel>()
+    private val model by viewModels<AddViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

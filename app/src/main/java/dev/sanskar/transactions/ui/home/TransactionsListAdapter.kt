@@ -45,7 +45,7 @@ class TransactionsListAdapter(private val context: Context, private val searchMo
 
             root.setOnClickListener {
                 if (!searchMode) root.findNavController().navigate(
-                    HomeFragmentDirections.actionHomeFragmentToAddTransactionFragment(position)
+                    HomeFragmentDirections.actionHomeFragmentToAddTransactionFragment(transaction.id)
                 )
             }
         }

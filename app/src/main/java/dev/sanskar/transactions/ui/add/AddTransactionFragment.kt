@@ -2,25 +2,25 @@ package dev.sanskar.transactions.ui.add
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
+import dev.sanskar.transactions.KEY_DELETE_REQUEST
+import dev.sanskar.transactions.KEY_DELETE_TRANSACTION_ID
 import dev.sanskar.transactions.R
 import dev.sanskar.transactions.asFormattedDateTime
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.FragmentAddTransactionBinding
-import dev.sanskar.transactions.shortSnackbarWithUndo
-import dev.sanskar.transactions.ui.model.MainViewModel
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 
 class AddTransactionFragment : Fragment() {
-    private val model by activityViewModels<MainViewModel>()
-    private val localModel by viewModels<AddTransactionFragmentModel>()
+    private val model by viewModels<AddViewModel>()
     private lateinit var binding: FragmentAddTransactionBinding
     private val args: AddTransactionFragmentArgs by navArgs()
     private var editMode = false
@@ -28,7 +28,7 @@ class AddTransactionFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        editMode = args.transactionIndex >= 0
+        editMode = args.transactionId >= 0
     }
 
     override fun onCreateView(
@@ -47,12 +47,10 @@ class AddTransactionFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_delete_transaction) {
-            val transaction = model.transactions.value?.get(args.transactionIndex)
-            if (transaction != null) {
-                model.deleteTransaction(transaction)
-                binding.root.shortSnackbarWithUndo("Transaction deleted!", model::undoTransactionDelete)
-                findNavController().popBackStack()
-            }
+            setFragmentResult(KEY_DELETE_REQUEST, bundleOf(
+                KEY_DELETE_TRANSACTION_ID to args.transactionId
+            ))
+            findNavController().popBackStack()
         }
         return false
     }
@@ -62,17 +60,17 @@ class AddTransactionFragment : Fragment() {
         onboard()
         if (editMode) {
             // Set received values in case of edit mode
-            val transaction = model.transactions.value?.get(args.transactionIndex)
-            if (transaction != null) {
-                fillEditData(transaction)
-            }
+            model.updateTransaction.observe(viewLifecycleOwner) {
+                if (it != null) fillEditData(it)
+            }    
+            model.getTransactionForUpdate(args.transactionId)
         } else {
             binding.chipExpense.isChecked = true
             binding.chipDigital.isChecked = true
         }
 
         // Sets timestamp in human readable format
-        binding.textViewTime.text = localModel.timestamp.asFormattedDateTime()
+        binding.textViewTime.text = model.timestamp.asFormattedDateTime()
 
         setupTimePicker()
         setupDatePicker()
@@ -113,19 +111,18 @@ class AddTransactionFragment : Fragment() {
             }
 
             if (editMode) {
-                val transaction = model.transactions.value?.get(args.transactionIndex)
-                if (transaction != null) {
+                model.updateTransaction.value?.let {
                     model.updateTransaction(
-                        transaction.id,
+                        it.id,
                         amount,
                         description,
                         isDigital,
                         isExpense,
-                        localModel.timestamp
+                        model.timestamp
                     )
                 }
             } else {
-                model.addTransaction(amount, description, localModel.timestamp, isDigital, isExpense)
+                model.addTransaction(amount, description, model.timestamp, isDigital, isExpense)
             }
             findNavController().popBackStack()
         }
@@ -133,26 +130,26 @@ class AddTransactionFragment : Fragment() {
 
     private fun setupTimePicker() {
         binding.buttonSetTime.setOnClickListener {
-            findNavController().navigate(AddTransactionFragmentDirections.actionAddTransactionFragmentToTimePickerFragment(localModel.hour, localModel.minute))
+            findNavController().navigate(AddTransactionFragmentDirections.actionAddTransactionFragmentToTimePickerFragment(model.hour, model.minute))
         }
 
         parentFragmentManager.setFragmentResultListener("timePicker", viewLifecycleOwner) { _, bundle ->
-            localModel.hour = bundle.getInt("hour")
-            localModel.minute = bundle.getInt("minute")
-            binding.textViewTime.text = localModel.timestamp.asFormattedDateTime()
+            model.hour = bundle.getInt("hour")
+            model.minute = bundle.getInt("minute")
+            binding.textViewTime.text = model.timestamp.asFormattedDateTime()
         }
     }
 
     private fun setupDatePicker() {
         binding.buttonSetDate.setOnClickListener {
-            findNavController().navigate(AddTransactionFragmentDirections.actionAddTransactionFragmentToDatePickerFragment(localModel.year, localModel.month, localModel.day))
+            findNavController().navigate(AddTransactionFragmentDirections.actionAddTransactionFragmentToDatePickerFragment(model.year, model.month, model.day))
         }
 
         parentFragmentManager.setFragmentResultListener("datePicker", viewLifecycleOwner) { _, bundle ->
-            localModel.year = bundle.getInt("year")
-            localModel.month = bundle.getInt("month")
-            localModel.day = bundle.getInt("day")
-            binding.textViewTime.text = localModel.timestamp.asFormattedDateTime()
+            model.year = bundle.getInt("year")
+            model.month = bundle.getInt("month")
+            model.day = bundle.getInt("day")
+            binding.textViewTime.text = model.timestamp.asFormattedDateTime()
         }
     }
 
@@ -167,7 +164,7 @@ class AddTransactionFragment : Fragment() {
         binding.chipCash.isChecked = !transaction.isDigital
         binding.buttonAdd.text = "Update"
 
-        localModel.timestamp = transaction.timestamp
+        model.timestamp = transaction.timestamp
     }
 
     private fun onboard() {

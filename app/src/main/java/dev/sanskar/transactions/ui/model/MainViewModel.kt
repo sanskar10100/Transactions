@@ -45,57 +45,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val transactions = MutableLiveData<List<Transaction>>()
 
     /**
-     * Adds a transaction to the database
-     */
-    fun addTransaction(
-        amount: Int,
-        description: String,
-        timestamp: Long,
-        isDigital: Boolean = true,
-        isExpense: Boolean = true,
-    ) {
-        val transaction = Transaction(
-            0,
-            amount,
-            timestamp,
-            isExpense,
-            description,
-            isDigital
-        )
-
-        viewModelScope.launch {
-            db.transactionDao().insertTransaction(transaction)
-        }
-        log("addTransaction: added $transaction")
-    }
-
-    /**
-     * Updates a transaction in the database. Transactions are matched through their IDs
-     */
-    fun updateTransaction(
-        id: Int,
-        amount: Int,
-        description: String,
-        isDigital: Boolean = true,
-        isExpense: Boolean = true,
-        timestamp: Long
-    ) {
-        val transaction = Transaction(
-            id,
-            amount,
-            timestamp,
-            isExpense,
-            description,
-            isDigital
-        )
-
-        viewModelScope.launch {
-            db.transactionDao().updateTransaction(transaction)
-        }
-        log("updateTransaction: updated $transaction")
-    }
-
-    /**
      * Purges the transaction record from the database. Use very cautiously.
      */
     fun clearAllTransactions() {
@@ -194,7 +143,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     /**
     * Deletes a transaction from the database. Matched through ID
     */
-    fun deleteTransaction(transaction: Transaction) {
+    private fun deleteTransaction(transaction: Transaction) {
         clearedTransaction = transaction
         viewModelScope.launch {
             db.transactionDao().deleteTransaction(transaction)
@@ -205,10 +154,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * Finds and deletes a transaction
      */
-    fun deleteTransaction(index: Int) {
-        val transactionToDelete = transactions.value?.get(index)
-        if (transactionToDelete != null) {
-            deleteTransaction(transactionToDelete)
+    fun deleteTransaction(id: Int) {
+        viewModelScope.launch {
+            val transactionToDelete = db.transactionDao().getTransactionFromId(id)
+            if (transactionToDelete != null) {
+                deleteTransaction(transactionToDelete)
+            }
         }
     }
 
