@@ -104,6 +104,9 @@
         <argument
             android:name="selectedItemIndex"
             app:argType="integer" />
+        <argument
+            android:name="menu_title"
+            app:argType="string" />
     </dialog>
     <dialog
         android:id="@+id/amountFilterBottomSheet"

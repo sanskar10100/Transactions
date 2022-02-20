@@ -157,7 +157,7 @@ class HomeFragment : Fragment() {
                 generateOptionsDirection(
                     SortByChoices.values().map {
                         it.readableString
-                    }.toTypedArray(), SORT_REQUEST_KEY, MainViewModel.QueryConfig.sortChoice.ordinal
+                    }.toTypedArray(), SORT_REQUEST_KEY, MainViewModel.QueryConfig.sortChoice.ordinal, "Sort By"
                 )
             )
             setFragmentResultListener(SORT_REQUEST_KEY) { _, bundle ->
@@ -173,7 +173,7 @@ class HomeFragment : Fragment() {
                 generateOptionsDirection(
                     FilterByTypeChoices.values().map {
                         it.readableString
-                    }.toTypedArray(), KEY_FILTER_BY_TYPE, MainViewModel.QueryConfig.filterTypeChoice.ordinal
+                    }.toTypedArray(), KEY_FILTER_BY_TYPE, MainViewModel.QueryConfig.filterTypeChoice.ordinal, "Filter by Type"
                 )
             )
             setFragmentResultListener(KEY_FILTER_BY_TYPE) { _, bundle ->
@@ -189,7 +189,7 @@ class HomeFragment : Fragment() {
                 generateOptionsDirection(
                     FilterByMediumChoices.values().map {
                         it.readableString
-                    }.toTypedArray(), KEY_FILTER_BY_MEDIUM, MainViewModel.QueryConfig.filterMediumChoice.ordinal
+                    }.toTypedArray(), KEY_FILTER_BY_MEDIUM, MainViewModel.QueryConfig.filterMediumChoice.ordinal, "Filter by Medium"
                 )
             )
             setFragmentResultListener(KEY_FILTER_BY_MEDIUM) { _, bundle ->
@@ -220,8 +220,8 @@ class HomeFragment : Fragment() {
     /**
      * Returns generated directions for the OptionsBottomSheetDialogFragment
      */
-    private fun generateOptionsDirection(options: Array<String>, key: String, selectedIndex: Int): NavDirections {
-        return HomeFragmentDirections.actionHomeFragmentToOptionsBottomSheet(options, key, selectedIndex)
+    private fun generateOptionsDirection(options: Array<String>, key: String, selectedIndex: Int, title: String): NavDirections {
+        return HomeFragmentDirections.actionHomeFragmentToOptionsBottomSheet(options, key, selectedIndex, title)
     }
 
     /**
