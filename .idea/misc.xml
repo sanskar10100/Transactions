@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_add_circle_colored_24.xml" value="0.365625" />
         <entry key="app/src/main/res/drawable/ic_baseline_calendar_month_24.xml" value="0.365625" />
         <entry key="app/src/main/res/drawable/ic_baseline_cash_24.xml" value="0.26481481481481484" />
+        <entry key="app/src/main/res/drawable/ic_baseline_copy_all_24.xml" value="0.3155" />
         <entry key="app/src/main/res/drawable/ic_baseline_currency_exchange_24.xml" value="0.365625" />
         <entry key="app/src/main/res/drawable/ic_baseline_currency_rupee_24.xml" value="0.365625" />
         <entry key="app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.365625" />
@@ -25,6 +26,7 @@
         <entry key="app/src/main/res/layout/fragment_add_transaction.xml" value="0.3494791666666667" />
         <entry key="app/src/main/res/layout/fragment_amount_filter_bottom_sheet.xml" value="0.3494791666666667" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.3494791666666667" />
+        <entry key="app/src/main/res/layout/fragment_feedback_bottom_sheet.xml" value="0.3494791666666667" />
         <entry key="app/src/main/res/layout/fragment_filter_parameter_bottom_dialog.xml" value="0.3494791666666667" />
         <entry key="app/src/main/res/layout/fragment_filter_result.xml" value="0.3494791666666667" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3494791666666667" />

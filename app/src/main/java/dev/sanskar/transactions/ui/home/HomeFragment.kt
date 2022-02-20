@@ -1,10 +1,7 @@
 package dev.sanskar.transactions.ui.home
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.*
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -259,28 +256,7 @@ class HomeFragment : Fragment() {
      * Gmail or GitHub
      */
     private fun sendFeedbackDialog() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setItems(arrayOf("GitHub", "Gmail")) { _, which ->
-                log("onOptionsItemSelected: $which")
-                when (which) {
-                    0 -> {
-                        log("onOptionsItemSelected: Attempting to create and launch a custom tab")
-                        CustomTabsIntent.Builder()
-                            .build()
-                            .launchUrl(requireContext(), Uri.parse("https://github.com/sanskar10100/Transactions/issues/new"))
-                    }
-                    1 -> {
-                        val intent = Intent(Intent.ACTION_SENDTO).apply {
-                            data = Uri.parse("mailto:")
-                            putExtra(Intent.EXTRA_EMAIL, arrayOf("sanskar10100@gmail.com"))
-                            putExtra(Intent.EXTRA_SUBJECT, "Feedback - Transactions")
-                        }
-                        startActivity(Intent.createChooser(intent, "Send Feedback"))
-                    }
-                }
-            }
-            .create()
-            .show()
+        findNavController().navigate(R.id.action_homeFragment_to_feedbackBottomSheet)
     }
 
     /**

@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_homeFragment_to_searchQueryBottomSheet"
             app:destination="@id/searchQueryBottomSheet" />
+        <action
+            android:id="@+id/action_homeFragment_to_feedbackBottomSheet"
+            app:destination="@id/feedbackBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/addTransactionFragment"
@@ -132,4 +135,9 @@
             android:id="@+id/action_searchResultsFragment_to_addTransactionFragment"
             app:destination="@id/addTransactionFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/feedbackBottomSheet"
+        android:name="dev.sanskar.transactions.ui.feedback.FeedbackBottomSheet"
+        android:label="fragment_feedback_bottom_sheet"
+        tools:layout="@layout/fragment_feedback_bottom_sheet" />
 </navigation>

@@ -1,9 +1,12 @@
 package dev.sanskar.transactions
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import java.text.SimpleDateFormat
@@ -19,6 +22,8 @@ const val KEY_AMOUNT = "key_amount"
 
 const val KEY_DELETE_REQUEST = "key_delete_request"
 const val KEY_DELETE_TRANSACTION_ID = "key_delete_transaction_id"
+
+const val ISSUE_URL = "https://github.com/sanskar10100/Transactions/issues/new"
 
 fun Long.asFormattedDateTime() : String {
     return SimpleDateFormat(
@@ -57,4 +62,19 @@ fun View.hide() {
 fun log(message: String) {
     if (BuildConfig.DEBUG || BuildConfig.BUILD_TYPE.lowercase().contains("debug"))
         Log.d("TransactionsDebug", message)
+}
+
+val VERSION_NAME = BuildConfig.VERSION_NAME
+val VERSION_CODE = BuildConfig.VERSION_CODE.toString()
+val DEVICE_INFO  = "${android.os.Build.MANUFACTURER} ${android.os.Build.PRODUCT} ${android.os.Build.MODEL}"
+
+fun getFeedbackInfo() = "Version Code: $VERSION_CODE\n" +
+            "Version Name: $VERSION_NAME\n" +
+            "Device Info: $DEVICE_INFO\n\n"
+
+fun Context.copyToClipboard(clipLabel: String, text: CharSequence){
+    val clipboard = ContextCompat.getSystemService(this, ClipboardManager::class.java)
+    clipboard?.setPrimaryClip(ClipData.newPlainText(clipLabel, text))
+
+    shortToast("Copied $clipLabel")
 }
