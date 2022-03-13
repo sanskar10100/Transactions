@@ -8,18 +8,6 @@ plugins {
 }
 
 android {
-    signingConfigs {
-        release {
-            def credsFilePath = file("../credentials.json").toString()
-            def credsFile = new File(credsFilePath, "").getText('UTF-8')
-            // Ignore this error, it's heresy
-            def json = new groovy.json.JsonSlurper().parseText(credsFile)
-            storeFile file(json.android.storeFile)
-            storePassword = json.android.storePassword
-            keyAlias = json.android.keyAlias
-            keyPassword = json.android.keyPassword
-        }
-    }
     compileSdk 31
 
     defaultConfig {
@@ -37,7 +25,6 @@ android {
             minifyEnabled false
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
     }
     compileOptions {

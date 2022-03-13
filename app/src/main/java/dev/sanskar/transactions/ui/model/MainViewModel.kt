@@ -164,6 +164,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
+     * This is potentially risky, as list position can change depending on filters
+     */
+    fun deleteTransactionByPosition(position: Int) {
+        viewModelScope.launch {
+            val transactionToDelete = transactions.value?.get(position)
+            if (transactionToDelete != null) {
+                deleteTransaction(transactionToDelete)
+            }
+        }
+    }
+
+    /**
      * Restores any deleted transactions
      */
     fun undoTransactionDelete() {
