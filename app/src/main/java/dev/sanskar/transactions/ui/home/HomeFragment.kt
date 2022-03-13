@@ -97,7 +97,7 @@ class HomeFragment : Fragment() {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder) = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                model.deleteTransaction(viewHolder.adapterPosition)
+                model.deleteTransactionByPosition(viewHolder.adapterPosition)
                 binding.root.shortSnackbarWithUndo("Transaction deleted!", model::undoTransactionDelete)
             }
         }).attachToRecyclerView(binding.listTransactions)
@@ -106,8 +106,9 @@ class HomeFragment : Fragment() {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder) = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                findNavController().navigate(
-                    HomeFragmentDirections.actionHomeFragmentToAddTransactionFragment(viewHolder.adapterPosition)
+                val transactionToEdit = model.transactions.value?.get(viewHolder.adapterPosition)
+                if (transactionToEdit != null) findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToAddTransactionFragment(transactionToEdit.id)
                 )
             }
         }).attachToRecyclerView(binding.listTransactions)
