@@ -32,6 +32,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun getReminderTime() = prefStore.getReminderTime()
 
     fun cancelReminderNotification() {
+        log("Cancelling reminder notification")
         prefStore.cancelReminder()
         WorkManager.getInstance(app).cancelAllWorkByTag(TAG_REMINDER_WORKER)
     }

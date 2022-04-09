@@ -28,6 +28,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_notifications"
+        android:icon="@drawable/ic_baseline_notifications_24"
+        android:title="Notifications"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_send_feedback"
         android:icon="@drawable/ic_baseline_feedback_24"
         android:title="Send Feedback"

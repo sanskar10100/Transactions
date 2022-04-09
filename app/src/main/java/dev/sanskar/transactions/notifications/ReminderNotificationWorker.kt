@@ -23,6 +23,7 @@ class ReminderNotificationWorker(private val appContext: Context, workerParamete
          * @param minute the minute at which daily reminder notification should appear [0-59]
          */
         fun schedule(appContext: Context, hourOfDay: Int, minute: Int) {
+            log("Reminder scheduling request received for $hourOfDay:$minute")
             val now = Calendar.getInstance()
             val target = Calendar.getInstance().apply {
                 set(Calendar.HOUR_OF_DAY, hourOfDay)
