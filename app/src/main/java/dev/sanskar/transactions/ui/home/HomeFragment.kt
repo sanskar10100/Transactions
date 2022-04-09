@@ -61,6 +61,7 @@ class HomeFragment : Fragment() {
             R.id.action_send_feedback -> sendFeedbackDialog()
             R.id.action_clear_all_filters -> clearFilters()
             R.id.action_search -> findNavController().navigate(R.id.action_homeFragment_to_searchQueryBottomSheet)
+            R.id.action_notifications -> findNavController().navigate(R.id.action_homeFragment_to_notificationsBottomSheet)
         }
 
         return true

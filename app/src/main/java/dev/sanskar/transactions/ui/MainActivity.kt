@@ -7,8 +7,13 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import dev.sanskar.transactions.R
+import dev.sanskar.transactions.notifications.NotificationHandler
+import dev.sanskar.transactions.notifications.ReminderNotificationWorker
 import dev.sanskar.transactions.ui.home.HomeFragmentDirections
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
