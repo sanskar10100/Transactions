@@ -25,6 +25,12 @@ const val KEY_DELETE_TRANSACTION_ID = "key_delete_transaction_id"
 
 const val ISSUE_URL = "https://github.com/sanskar10100/Transactions/issues/new"
 
+const val TAG_REMINDER_WORKER = "reminder_worker"
+const val SHARED_PREF_REMINDER_HOUR = "reminder_hour"
+const val SHARED_PREF_REMINDER_MINUTE = "reminder_minute"
+const val DEFAULT_REMINDER_HOUR = 22
+const val DEFAULT_REMINDER_MINUTE = 0
+
 fun Long.asFormattedDateTime() : String {
     return SimpleDateFormat(
         "dd/MM/yy hh:mm aaa",

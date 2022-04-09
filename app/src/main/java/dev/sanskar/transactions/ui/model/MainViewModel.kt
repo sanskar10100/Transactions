@@ -5,14 +5,47 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
+import androidx.work.WorkManager
+import dev.sanskar.transactions.DEFAULT_REMINDER_HOUR
+import dev.sanskar.transactions.DEFAULT_REMINDER_MINUTE
+import dev.sanskar.transactions.TAG_REMINDER_WORKER
 import dev.sanskar.transactions.data.*
 import dev.sanskar.transactions.log
+import dev.sanskar.transactions.notifications.ReminderNotificationWorker
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.util.*
 
 private const val TAG = "MainViewModel"
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val app = application
+    private val prefStore = PreferenceStore(application)
+
+    fun scheduleReminderNotification(hourOfDay: Int, minute: Int) {
+        prefStore.setReminderTime(hourOfDay, minute)
+        ReminderNotificationWorker.schedule(app, hourOfDay, minute)
+    }
+
+    fun getReminderTime() = prefStore.getReminderTime()
+
+    fun cancelReminderNotification() {
+        prefStore.cancelReminder()
+        WorkManager.getInstance(app).cancelAllWorkByTag(TAG_REMINDER_WORKER)
+    }
+
+    /**
+     * This should run only once, on the first launch of the app and sets a default reminder time
+     * which can then be configured by the user.
+     */
+    private fun checkAndSetDefaultReminder() {
+        if (!prefStore.isDefaultReminderSet()) {
+            scheduleReminderNotification(DEFAULT_REMINDER_HOUR, DEFAULT_REMINDER_MINUTE)
+            prefStore.saveDefaultReminderIsSet()
+        }
+    }
 
     /**
      * Holds the current Query Configurations like the applied filters and the sorting method.
@@ -39,6 +72,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         DBInstanceHolder.db = this.db
         resetQueryConfig()
         executeConfig() // Get first time data with initial configurations
+        checkAndSetDefaultReminder()
     }
 
     // The main transactions list livedata. This list is used as the central reference throughout the app

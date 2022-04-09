@@ -52,6 +52,7 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.4.1"
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.9'
     implementation 'com.google.firebase:firebase-analytics-ktx:20.1.2'
+    implementation "androidx.work:work-runtime-ktx:2.7.1"
 
     // Room
     def room_version = "2.4.2"
