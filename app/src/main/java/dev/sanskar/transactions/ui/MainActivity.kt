@@ -8,6 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import dev.sanskar.transactions.R
+import dev.sanskar.transactions.notifications.NotificationHandler
 import dev.sanskar.transactions.ui.home.HomeFragmentDirections
 
 class MainActivity : AppCompatActivity() {
