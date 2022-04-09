@@ -16,13 +16,16 @@ A fast and easy zero-config transaction manager for Android which helps you trac
 - Sort by amount, time and insertion order
 - Easy onboarding for first time users
 - Swipe from right to delete a transaction
+- Get daily reminder notifications at a time of your choice
 
 ### What is being used in building this app
 - Kotlin
 - Android SDK
-- Material Design 3
+- Material Design 3 Themes and Components
 - Clean MVVM Architecture
+- AndroidX Lifecycle
 - Room ORM (Version 2.4)
+- WorkManager
 - Kotlin Coroutines
 - Kotlin Flows
 - LiveData
@@ -42,8 +45,14 @@ A fast and easy zero-config transaction manager for Android which helps you trac
 
 ---
 
+### MAD (Modern Android Development) Scorecard
+![summary](https://user-images.githubusercontent.com/22092047/162580134-01f835d5-ad99-4546-819e-5ab5f010137e.png)
+
+
+
 ## Related Articles
 - https://sanskar10100.hashnode.dev/querybuilder-how-i-wrote-a-runtime-sql-query-generator-for-an-android-app
+- https://sanskar10100.hashnode.dev/implementing-periodic-notifications-with-workmanager
 
 ---
 
