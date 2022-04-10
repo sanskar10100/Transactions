@@ -1,82 +1,91 @@
 package dev.sanskar.transactions.ui.add
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import dev.sanskar.transactions.data.DBInstanceHolder
 import dev.sanskar.transactions.data.Transaction
+import dev.sanskar.transactions.get12HourTime
 import dev.sanskar.transactions.log
 import kotlinx.coroutines.launch
 import java.util.*
 
 class AddViewModel : ViewModel() {
-    // Datetime related code
-    var timestamp: Long
-        set(value) {
-            // Called every time timestamp is set after the initialization
-            // I'm not sure why this exists, but at this point I'm too afraid to ask
-            updateComponents(value)
-        }
-        get() {
-            Calendar.getInstance().apply {
-                set(year, month, day, hour, minute)
-                return this.timeInMillis
-            }
-        }
-
-    init {
-        // For initialization
-        timestamp = System.currentTimeMillis()
-        updateComponents(timestamp)
-    }
-
-
+    var amount = 0
+    var description = ""
+    var isDigital = true
+    var isExpense = true
     var year = 0
     var month = 0
     var day = 0
     var hour = 0
     var minute = 0
 
-    private fun updateComponents(timestamp: Long) {
-        val cal = Calendar.getInstance()
-        cal.timeInMillis = timestamp
-        year = cal.get(Calendar.YEAR)
-        month = cal.get(Calendar.MONTH)
-        day = cal.get(Calendar.DAY_OF_MONTH)
-        hour = cal.get(Calendar.HOUR_OF_DAY)
-        minute = cal.get(Calendar.MINUTE)
-
-        log("updateComponents: Received timestamp: $timestamp, $cal")
+    fun setDateFromTimestamp(timestamp: Long) {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = timestamp
+        year = calendar[Calendar.YEAR]
+        month = calendar[Calendar.MONTH]
+        day = calendar[Calendar.DAY_OF_MONTH]
     }
 
-    // Persistence related code
+    fun getDate() = "$day/${month + 1}/$year"
+
+    fun getTime() = get12HourTime(hour, minute)
+
+    fun constructTimestamp(): Long {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.YEAR, year)
+        calendar.set(Calendar.MONTH, month)
+        calendar.set(Calendar.DAY_OF_MONTH, day)
+        calendar.set(Calendar.HOUR_OF_DAY, hour)
+        calendar.set(Calendar.MINUTE, minute)
+        return calendar.timeInMillis
+    }
+
+    private fun setTimeComponents(timestamp: Long) {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = timestamp
+        year = calendar.get(Calendar.YEAR)
+        month = calendar.get(Calendar.MONTH)
+        day = calendar.get(Calendar.DAY_OF_MONTH)
+        hour = calendar.get(Calendar.HOUR_OF_DAY)
+        minute = calendar.get(Calendar.MINUTE)
+    }
+
+    init {
+        Calendar.getInstance().apply {
+            year = this.get(Calendar.YEAR)
+            month = this.get(Calendar.MONTH)
+            day = this.get(Calendar.DAY_OF_MONTH)
+            hour = this.get(Calendar.HOUR_OF_DAY)
+            minute = this.get(Calendar.MINUTE)
+        }
+    }
 
     private val db = DBInstanceHolder.db
 
-    val updateTransaction = MutableLiveData<Transaction>()
-    fun getTransactionForUpdate(id: Int) {
-        viewModelScope.launch {
-            val result = db.transactionDao().getTransactionFromId(id)
-            if (result != null) {
-                updateTransaction.value = result!!
-            }
+
+    fun setValuesIfEdit(id: Int) = liveData {
+        val result = db.transactionDao().getTransactionFromId(id)
+        if (result != null) {
+            amount = result.amount
+            description = result.description
+            isDigital = result.isDigital
+            isExpense = result.isExpense
+            setTimeComponents(result.timestamp)
+            emit(true)
         }
     }
 
     /**
      * Adds a transaction to the database
      */
-    fun addTransaction(
-        amount: Int,
-        description: String,
-        timestamp: Long,
-        isDigital: Boolean = true,
-        isExpense: Boolean = true,
-    ) {
+    fun addTransaction() {
         val transaction = Transaction(
             0,
             amount,
-            timestamp,
+            constructTimestamp(),
             isExpense,
             description,
             isDigital
@@ -91,18 +100,11 @@ class AddViewModel : ViewModel() {
     /**
      * Updates a transaction in the database. Transactions are matched through their IDs
      */
-    fun updateTransaction(
-        id: Int,
-        amount: Int,
-        description: String,
-        isDigital: Boolean = true,
-        isExpense: Boolean = true,
-        timestamp: Long
-    ) {
+    fun updateTransaction(id: Int, ) {
         val transaction = Transaction(
             id,
             amount,
-            timestamp,
+            constructTimestamp(),
             isExpense,
             description,
             isDigital

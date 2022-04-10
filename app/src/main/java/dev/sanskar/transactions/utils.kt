@@ -44,10 +44,11 @@ fun get12HourTime(hour: Int, minute: Int) : String {
     return "${if (hour > 12) hour - 12 else hour}:$minutesString ${if (hour > 12) "PM" else "AM"}"
 }
 
-val TextInputLayout.text: String
-get() {
-    return this.editText?.text.toString() ?: ""
-}
+var TextInputLayout.text: String
+    get() {
+        return this.editText?.text.toString() ?: ""
+    }
+    set(value) = this.editText?.setText(value)!!
 
 fun View.shortSnackbar(message: String) {
     Snackbar.make(this, message, Snackbar.LENGTH_SHORT).show()
