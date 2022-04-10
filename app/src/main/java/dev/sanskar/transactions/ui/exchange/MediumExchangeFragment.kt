@@ -47,15 +47,24 @@ class MediumExchangeFragment : BottomSheetDialogFragment() {
                 binding.textFieldAmount.error = "Amount cannot be empty!"
                 return@setOnClickListener
             } else {
-                val amount = binding.textFieldAmount.text.toInt();
+                model.amount = binding.textFieldAmount.text.toInt();
+                model.description = "Medium Exchange"
                 if (binding.chipCashSource.isChecked) {
                     // Remove from cash and add to digital
-                    model.addTransaction(amount, "Currency Medium Exchange", System.currentTimeMillis(), false, true)
-                    model.addTransaction(amount, "Currency Medium Exchange", System.currentTimeMillis(), true, false)
+                    model.isExpense = true
+                    model.isDigital = false
+                    model.addTransaction()
+                    model.isExpense = false
+                    model.isDigital = true
+                    model.addTransaction()
                 } else if (binding.chipDigitalSource.isChecked) {
                     // Remove from digital and add to cash
-                    model.addTransaction(amount, "Currency Medium Exchange", System.currentTimeMillis(), true, true)
-                    model.addTransaction(amount, "Currency Medium Exchange", System.currentTimeMillis(), false, false)
+                    model.isExpense = true
+                    model.isDigital = true
+                    model.addTransaction()
+                    model.isExpense = false
+                    model.isDigital = false
+                    model.addTransaction()
                 }
                 dialog?.dismiss()
             }
