@@ -33,6 +33,7 @@ A fast and easy zero-config transaction manager for Android which helps you trac
 - Navigation Component with SafeArgs plugin
 - FragmentResults API
 - Firebase Crashlytics
+- Play Store Core API
 - [Lottie](https://github.com/airbnb/lottie-android)
 - [MaterialShowcaseView](https://github.com/deano2390/MaterialShowcaseView)
 - [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
