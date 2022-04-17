@@ -26,6 +26,7 @@ A fast and easy zero-config transaction manager for Android which helps you trac
 - AndroidX Lifecycle
 - Room ORM (Version 2.4)
 - WorkManager
+- Dependency Injection using Hilt
 - Kotlin Coroutines
 - Kotlin Flows
 - LiveData
