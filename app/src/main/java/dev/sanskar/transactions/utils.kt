@@ -23,6 +23,8 @@ const val KEY_AMOUNT = "key_amount"
 const val KEY_DELETE_REQUEST = "key_delete_request"
 const val KEY_DELETE_TRANSACTION_ID = "key_delete_transaction_id"
 
+const val KEY_ADD_OR_UPDATE = "key_add_or_update"
+
 const val ISSUE_URL = "https://github.com/sanskar10100/Transactions/issues/new"
 
 const val TAG_REMINDER_WORKER = "reminder_worker"

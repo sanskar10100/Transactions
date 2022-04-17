@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.play.core.review.ReviewManagerFactory
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sanskar.transactions.*
 import dev.sanskar.transactions.data.FilterByMediumChoices
@@ -86,6 +87,26 @@ class HomeFragment : Fragment() {
             val id = bundle.getInt(KEY_DELETE_TRANSACTION_ID)
             model.deleteTransaction(id)
             binding.root.shortSnackbarWithUndo("Transaction Deleted!", model::undoTransactionDelete)
+        }
+
+        // Add or edit event performed in [AddTransactionFragment], ask for review
+        setFragmentResultListener(KEY_ADD_OR_UPDATE) { _, _ ->
+            model.shouldAskForReview().observe(viewLifecycleOwner) {
+                log("Attempting to make review request")
+                val manager = ReviewManagerFactory.create(requireContext())
+                val request = manager.requestReviewFlow()
+                request.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        log("Review request successfully attempted")
+                        manager.launchReviewFlow(requireActivity(), task.result).addOnCompleteListener {
+                            findNavController().popBackStack()
+                        }
+                    } else {
+                        log("Failed to launch review popup with exception: ${task.exception?.message}")
+                        findNavController().popBackStack()
+                    }
+                }
+            }
         }
     }
 

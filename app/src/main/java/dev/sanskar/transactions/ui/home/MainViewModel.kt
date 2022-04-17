@@ -2,6 +2,7 @@ package dev.sanskar.transactions.ui.home
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanskar.transactions.DEFAULT_REMINDER_HOUR
@@ -198,6 +199,11 @@ class MainViewModel @Inject constructor(
                 deleteTransaction(transactionToDelete)
             }
         }
+    }
+
+    fun shouldAskForReview() = liveData {
+        val result = db.transactionDao().getTransactionCount()
+        if (result in listOf(10, 25, 50, 100, 200, 500, 1000)) emit(true)
     }
 
     /**
