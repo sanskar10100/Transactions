@@ -97,6 +97,11 @@ class AddViewModel : ViewModel() {
         log("addTransaction: added $transaction")
     }
 
+    fun hasAddedTenTransactions() = liveData {
+        val result = db.transactionDao().getTransactionCount()
+        if (result >= 10) emit(true)
+    }
+
     /**
      * Updates a transaction in the database. Transactions are matched through their IDs
      */

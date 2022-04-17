@@ -12,8 +12,8 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.google.android.play.core.review.ReviewManagerFactory
 import dev.sanskar.transactions.*
-import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.FragmentAddTransactionBinding
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
@@ -104,7 +104,26 @@ class AddTransactionFragment : Fragment() {
             model.isDigital = binding.chipDigital.isChecked
 
             if (editMode) model.updateTransaction(args.transactionId) else model.addTransaction()
-            findNavController().popBackStack()
+            askForPlayStoreReview()
+        }
+    }
+
+    private fun askForPlayStoreReview() {
+        model.hasAddedTenTransactions().observe(viewLifecycleOwner) {
+            log("Attempting to make review request")
+            val manager = ReviewManagerFactory.create(requireContext())
+            val request = manager.requestReviewFlow()
+            request.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    log("Review request successfully attempted")
+                    manager.launchReviewFlow(requireActivity(), task.result).addOnCompleteListener {
+                        findNavController().popBackStack()
+                    }
+                } else {
+                    log("Failed to launch review popup with exception: ${task.exception?.message}")
+                    findNavController().popBackStack()
+                }
+            }
         }
     }
 
