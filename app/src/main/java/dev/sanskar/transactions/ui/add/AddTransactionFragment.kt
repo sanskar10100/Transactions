@@ -106,26 +106,8 @@ class AddTransactionFragment : Fragment() {
             model.isDigital = binding.chipDigital.isChecked
 
             if (editMode) model.updateTransaction(args.transactionId) else model.addTransaction()
-            askForPlayStoreReview()
-        }
-    }
-
-    private fun askForPlayStoreReview() {
-        model.hasAddedTenTransactions().observe(viewLifecycleOwner) {
-            log("Attempting to make review request")
-            val manager = ReviewManagerFactory.create(requireContext())
-            val request = manager.requestReviewFlow()
-            request.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    log("Review request successfully attempted")
-                    manager.launchReviewFlow(requireActivity(), task.result).addOnCompleteListener {
-                        findNavController().popBackStack()
-                    }
-                } else {
-                    log("Failed to launch review popup with exception: ${task.exception?.message}")
-                    findNavController().popBackStack()
-                }
-            }
+            setFragmentResult(KEY_ADD_OR_UPDATE, bundleOf())
+            findNavController().popBackStack()
         }
     }
 
