@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import dev.sanskar.transactions.databinding.FragmentMediumExchangeBinding
 import dev.sanskar.transactions.text
 import dev.sanskar.transactions.ui.add.AddViewModel
 
+@AndroidEntryPoint
 class MediumExchangeFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentMediumExchangeBinding
     private val model by viewModels<AddViewModel>()

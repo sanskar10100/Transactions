@@ -13,12 +13,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.google.android.play.core.review.ReviewManagerFactory
+import dagger.hilt.android.AndroidEntryPoint
 import dev.sanskar.transactions.*
 import dev.sanskar.transactions.databinding.FragmentAddTransactionBinding
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 
+@AndroidEntryPoint
 class AddTransactionFragment : Fragment() {
     private val model by viewModels<AddViewModel>()
     private lateinit var binding: FragmentAddTransactionBinding

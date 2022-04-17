@@ -3,14 +3,20 @@ package dev.sanskar.transactions.ui.add
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import dev.sanskar.transactions.data.DBInstanceHolder
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanskar.transactions.data.Transaction
+import dev.sanskar.transactions.data.TransactionDatabase
 import dev.sanskar.transactions.get12HourTime
 import dev.sanskar.transactions.log
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 
-class AddViewModel : ViewModel() {
+@HiltViewModel
+class AddViewModel @Inject constructor(
+    private val db: TransactionDatabase
+) : ViewModel() {
+
     var amount = 0
     var description = ""
     var isDigital = true
@@ -62,8 +68,6 @@ class AddViewModel : ViewModel() {
             minute = this.get(Calendar.MINUTE)
         }
     }
-
-    private val db = DBInstanceHolder.db
 
 
     fun setValuesIfEdit(id: Int) = liveData {

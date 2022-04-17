@@ -6,7 +6,7 @@ import dev.sanskar.transactions.SHARED_PREF_REMINDER_HOUR
 import dev.sanskar.transactions.SHARED_PREF_REMINDER_MINUTE
 
 class PreferenceStore(private val context: Context) {
-    val sharedPref = context.getSharedPreferences("transactions_shared_pref", Context.MODE_PRIVATE)
+    private val sharedPref = context.getSharedPreferences("transactions_shared_pref", Context.MODE_PRIVATE)
 
     /**
      * @return the hour of the day in which the reminder should be shown, default is 22, if cancelled -1

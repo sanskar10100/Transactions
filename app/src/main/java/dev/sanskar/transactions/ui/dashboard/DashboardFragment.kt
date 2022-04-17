@@ -17,10 +17,11 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 
 import com.github.mikephil.charting.data.PieEntry
+import dagger.hilt.android.AndroidEntryPoint
 import dev.sanskar.transactions.R
-import dev.sanskar.transactions.ui.model.MainViewModel
+import dev.sanskar.transactions.ui.home.MainViewModel
 
-
+@AndroidEntryPoint
 class DashboardFragment : Fragment() {
     private lateinit var binding: FragmentDashboardBinding
     private val model by activityViewModels<MainViewModel>()

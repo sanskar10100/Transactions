@@ -8,12 +8,14 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import dagger.hilt.android.AndroidEntryPoint
 import dev.sanskar.transactions.DEFAULT_REMINDER_HOUR
 import dev.sanskar.transactions.DEFAULT_REMINDER_MINUTE
 import dev.sanskar.transactions.databinding.FragmentNotificationsBottomSheetBinding
 import dev.sanskar.transactions.get12HourTime
-import dev.sanskar.transactions.ui.model.MainViewModel
+import dev.sanskar.transactions.ui.home.MainViewModel
 
+@AndroidEntryPoint
 class NotificationsBottomSheet : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentNotificationsBottomSheetBinding
     private val viewModel by viewModels<MainViewModel>()

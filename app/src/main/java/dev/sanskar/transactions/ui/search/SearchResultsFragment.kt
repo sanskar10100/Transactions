@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import dagger.hilt.android.AndroidEntryPoint
 import dev.sanskar.transactions.databinding.FragmentSearchResultsBinding
 import dev.sanskar.transactions.hide
 import dev.sanskar.transactions.show
 import dev.sanskar.transactions.ui.home.TransactionsListAdapter
-import dev.sanskar.transactions.ui.model.MainViewModel
+import dev.sanskar.transactions.ui.home.MainViewModel
 
+@AndroidEntryPoint
 class SearchResultsFragment : Fragment() {
     private lateinit var binding: FragmentSearchResultsBinding
     private val model by activityViewModels<MainViewModel>()
