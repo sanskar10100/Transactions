@@ -9,15 +9,17 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 import dev.sanskar.transactions.R
 import dev.sanskar.transactions.databinding.FragmentSearchQueryBottomSheetBinding
 import dev.sanskar.transactions.text
-import dev.sanskar.transactions.ui.model.MainViewModel
+import dev.sanskar.transactions.ui.home.MainViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SearchQueryBottomSheet : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentSearchQueryBottomSheetBinding
 

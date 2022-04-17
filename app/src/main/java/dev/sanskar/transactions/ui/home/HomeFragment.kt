@@ -11,18 +11,18 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import dev.sanskar.transactions.*
 import dev.sanskar.transactions.data.FilterByMediumChoices
 import dev.sanskar.transactions.data.FilterByTypeChoices
 import dev.sanskar.transactions.data.SortByChoices
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.FragmentHomeBinding
-import dev.sanskar.transactions.ui.model.MainViewModel
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
 
-private const val TAG = "HomeFragment"
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val model by activityViewModels<MainViewModel>()

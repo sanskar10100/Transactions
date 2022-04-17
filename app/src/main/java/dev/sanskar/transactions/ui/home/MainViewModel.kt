@@ -1,28 +1,29 @@
-package dev.sanskar.transactions.ui.model
+package dev.sanskar.transactions.ui.home
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.Room
-import androidx.work.WorkManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanskar.transactions.DEFAULT_REMINDER_HOUR
 import dev.sanskar.transactions.DEFAULT_REMINDER_MINUTE
-import dev.sanskar.transactions.TAG_REMINDER_WORKER
 import dev.sanskar.transactions.data.*
 import dev.sanskar.transactions.log
-import dev.sanskar.transactions.notifications.ReminderNotificationWorker
+import dev.sanskar.transactions.notifications.NotificationScheduler
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val prefStore: PreferenceStore,
+    private val db: TransactionDatabase,
+    private val notificationScheduler: NotificationScheduler
+) : ViewModel() {
 
-    private val app = application
-    private val prefStore = PreferenceStore(application)
 
     fun scheduleReminderNotification(hourOfDay: Int, minute: Int) {
         prefStore.setReminderTime(hourOfDay, minute)
-        ReminderNotificationWorker.schedule(app, hourOfDay, minute)
+        notificationScheduler.scheduleReminderNotification(hourOfDay, minute)
     }
 
     fun getReminderTime() = prefStore.getReminderTime()
@@ -30,7 +31,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun cancelReminderNotification() {
         log("Cancelling reminder notification")
         prefStore.cancelReminder()
-        WorkManager.getInstance(app).cancelAllWorkByTag(TAG_REMINDER_WORKER)
+        notificationScheduler.cancelAll()
     }
 
     /**
@@ -57,16 +58,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         var sortChoice = SortByChoices.UNSPECIFIED
     }
 
-    private var db = Room.databaseBuilder(
-        application,
-        TransactionDatabase::class.java,
-        "transactions"
-    ).allowMainThreadQueries() // For small aggregate queries like sum
-        .build()
 
 
     init {
-        DBInstanceHolder.db = this.db
         resetQueryConfig()
         executeConfig() // Get first time data with initial configurations
         checkAndSetDefaultReminder()
