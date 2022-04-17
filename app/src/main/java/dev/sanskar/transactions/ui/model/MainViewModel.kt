@@ -12,12 +12,8 @@ import dev.sanskar.transactions.TAG_REMINDER_WORKER
 import dev.sanskar.transactions.data.*
 import dev.sanskar.transactions.log
 import dev.sanskar.transactions.notifications.ReminderNotificationWorker
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.util.*
-
-private const val TAG = "MainViewModel"
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
