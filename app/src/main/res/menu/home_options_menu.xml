@@ -3,12 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_baseline_search_24"
-        android:title="Search"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/action_dashboard"
         android:icon="@drawable/ic_baseline_dashboard_24"
         android:title="Dashboard"

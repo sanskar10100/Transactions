@@ -1,4 +1,4 @@
-package dev.sanskar.transactions.ui.search
+package dev.sanskar.transactions.ui.bottomdialogs
 
 import android.content.Context
 import android.os.Bundle
