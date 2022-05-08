@@ -82,7 +82,7 @@ class TransactionUnitTests {
     fun query_sort_and_search() {
         val query = QueryBuilder()
             .setSortingChoice(SortByChoices.AMOUNT_HIGHEST_FIRST)
-            .setSearchChoice(SearchChoices.SPECIFIED, "Recharge")
+            .setFilterSearch(SearchChoices.SPECIFIED, "Recharge")
             .build()
         assertEquals("SELECT * FROM `transaction` WHERE description LIKE '%recharge%' ORDER BY amount DESC", query.sql)
     }
@@ -90,8 +90,28 @@ class TransactionUnitTests {
     @Test
     fun query_search_only() {
         val query = QueryBuilder()
-            .setSearchChoice(SearchChoices.SPECIFIED, "Recharge")
+            .setFilterSearch(SearchChoices.SPECIFIED, "Recharge")
             .build()
         assertEquals("SELECT * FROM `transaction` WHERE description LIKE '%recharge%'", query.sql)
+    }
+
+    @Test
+    fun sort_and_time() {
+        val query = QueryBuilder()
+            .setFilterTime(FilterByTimeChoices.SPECIFIED, 249808343289, 8439837973)
+            .setSortingChoice(SortByChoices.TIME_EARLIEST_FIRST)
+            .build()
+        assertEquals("SELECT * FROM `transaction` WHERE timestamp BETWEEN 249808343289 AND 8439837973 ORDER BY timestamp ASC", query.sql)
+    }
+
+    @Test
+    fun time_only() {
+        val query = QueryBuilder()
+            .setFilterTime(FilterByTimeChoices.SPECIFIED, 249808343289, 8439837973)
+            .build()
+        assertEquals(
+            "SELECT * FROM `transaction` WHERE timestamp BETWEEN 249808343289 AND 8439837973",
+            query.sql
+        )
     }
 }

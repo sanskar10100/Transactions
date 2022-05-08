@@ -113,6 +113,13 @@
                 android:text="Any Amount"
                 app:chipIcon="@drawable/ic_baseline_currency_rupee_24" />
 
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_filter_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Any Time"
+                app:chipIcon="@drawable/ic_baseline_access_time_filled_24" />
+
         </com.google.android.material.chip.ChipGroup>
 
     </HorizontalScrollView>
