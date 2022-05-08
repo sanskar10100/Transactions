@@ -59,6 +59,9 @@ class MainViewModel @Inject constructor(
         var sortChoice = SortByChoices.UNSPECIFIED
         var searchChoice = SearchChoices.UNSPECIFIED
         var searchQuery = ""
+        var filterTimeChoice = FilterByTimeChoices.UNSPECIFIED
+        var filterFromTime = -1L
+        var filterToTime = -1L
     }
 
 
@@ -140,6 +143,13 @@ class MainViewModel @Inject constructor(
         executeConfig()
     }
 
+    fun setFilterTime(fromTime: Long, toTime: Long) {
+        QueryConfig.filterTimeChoice = FilterByTimeChoices.SPECIFIED
+        QueryConfig.filterFromTime = fromTime
+        QueryConfig.filterToTime = toTime
+        executeConfig()
+    }
+
     /**
      * Generates an SQL query from the current configuration and executes it through Room.
      * An observable flow is returned, updates whenever there's a change in the database
@@ -150,7 +160,8 @@ class MainViewModel @Inject constructor(
             .setFilterType(QueryConfig.filterTypeChoice)
             .setFilterMedium(QueryConfig.filterMediumChoice)
             .setSortingChoice(QueryConfig.sortChoice)
-            .setSearchChoice(QueryConfig.searchChoice, QueryConfig.searchQuery)
+            .setFilterSearch(QueryConfig.searchChoice, QueryConfig.searchQuery)
+            .setFilterTime(QueryConfig.filterTimeChoice, QueryConfig.filterFromTime, QueryConfig.filterToTime)
             .build()
         viewModelScope.launch {
             db.transactionDao().customTransactionQuery(query).collect {
@@ -171,6 +182,9 @@ class MainViewModel @Inject constructor(
             sortChoice = SortByChoices.UNSPECIFIED
             searchChoice = SearchChoices.UNSPECIFIED
             searchQuery = ""
+            filterTimeChoice = FilterByTimeChoices.UNSPECIFIED
+            filterFromTime = -1
+            filterToTime = -1
         }
         executeConfig()
     }

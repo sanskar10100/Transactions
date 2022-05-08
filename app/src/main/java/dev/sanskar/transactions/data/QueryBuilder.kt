@@ -20,9 +20,9 @@ enum class FilterByMediumChoices(val readableString: String) {
     UNSPECIFIED("Cash and Digital")
 }
 
-enum class FilterByTimeChoices {
-    SPECIFIED,
-    UNSPECIFIED
+enum class FilterByTimeChoices(val readableString: String) {
+    SPECIFIED(""),
+    UNSPECIFIED("Filter by time")
 }
 
 enum class SearchChoices(val readableString: String) {
@@ -80,10 +80,20 @@ class QueryBuilder {
         return this
     }
 
-    fun setSearchChoice(searchChoice: SearchChoices, searchQuery: String): QueryBuilder {
+    fun setFilterSearch(searchChoice: SearchChoices, searchQuery: String): QueryBuilder {
         if (searchChoice != SearchChoices.UNSPECIFIED) {
             this.searchChoice = searchChoice
             this.searchQuery = searchQuery.lowercase()
+            this.filterEnabled = true
+        }
+        return this
+    }
+
+    fun setFilterTime(filterTimeChoice: FilterByTimeChoices, fromTime: Long, toTime: Long): QueryBuilder {
+        if (filterTimeChoice != FilterByTimeChoices.UNSPECIFIED) {
+            this.filterTimeChoice = filterTimeChoice
+            this.fromTime = fromTime
+            this.toTime = toTime
             this.filterEnabled = true
         }
         return this
@@ -151,6 +161,12 @@ class QueryBuilder {
         if (searchChoice != SearchChoices.UNSPECIFIED) {
             if (previousFilterExists) query.append(" AND")
             query.append(" description LIKE '%$searchQuery%'")
+            previousFilterExists = true
+        }
+
+        if (filterTimeChoice != FilterByTimeChoices.UNSPECIFIED) {
+            if (previousFilterExists) query.append(" AND")
+            query.append(" timestamp BETWEEN $fromTime AND $toTime")
             previousFilterExists = true
         }
 
