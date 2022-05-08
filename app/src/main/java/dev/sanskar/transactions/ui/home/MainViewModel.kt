@@ -64,16 +64,14 @@ class MainViewModel @Inject constructor(
         var filterToTime = -1L
     }
 
-
+    // The main transactions list livedata. This list is used as the central reference throughout the app
+    val transactions = MutableLiveData<List<Transaction>>()
 
     init {
         resetQueryConfig()
         executeConfig() // Get first time data with initial configurations
         checkAndSetDefaultReminder()
     }
-
-    // The main transactions list livedata. This list is used as the central reference throughout the app
-    val transactions = MutableLiveData<List<Transaction>>()
 
     /**
      * Purges the transaction record from the database. Use very cautiously.
