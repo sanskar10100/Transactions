@@ -22,7 +22,7 @@ enum class FilterByMediumChoices(val readableString: String) {
 
 enum class FilterByTimeChoices(val readableString: String) {
     SPECIFIED(""),
-    UNSPECIFIED("Filter by time")
+    UNSPECIFIED("Any time")
 }
 
 enum class SearchChoices(val readableString: String) {

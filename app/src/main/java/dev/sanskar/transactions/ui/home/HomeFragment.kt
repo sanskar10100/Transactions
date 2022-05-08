@@ -2,6 +2,7 @@ package dev.sanskar.transactions.ui.home
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -10,11 +11,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.review.ReviewManagerFactory
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sanskar.transactions.*
-import dev.sanskar.transactions.show
 import dev.sanskar.transactions.data.FilterByMediumChoices
 import dev.sanskar.transactions.data.FilterByTypeChoices
 import dev.sanskar.transactions.data.SortByChoices
@@ -23,6 +24,7 @@ import dev.sanskar.transactions.databinding.FragmentHomeBinding
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
+import java.util.*
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -187,6 +189,7 @@ class HomeFragment : Fragment() {
         binding.chipFilterMedium.text = MainViewModel.QueryConfig.filterMediumChoice.readableString
         binding.chipFilterAmount.text = MainViewModel.QueryConfig.filterAmountChoice.readableString
         binding.chipSearch.text = MainViewModel.QueryConfig.searchChoice.readableString
+        binding.chipFilterTime.text = MainViewModel.QueryConfig.filterTimeChoice.readableString
     }
 
     private fun setChipListeners() {
@@ -261,6 +264,38 @@ class HomeFragment : Fragment() {
                 model.setSearchQuery(bundle.getString(KEY_SEARCH) ?: "")
                 (it as Chip).text = "Search for '${MainViewModel.QueryConfig.searchQuery}'"
             }
+        }
+
+        binding.chipFilterTime.setOnClickListener {
+            val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
+                .setTitleText("Select date range")
+                .setSelection(
+                    Pair(
+                        MaterialDatePicker.thisMonthInUtcMilliseconds(),
+                        MaterialDatePicker.todayInUtcMilliseconds()
+                    )
+                   )
+                .build()
+            dateRangePicker.addOnPositiveButtonClickListener {
+                // For some reason selecting 1 and 8 gives us time between 5:30 AM on these dates,
+                // so we adjust the hour and minute ourself
+                val from = Calendar.getInstance().run {
+                    timeInMillis = it.first
+                    set(Calendar.HOUR_OF_DAY, 0)
+                    set(Calendar.MINUTE, 0)
+                    timeInMillis
+                }
+
+                val to = Calendar.getInstance().run {
+                    timeInMillis = it.second
+                    set(Calendar.HOUR_OF_DAY, 23)
+                    set(Calendar.MINUTE, 59)
+                    timeInMillis
+                }
+                model.setFilterTime(from, to)
+                binding.chipFilterTime.text = "${from.asFormattedDateTime()}- ${to.asFormattedDateTime()}"
+            }
+            dateRangePicker.show(childFragmentManager, "dateRangePicker")
         }
     }
 
