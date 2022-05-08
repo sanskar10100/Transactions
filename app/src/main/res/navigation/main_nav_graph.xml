@@ -95,7 +95,7 @@
     </dialog>
     <dialog
         android:id="@+id/searchQueryBottomSheet"
-        android:name="dev.sanskar.transactions.ui.search.SearchQueryBottomSheet"
+        android:name="dev.sanskar.transactions.ui.bottomdialogs.SearchQueryBottomSheet"
         android:label="fragment_search_query_bottom_sheet"
         tools:layout="@layout/fragment_search_query_bottom_sheet" />
     <dialog
