@@ -77,4 +77,21 @@ class TransactionUnitTests {
             .build()
         assertEquals("SELECT * FROM `transaction` ORDER BY amount DESC", query.sql)
     }
+
+    @Test
+    fun query_sort_and_search() {
+        val query = QueryBuilder()
+            .setSortingChoice(SortByChoices.AMOUNT_HIGHEST_FIRST)
+            .setSearchChoice(SearchChoices.SPECIFIED, "Recharge")
+            .build()
+        assertEquals("SELECT * FROM `transaction` WHERE description LIKE '%recharge%' ORDER BY amount DESC", query.sql)
+    }
+
+    @Test
+    fun query_search_only() {
+        val query = QueryBuilder()
+            .setSearchChoice(SearchChoices.SPECIFIED, "Recharge")
+            .build()
+        assertEquals("SELECT * FROM `transaction` WHERE description LIKE '%recharge%'", query.sql)
+    }
 }

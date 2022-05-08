@@ -187,6 +187,7 @@ class HomeFragment : Fragment() {
         binding.chipFilterType.text = MainViewModel.QueryConfig.filterTypeChoice.readableString
         binding.chipFilterMedium.text = MainViewModel.QueryConfig.filterMediumChoice.readableString
         binding.chipFilterAmount.text = MainViewModel.QueryConfig.filterAmountChoice.readableString
+        binding.chipSearch.text = MainViewModel.QueryConfig.searchChoice.readableString
     }
 
     private fun setChipListeners() {
@@ -252,6 +253,14 @@ class HomeFragment : Fragment() {
                 (it as Chip).text = if (amount != -1)
                     "${MainViewModel.QueryConfig.filterAmountChoice.readableString} ${MainViewModel.QueryConfig.filterAmountValue}"
                     else MainViewModel.QueryConfig.filterAmountChoice.readableString
+            }
+        }
+
+        binding.chipSearch.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchQueryBottomSheet())
+            setFragmentResultListener(KEY_SEARCH) { _, bundle ->
+                model.setSearchQuery(bundle.getString(KEY_SEARCH) ?: "")
+                (it as Chip).text = "Search for '${MainViewModel.QueryConfig.searchQuery}'"
             }
         }
     }

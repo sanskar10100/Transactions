@@ -25,6 +25,11 @@ enum class FilterByTimeChoices {
     UNSPECIFIED
 }
 
+enum class SearchChoices(val readableString: String) {
+    SPECIFIED(""),
+    UNSPECIFIED("Search Description")
+}
+
 enum class SortByChoices(val readableString: String) {
     AMOUNT_HIGHEST_FIRST("Highest Amount First"),
     AMOUNT_LOWEST_FIRST("Lowest Amount First"),
@@ -47,6 +52,9 @@ class QueryBuilder {
 
     private var sortChoice = SortByChoices.UNSPECIFIED
 
+    private var searchChoice = SearchChoices.UNSPECIFIED
+    private var searchQuery = ""
+
     fun setFilterAmount(filterAmountChoice: FilterByAmountChoices, amount: Int): QueryBuilder {
         if (filterAmountChoice != FilterByAmountChoices.UNSPECIFIED) {
             this.filterAmountChoice = filterAmountChoice
@@ -67,6 +75,15 @@ class QueryBuilder {
     fun setFilterMedium(filterMediumChoice: FilterByMediumChoices): QueryBuilder {
         if (filterMediumChoice != FilterByMediumChoices.UNSPECIFIED) {
             this.filterMediumChoice = filterMediumChoice
+            this.filterEnabled = true
+        }
+        return this
+    }
+
+    fun setSearchChoice(searchChoice: SearchChoices, searchQuery: String): QueryBuilder {
+        if (searchChoice != SearchChoices.UNSPECIFIED) {
+            this.searchChoice = searchChoice
+            this.searchQuery = searchQuery.lowercase()
             this.filterEnabled = true
         }
         return this
@@ -128,6 +145,12 @@ class QueryBuilder {
                 else -> ""
             }
             query.append(" $mediumIsDigital")
+            previousFilterExists = true
+        }
+
+        if (searchChoice != SearchChoices.UNSPECIFIED) {
+            if (previousFilterExists) query.append(" AND")
+            query.append(" description LIKE '%$searchQuery%'")
             previousFilterExists = true
         }
 
