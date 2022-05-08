@@ -74,6 +74,18 @@ fun View.hide() {
     this.visibility = View.GONE
 }
 
+fun View.showWithAnimation(duration: Long = 300) = run {
+    this.apply {
+        alpha = 0f
+        visibility = View.VISIBLE
+        animate().alpha(1f).duration = duration
+    }
+}
+
+fun View.hideWithAnimation(duration: Long = 300) = run {
+    this.animate().alpha(0f).setDuration(duration).withEndAction { this.hide() }.start()
+}
+
 fun log(message: String) {
     if (BuildConfig.DEBUG || BuildConfig.BUILD_TYPE.lowercase().contains("debug"))
         Log.d("TransactionsDebug", message)

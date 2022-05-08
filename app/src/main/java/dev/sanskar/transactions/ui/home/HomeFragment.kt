@@ -85,7 +85,7 @@ class HomeFragment : Fragment() {
                     }
                 }
                 if (! binding.listTransactions.canScrollVertically(-1)) {
-                    binding.fabScrollToTop.hide()
+                    binding.fabScrollToTop.hideWithAnimation()
                 }
             }
         })
