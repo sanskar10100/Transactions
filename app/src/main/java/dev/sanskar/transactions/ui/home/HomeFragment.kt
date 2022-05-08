@@ -347,6 +347,7 @@ class HomeFragment : Fragment() {
     private fun clearFilters() {
         model.resetQueryConfig()
         setChipTitles()
+        binding.root.shortSnackbar("Cleared all filters")
     }
 
     /**
