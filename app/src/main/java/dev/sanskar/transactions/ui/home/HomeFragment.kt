@@ -14,6 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.review.ReviewManagerFactory
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sanskar.transactions.*
+import dev.sanskar.transactions.show
 import dev.sanskar.transactions.data.FilterByMediumChoices
 import dev.sanskar.transactions.data.FilterByTypeChoices
 import dev.sanskar.transactions.data.SortByChoices
@@ -73,6 +74,21 @@ class HomeFragment : Fragment() {
         binding.listTransactions.adapter = adapter
         setupRecyclerViewSwipe()
         onboard()
+
+        binding.listTransactions.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0) {
+                    binding.fabScrollToTop.apply {
+                        setOnClickListener { recyclerView.smoothScrollToPosition(0) }
+                        show()
+                    }
+                }
+                if (! binding.listTransactions.canScrollVertically(-1)) {
+                    binding.fabScrollToTop.hide()
+                }
+            }
+        })
 
         binding.fabAddTransaction.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_addTransactionFragment)
