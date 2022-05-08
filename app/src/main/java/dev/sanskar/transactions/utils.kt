@@ -20,8 +20,11 @@ const val KEY_FILTER_BY_MEDIUM = "key_filter_by_medium"
 const val KEY_FILTER_BY_AMOUNT = "key_filter_by_amount"
 const val KEY_AMOUNT = "key_amount"
 
+
 const val KEY_DELETE_REQUEST = "key_delete_request"
 const val KEY_DELETE_TRANSACTION_ID = "key_delete_transaction_id"
+
+const val KEY_SEARCH = "key_search"
 
 const val KEY_ADD_OR_UPDATE = "key_add_or_update"
 
@@ -72,6 +75,18 @@ fun View.show() {
 
 fun View.hide() {
     this.visibility = View.GONE
+}
+
+fun View.showWithAnimation(duration: Long = 300) = run {
+    this.apply {
+        alpha = 0f
+        visibility = View.VISIBLE
+        animate().alpha(1f).duration = duration
+    }
+}
+
+fun View.hideWithAnimation(duration: Long = 300) = run {
+    this.animate().alpha(0f).setDuration(duration).withEndAction { this.hide() }.start()
 }
 
 fun log(message: String) {

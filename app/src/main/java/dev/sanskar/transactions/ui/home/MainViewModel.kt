@@ -57,6 +57,8 @@ class MainViewModel @Inject constructor(
         var filterTypeChoice = FilterByTypeChoices.UNSPECIFIED
         var filterMediumChoice = FilterByMediumChoices.UNSPECIFIED
         var sortChoice = SortByChoices.UNSPECIFIED
+        var searchChoice = SearchChoices.UNSPECIFIED
+        var searchQuery = ""
     }
 
 
@@ -132,6 +134,12 @@ class MainViewModel @Inject constructor(
         executeConfig()
     }
 
+    fun setSearchQuery(query: String) {
+        QueryConfig.searchChoice = SearchChoices.SPECIFIED
+        QueryConfig.searchQuery = query
+        executeConfig()
+    }
+
     /**
      * Generates an SQL query from the current configuration and executes it through Room.
      * An observable flow is returned, updates whenever there's a change in the database
@@ -142,6 +150,7 @@ class MainViewModel @Inject constructor(
             .setFilterType(QueryConfig.filterTypeChoice)
             .setFilterMedium(QueryConfig.filterMediumChoice)
             .setSortingChoice(QueryConfig.sortChoice)
+            .setSearchChoice(QueryConfig.searchChoice, QueryConfig.searchQuery)
             .build()
         viewModelScope.launch {
             db.transactionDao().customTransactionQuery(query).collect {
@@ -160,6 +169,8 @@ class MainViewModel @Inject constructor(
             filterTypeChoice = FilterByTypeChoices.UNSPECIFIED
             filterMediumChoice = FilterByMediumChoices.UNSPECIFIED
             sortChoice = SortByChoices.UNSPECIFIED
+            searchChoice = SearchChoices.UNSPECIFIED
+            searchQuery = ""
         }
         executeConfig()
     }

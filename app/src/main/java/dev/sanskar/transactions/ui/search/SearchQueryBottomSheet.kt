@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import dev.sanskar.transactions.R
+import dev.sanskar.transactions.KEY_SEARCH
 import dev.sanskar.transactions.databinding.FragmentSearchQueryBottomSheetBinding
 import dev.sanskar.transactions.text
 import dev.sanskar.transactions.ui.home.MainViewModel
@@ -55,8 +57,9 @@ class SearchQueryBottomSheet : BottomSheetDialogFragment() {
             if (searchQuery.isEmpty()) {
                 binding.textFieldSearchQuery.error = "Empty Query!"
             } else {
-                model.search(searchQuery)
-                findNavController().navigate(R.id.action_searchQueryBottomSheet_to_searchResultsFragment)
+                model.setSearchQuery(searchQuery)
+                setFragmentResult(KEY_SEARCH, bundleOf(KEY_SEARCH to searchQuery))
+                findNavController().popBackStack()
             }
         }
     }
