@@ -49,9 +49,6 @@ interface TransactionDao {
     @RawQuery(observedEntities = [Transaction::class])
     fun customTransactionQuery(query: SupportSQLiteQuery): Flow<List<Transaction>>
 
-    @Query("SELECT * FROM `transaction` WHERE description LIKE :query")
-    suspend fun search(query: String): List<Transaction>
-
     @Query("SELECT * FROM `transaction` WHERE id = :id")
     suspend fun getTransactionFromId(id: Int): Transaction?
 

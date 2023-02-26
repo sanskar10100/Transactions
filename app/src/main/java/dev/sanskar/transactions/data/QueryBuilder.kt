@@ -26,8 +26,8 @@ enum class FilterByTimeChoices(val readableString: String) {
 }
 
 enum class SearchChoices(val readableString: String) {
-    SPECIFIED(""),
-    UNSPECIFIED("Search Description")
+    SPECIFIED("Searching For"),
+    UNSPECIFIED("Search by Description")
 }
 
 enum class SortByChoices(val readableString: String) {
