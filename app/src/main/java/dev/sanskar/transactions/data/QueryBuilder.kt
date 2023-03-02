@@ -33,9 +33,9 @@ enum class SearchChoices(val readableString: String) {
 enum class SortByChoices(val readableString: String) {
     AMOUNT_HIGHEST_FIRST("Highest Amount First"),
     AMOUNT_LOWEST_FIRST("Lowest Amount First"),
-    TIME_EARLIEST_FIRST("Earliest Transaction First"),
+    UNSPECIFIED_TIME_EARLIEST_FIRST("Earliest Transaction First"),
     TIME_NEWEST_FIRST("Latest Transaction First"),
-    UNSPECIFIED("Default Order")
+    INSERT_ORDER("Insert Order")
 }
 
 class QueryBuilder {
@@ -50,7 +50,7 @@ class QueryBuilder {
     private var toTime = 0L
     private var filterEnabled = false
 
-    private var sortChoice = SortByChoices.UNSPECIFIED
+    private var sortChoice = SortByChoices.UNSPECIFIED_TIME_EARLIEST_FIRST
 
     private var searchChoice = SearchChoices.UNSPECIFIED
     private var searchQuery = ""
@@ -177,13 +177,13 @@ class QueryBuilder {
 //        }
 
         // Sort
-        if (sortChoice != SortByChoices.UNSPECIFIED) {
+        if (sortChoice != SortByChoices.INSERT_ORDER) {
             query.append(" ORDER BY")
             val sort = when(sortChoice) {
                 SortByChoices.AMOUNT_HIGHEST_FIRST -> "amount DESC"
                 SortByChoices.AMOUNT_LOWEST_FIRST -> "amount ASC"
                 SortByChoices.TIME_NEWEST_FIRST -> "timestamp DESC"
-                SortByChoices.TIME_EARLIEST_FIRST -> "timestamp ASC"
+                SortByChoices.UNSPECIFIED_TIME_EARLIEST_FIRST -> "timestamp ASC"
                 else -> ""
             }
             query.append(" $sort")

@@ -7,7 +7,7 @@ data class FilterState(
     val filterAmountValue: Int = -1,
     val filterTypeChoice: FilterByTypeChoices = FilterByTypeChoices.UNSPECIFIED,
     val filterMediumChoice: FilterByMediumChoices = FilterByMediumChoices.UNSPECIFIED,
-    val sortChoice: SortByChoices = SortByChoices.UNSPECIFIED,
+    val sortChoice: SortByChoices = SortByChoices.UNSPECIFIED_TIME_EARLIEST_FIRST,
     val searchChoice: SearchChoices = SearchChoices.UNSPECIFIED,
     val searchQuery: String = "",
     val filterTimeChoice: FilterByTimeChoices = FilterByTimeChoices.UNSPECIFIED,

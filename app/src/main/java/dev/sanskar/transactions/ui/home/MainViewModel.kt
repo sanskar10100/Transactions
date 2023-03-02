@@ -11,7 +11,6 @@ import dev.sanskar.transactions.data.*
 import dev.sanskar.transactions.log
 import dev.sanskar.transactions.notifications.NotificationScheduler
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -86,7 +85,7 @@ class MainViewModel @Inject constructor(
     fun setSortMethod(index: Int) {
         filterState.value = filterState.value.copy(sortChoice = SortByChoices.values().find {
             it.ordinal == index
-        } ?: SortByChoices.UNSPECIFIED)
+        } ?: SortByChoices.UNSPECIFIED_TIME_EARLIEST_FIRST)
         executeConfig()
     }
 
