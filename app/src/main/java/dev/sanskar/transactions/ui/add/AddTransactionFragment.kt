@@ -67,6 +67,7 @@ class AddTransactionFragment : Fragment() {
                     setInitial() // Wait until values are loaded in ViewModel
                 }
             }
+            binding.buttonAdd.text = "Update"
         } else {
             setInitial()
         }
