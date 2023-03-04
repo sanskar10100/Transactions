@@ -11,6 +11,9 @@ import dev.sanskar.transactions.data.*
 import dev.sanskar.transactions.log
 import dev.sanskar.transactions.notifications.NotificationScheduler
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +25,9 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     val filterState = MutableStateFlow(FilterState())
+    val backClearsFilter = filterState
+        .map { it.areFiltersActive() }
+        .stateIn(viewModelScope, SharingStarted.Lazily, false)
 
     fun scheduleReminderNotification(hourOfDay: Int, minute: Int) {
         prefStore.setReminderTime(hourOfDay, minute)
@@ -51,7 +57,7 @@ class MainViewModel @Inject constructor(
     val transactions = MutableLiveData<List<Transaction>>()
 
     init {
-        resetQueryConfig()
+        resetFilters()
         executeConfig() // Get first time data with initial configurations
         checkAndSetDefaultReminder()
     }
@@ -171,7 +177,7 @@ class MainViewModel @Inject constructor(
     /**
      * Resets query configuration to its original state
      */
-    fun resetQueryConfig() {
+    fun resetFilters() {
         filterState.value = FilterState()
         executeConfig()
     }

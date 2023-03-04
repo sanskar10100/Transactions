@@ -14,3 +14,12 @@ data class FilterState(
     val filterFromTime: Long = -1L,
     val filterToTime: Long = -1L
 )
+
+fun FilterState.areFiltersActive(): Boolean {
+    return filterAmountChoice != FilterByAmountChoices.UNSPECIFIED ||
+            filterTypeChoice != FilterByTypeChoices.UNSPECIFIED ||
+            filterMediumChoice != FilterByMediumChoices.UNSPECIFIED ||
+            sortChoice != SortByChoices.UNSPECIFIED_TIME_EARLIEST_FIRST ||
+            searchChoice != SearchChoices.UNSPECIFIED ||
+            filterTimeChoice != FilterByTimeChoices.UNSPECIFIED
+}
