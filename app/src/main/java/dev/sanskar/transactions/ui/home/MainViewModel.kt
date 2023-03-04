@@ -10,11 +10,13 @@ import dev.sanskar.transactions.DEFAULT_REMINDER_MINUTE
 import dev.sanskar.transactions.data.*
 import dev.sanskar.transactions.log
 import dev.sanskar.transactions.notifications.NotificationScheduler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -130,10 +132,18 @@ class MainViewModel @Inject constructor(
                 .collect {
                     transactions.value = it
 
-                    // SQL can return NULL in case of no results
-                    // which may result in nullptr, so performing op in code
-                    cashBalance.value = db.getCashIncome() - db.getCashExpenses()
-                    digitalBalance.value = db.getDigitalIncome() - db.getDigitalExpenses()
+                    // I haven't quite figured out how to do this in SQL because of the complexity of the query
+                    digitalBalance.value = it
+                        .filter { it.isDigital }
+                        .fold(0) { acc, transaction ->
+                            if (transaction.isExpense) (acc - transaction.amount) else (acc + transaction.amount)
+                        }
+
+                    cashBalance.value = it
+                        .filter { !it.isDigital }
+                        .fold(0) { acc, transaction ->
+                            if (transaction.isExpense) (acc - transaction.amount) else (acc + transaction.amount)
+                        }
                 }
 
         }

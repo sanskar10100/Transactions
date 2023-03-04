@@ -19,13 +19,6 @@ interface TransactionDao {
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1")
     fun getExpenses(): Int
 
-    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 0 AND isDigital = 0")
-    fun getCashIncome(): Int
-
-    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 0 and isDigital = 1")
-    fun getDigitalIncome(): Int
-
-
     @Update
     suspend fun updateTransaction(transactions: Transaction)
 
