@@ -53,7 +53,16 @@ fun Long.asFormattedDateTime() : String {
 fun get12HourTime(hour: Int, minute: Int) : String {
     val minutesString = if (minute < 10) "0$minute" else "$minute"
 
-    return "${if (hour > 12) hour - 12 else hour}:$minutesString ${if (hour > 12) "PM" else "AM"}"
+    // Get 12 hour time string
+    return if (hour == 0) {
+        "12:$minutesString AM"
+    } else if (hour < 12) {
+        "$hour:$minutesString AM"
+    } else if (hour == 12) {
+        "$hour:$minutesString PM"
+    } else {
+        "${hour - 12}:$minutesString PM"
+    }
 }
 
 var TextInputLayout.text: String
