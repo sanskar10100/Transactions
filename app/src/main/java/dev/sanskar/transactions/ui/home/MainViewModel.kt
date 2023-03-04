@@ -73,12 +73,6 @@ class MainViewModel @Inject constructor(
         log("clearTransactions: all transactions cleared!")
     }
 
-    fun getDigitalBalance() =
-        db.transactionDao().getTotalDigitalIncome() - db.transactionDao().getTotalDigitalExpenses()
-
-    fun getCashBalance() =
-        db.transactionDao().getTotalCashIncome() - db.transactionDao().getTotalCashExpenses()
-
     fun getTotalExpenses() = db.transactionDao().getTotalExpenses().toFloat()
 
     fun getCashExpense() = db.transactionDao().getTotalCashExpenses().toFloat()
@@ -152,25 +146,13 @@ class MainViewModel @Inject constructor(
      * An observable flow is returned, updates whenever there's a change in the database
      */
     private fun executeConfig() {
-        val query = QueryBuilder()
-            .setFilterAmount(
-                filterState.value.filterAmountChoice,
-                filterState.value.filterAmountValue
-            )
-            .setFilterType(filterState.value.filterTypeChoice)
-            .setFilterMedium(filterState.value.filterMediumChoice)
-            .setSortingChoice(filterState.value.sortChoice)
-            .setFilterSearch(filterState.value.searchChoice, filterState.value.searchQuery)
-            .setFilterTime(
-                filterState.value.filterTimeChoice,
-                filterState.value.filterFromTime,
-                filterState.value.filterToTime
-            )
-            .build()
         viewModelScope.launch {
-            db.transactionDao().customTransactionQuery(query).collect {
-                transactions.value = it
-            }
+            db
+                .transactionDao()
+                .customTransactionQuery(buildQuery(filterState.value))
+                .collect {
+                    transactions.value = it
+                }
         }
     }
 

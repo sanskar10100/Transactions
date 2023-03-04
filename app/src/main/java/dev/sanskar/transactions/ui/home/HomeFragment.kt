@@ -170,8 +170,8 @@ class HomeFragment : Fragment() {
                 binding.listTransactions.visibility = View.VISIBLE
                 binding.lottieEmpty.visibility = View.GONE
                 adapter.submitList(it)
-                binding.textViewCashBalance.text = "₹${model.getCashBalance()}"
-                binding.textViewDigitalBalance.text = "₹${model.getDigitalBalance()}"
+//                binding.textViewCashBalance.text = "₹${model.getCashBalance()}"
+//                binding.textViewDigitalBalance.text = "₹${model.getDigitalBalance()}"
             }
         }
 
