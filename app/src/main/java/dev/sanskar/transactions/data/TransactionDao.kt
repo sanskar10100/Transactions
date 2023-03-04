@@ -11,13 +11,20 @@ interface TransactionDao {
     suspend fun insertTransaction(transactions: Transaction)
 
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND isDigital = 0")
-    fun getTotalCashExpenses(): Int
+    fun getCashExpenses(): Int
 
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND isDigital = 1")
-    fun getTotalDigitalExpenses(): Int
+    fun getDigitalExpenses(): Int
 
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1")
-    fun getTotalExpenses(): Int
+    fun getExpenses(): Int
+
+    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 0 AND isDigital = 0")
+    fun getCashIncome(): Int
+
+    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 0 and isDigital = 1")
+    fun getDigitalIncome(): Int
+
 
     @Update
     suspend fun updateTransaction(transactions: Transaction)

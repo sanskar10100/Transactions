@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val prefStore: PreferenceStore,
-    private val db: TransactionDatabase,
+    private val db: TransactionDao,
     private val notificationScheduler: NotificationScheduler
 ) : ViewModel() {
 
@@ -29,32 +29,10 @@ class MainViewModel @Inject constructor(
         .map { it.areFiltersActive() }
         .stateIn(viewModelScope, SharingStarted.Lazily, false)
 
-    fun scheduleReminderNotification(hourOfDay: Int, minute: Int) {
-        prefStore.setReminderTime(hourOfDay, minute)
-        notificationScheduler.scheduleReminderNotification(hourOfDay, minute)
-    }
-
-    fun getReminderTime() = prefStore.getReminderTime()
-
-    fun cancelReminderNotification() {
-        log("Cancelling reminder notification")
-        prefStore.cancelReminder()
-        notificationScheduler.cancelAll()
-    }
-
-    /**
-     * This should run only once, on the first launch of the app and sets a default reminder time
-     * which can then be configured by the user.
-     */
-    private fun checkAndSetDefaultReminder() {
-        if (!prefStore.isDefaultReminderSet()) {
-            scheduleReminderNotification(DEFAULT_REMINDER_HOUR, DEFAULT_REMINDER_MINUTE)
-            prefStore.saveDefaultReminderIsSet()
-        }
-    }
-
     // The main transactions list livedata. This list is used as the central reference throughout the app
-    val transactions = MutableLiveData<List<Transaction>>()
+    val transactions = MutableStateFlow(emptyList<Transaction>())
+    val cashBalance = MutableStateFlow(0)
+    val digitalBalance = MutableStateFlow(0)
 
     init {
         resetFilters()
@@ -67,17 +45,17 @@ class MainViewModel @Inject constructor(
      */
     fun clearAllTransactions() {
         viewModelScope.launch {
-            db.transactionDao().clearTransactions()
+            db.clearTransactions()
         }
 
         log("clearTransactions: all transactions cleared!")
     }
 
-    fun getTotalExpenses() = db.transactionDao().getTotalExpenses().toFloat()
+    fun getTotalExpenses() = db.getExpenses().toFloat()
 
-    fun getCashExpense() = db.transactionDao().getTotalCashExpenses().toFloat()
+    fun getCashExpense() = db.getCashExpenses().toFloat()
 
-    fun getDigitalExpense() = db.transactionDao().getTotalDigitalExpenses()
+    fun getDigitalExpense() = db.getDigitalExpenses()
 
     /**
      * Sets the sorting method (highest amount/lowest amount/earliest/latest/insertion order (default))
@@ -148,11 +126,15 @@ class MainViewModel @Inject constructor(
     private fun executeConfig() {
         viewModelScope.launch {
             db
-                .transactionDao()
                 .customTransactionQuery(buildQuery(filterState.value))
                 .collect {
                     transactions.value = it
                 }
+
+            // SQL can return NULL in case of no results
+            // which may result in nullptr, so performing op in code
+            cashBalance.value = db.getCashIncome() - db.getCashExpenses()
+            digitalBalance.value = db.getDigitalIncome() - db.getDigitalExpenses()
         }
     }
 
@@ -172,7 +154,7 @@ class MainViewModel @Inject constructor(
     private fun deleteTransaction(transaction: Transaction) {
         clearedTransaction = transaction
         viewModelScope.launch {
-            db.transactionDao().deleteTransaction(transaction)
+            db.deleteTransaction(transaction)
         }
         log("deleteTransaction: deleted $transaction")
     }
@@ -182,7 +164,7 @@ class MainViewModel @Inject constructor(
      */
     fun deleteTransaction(id: Int) {
         viewModelScope.launch {
-            val transactionToDelete = db.transactionDao().getTransactionFromId(id)
+            val transactionToDelete = db.getTransactionFromId(id)
             if (transactionToDelete != null) {
                 deleteTransaction(transactionToDelete)
             }
@@ -202,7 +184,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun shouldAskForReview() = liveData {
-        val result = db.transactionDao().getTransactionCount()
+        val result = db.getTransactionCount()
         if (result in listOf(10, 25, 50, 100, 200, 500, 1000)) emit(true)
     }
 
@@ -212,9 +194,33 @@ class MainViewModel @Inject constructor(
     fun undoTransactionDelete() {
         if (clearedTransaction != null) {
             viewModelScope.launch {
-                db.transactionDao().insertTransaction(clearedTransaction!!)
+                db.insertTransaction(clearedTransaction!!)
                 clearedTransaction = null
             }
+        }
+    }
+
+    fun scheduleReminderNotification(hourOfDay: Int, minute: Int) {
+        prefStore.setReminderTime(hourOfDay, minute)
+        notificationScheduler.scheduleReminderNotification(hourOfDay, minute)
+    }
+
+    fun getReminderTime() = prefStore.getReminderTime()
+
+    fun cancelReminderNotification() {
+        log("Cancelling reminder notification")
+        prefStore.cancelReminder()
+        notificationScheduler.cancelAll()
+    }
+
+    /**
+     * This should run only once, on the first launch of the app and sets a default reminder time
+     * which can then be configured by the user.
+     */
+    private fun checkAndSetDefaultReminder() {
+        if (!prefStore.isDefaultReminderSet()) {
+            scheduleReminderNotification(DEFAULT_REMINDER_HOUR, DEFAULT_REMINDER_MINUTE)
+            prefStore.saveDefaultReminderIsSet()
         }
     }
 }

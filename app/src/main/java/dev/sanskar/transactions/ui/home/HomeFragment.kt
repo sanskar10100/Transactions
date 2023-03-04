@@ -162,7 +162,7 @@ class HomeFragment : Fragment() {
 
 
     private fun initListUpdateListener() {
-        model.transactions.observe(viewLifecycleOwner) {
+        model.transactions.collectWithLifecycle {
             if (it.isNullOrEmpty()) {
                 binding.listTransactions.visibility = View.GONE
                 binding.lottieEmpty.visibility = View.VISIBLE
@@ -170,11 +170,16 @@ class HomeFragment : Fragment() {
                 binding.listTransactions.visibility = View.VISIBLE
                 binding.lottieEmpty.visibility = View.GONE
                 adapter.submitList(it)
-//                binding.textViewCashBalance.text = "₹${model.getCashBalance()}"
-//                binding.textViewDigitalBalance.text = "₹${model.getDigitalBalance()}"
             }
         }
 
+        model.cashBalance.collectWithLifecycle {
+            binding.textViewCashBalance.text = it.toString()
+        }
+
+        model.digitalBalance.collectWithLifecycle {
+            binding.textViewDigitalBalance.text = it.toString()
+        }
     }
 
     /**
