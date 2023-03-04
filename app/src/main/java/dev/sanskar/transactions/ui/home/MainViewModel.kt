@@ -129,12 +129,13 @@ class MainViewModel @Inject constructor(
                 .customTransactionQuery(buildQuery(filterState.value))
                 .collect {
                     transactions.value = it
+
+                    // SQL can return NULL in case of no results
+                    // which may result in nullptr, so performing op in code
+                    cashBalance.value = db.getCashIncome() - db.getCashExpenses()
+                    digitalBalance.value = db.getDigitalIncome() - db.getDigitalExpenses()
                 }
 
-            // SQL can return NULL in case of no results
-            // which may result in nullptr, so performing op in code
-            cashBalance.value = db.getCashIncome() - db.getCashExpenses()
-            digitalBalance.value = db.getDigitalIncome() - db.getDigitalExpenses()
         }
     }
 
