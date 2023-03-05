@@ -1,5 +1,6 @@
 # Transactions
-A fast and easy zero-config transaction manager for Android which helps you track your income and expenses generated through cash or digital mediums. Specifically designed to cater to the needs of **hostelers and students** with features like an intuitive, color coded UI, app shortcuts, medium exchange and incremental filtering.
+A fast and easy zero-config transaction manager for Android which helps you track your income and expenses generated through cash or digital mediums.  
+Transactions is designed to cater to people in a hurry with features like an intuitive, color coded UI, a handy dashboard (WIP), and incremental filtering.
 
 <a href='https://play.google.com/store/apps/details?id=dev.sanskar.transactions&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'  width="30%" height="30%"/></a>
 
