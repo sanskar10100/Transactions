@@ -372,8 +372,8 @@ class HomeFragment : Fragment() {
                 .build())
             addSequenceItem(binding.textViewCashBalance, "You can see your current cash balance here", "Got it")
             addSequenceItem(binding.textViewDigitalBalance, "You can see your current digital balance here", "Got it")
-            addSequenceItem(binding.chipSort, "Sort your transactions by clicking here", "Got it")
-            addSequenceItem(binding.chipFilterType, "Click this to filter your transactions by type or swipe right to see more options", "Got it")
+            addSequenceItem(binding.chipSearch, "Click this to search your transactions", "Got it")
+            addSequenceItem(binding.chipSort, "Sort your transactions by clicking here.\nSwipe left to see more options!", "Got it")
             start()
         }
     }
