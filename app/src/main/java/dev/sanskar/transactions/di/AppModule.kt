@@ -26,6 +26,10 @@ object AppModule {
         .allowMainThreadQueries() // For small queries like sum calculation
         .build()
 
+    @Singleton
+    @Provides
+    fun provideTransactionDao(db: TransactionDatabase) = db.transactionDao()
+
     @Provides
     @Singleton
     fun providePreferenceStoreInstance(@ApplicationContext context: Context) = PreferenceStore(context)

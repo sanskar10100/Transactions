@@ -35,7 +35,7 @@ class TransactionUnitTests {
             .setFilterAmount(FilterByAmountChoices.GREATER_THAN, 100)
             .setFilterType(FilterByTypeChoices.INCOME)
             .setFilterMedium(FilterByMediumChoices.DIGITAL)
-            .setSortingChoice(SortByChoices.TIME_EARLIEST_FIRST)
+            .setSortingChoice(SortByChoices.UNSPECIFIED_TIME_EARLIEST_FIRST)
             .build()
         assertEquals("SELECT * FROM `transaction` WHERE amount >= 100 AND isExpense = 0 AND isDigital = 1 ORDER BY timestamp ASC", query.sql)
     }
@@ -99,7 +99,7 @@ class TransactionUnitTests {
     fun sort_and_time() {
         val query = QueryBuilder()
             .setFilterTime(FilterByTimeChoices.SPECIFIED, 249808343289, 8439837973)
-            .setSortingChoice(SortByChoices.TIME_EARLIEST_FIRST)
+            .setSortingChoice(SortByChoices.UNSPECIFIED_TIME_EARLIEST_FIRST)
             .build()
         assertEquals("SELECT * FROM `transaction` WHERE timestamp BETWEEN 249808343289 AND 8439837973 ORDER BY timestamp ASC", query.sql)
     }

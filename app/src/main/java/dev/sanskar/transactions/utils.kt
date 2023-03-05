@@ -7,8 +7,15 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -46,7 +53,16 @@ fun Long.asFormattedDateTime() : String {
 fun get12HourTime(hour: Int, minute: Int) : String {
     val minutesString = if (minute < 10) "0$minute" else "$minute"
 
-    return "${if (hour > 12) hour - 12 else hour}:$minutesString ${if (hour > 12) "PM" else "AM"}"
+    // Get 12 hour time string
+    return if (hour == 0) {
+        "12:$minutesString AM"
+    } else if (hour < 12) {
+        "$hour:$minutesString AM"
+    } else if (hour == 12) {
+        "$hour:$minutesString PM"
+    } else {
+        "${hour - 12}:$minutesString PM"
+    }
 }
 
 var TextInputLayout.text: String
@@ -107,4 +123,23 @@ fun Context.copyToClipboard(clipLabel: String, text: CharSequence){
     clipboard?.setPrimaryClip(ClipData.newPlainText(clipLabel, text))
 
     shortToast("Copied $clipLabel")
+}
+
+fun Fragment.collectStateFlow(body: suspend CoroutineScope.() -> Unit) {
+    viewLifecycleOwner.lifecycleScope.launch {
+        repeatOnLifecycle(Lifecycle.State.STARTED) {
+            body()
+        }
+    }
+}
+
+context(Fragment)
+fun <T> StateFlow<T>.collectWithLifecycle(block: (T) -> Unit) {
+    viewLifecycleOwner.lifecycleScope.launch {
+        repeatOnLifecycle(Lifecycle.State.CREATED) {
+            this@collectWithLifecycle.collect {
+                block(it)
+            }
+        }
+    }
 }

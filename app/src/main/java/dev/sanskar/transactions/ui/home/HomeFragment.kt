@@ -2,6 +2,7 @@ package dev.sanskar.transactions.ui.home
 
 import android.os.Bundle
 import android.view.*
+import androidx.activity.addCallback
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -10,16 +11,12 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.review.ReviewManagerFactory
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sanskar.transactions.*
-import dev.sanskar.transactions.data.FilterByMediumChoices
-import dev.sanskar.transactions.data.FilterByTypeChoices
-import dev.sanskar.transactions.data.SortByChoices
-import dev.sanskar.transactions.data.Transaction
+import dev.sanskar.transactions.data.*
 import dev.sanskar.transactions.databinding.FragmentHomeBinding
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
@@ -62,8 +59,11 @@ class HomeFragment : Fragment() {
             R.id.action_exchange_medium -> {
                 findNavController().navigate(R.id.action_homeFragment_to_mediumExchangeFragment)
             }
-            R.id.action_send_feedback -> sendFeedbackDialog()
-            R.id.action_clear_all_filters -> clearFilters()
+            R.id.action_send_feedback -> showFeedbackSheet()
+            R.id.action_clear_all_filters -> {
+                model.resetFilters()
+                binding.root.shortSnackbar("Filters cleared")
+            }
             R.id.action_notifications -> findNavController().navigate(R.id.action_homeFragment_to_notificationsBottomSheet)
         }
 
@@ -76,6 +76,18 @@ class HomeFragment : Fragment() {
         setupRecyclerViewSwipe()
         onboard()
 
+        binding.fabAddTransaction.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_addTransactionFragment)
+        }
+
+        initChipClickListeners()
+        initFilterObservers()
+        initFragmentResultListeners()
+        initListUpdateListener()
+        initScrollUpFabListener()
+    }
+
+    private fun initScrollUpFabListener() {
         binding.listTransactions.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -85,20 +97,14 @@ class HomeFragment : Fragment() {
                         show()
                     }
                 }
-                if (! binding.listTransactions.canScrollVertically(-1)) {
+                if (!binding.listTransactions.canScrollVertically(-1)) {
                     binding.fabScrollToTop.hideWithAnimation()
                 }
             }
         })
+    }
 
-        binding.fabAddTransaction.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_addTransactionFragment)
-        }
-
-        model.transactions.observe(viewLifecycleOwner) { onNewTransactionListReceived(it) }
-
-        setChipListeners()
-
+    private fun initFragmentResultListeners() {
         // Delete event received from AddTransactionFragment
         setFragmentResultListener(KEY_DELETE_REQUEST) { _, bundle ->
             val id = bundle.getInt(KEY_DELETE_TRANSACTION_ID)
@@ -115,9 +121,10 @@ class HomeFragment : Fragment() {
                 request.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         log("Review request successfully attempted")
-                        manager.launchReviewFlow(requireActivity(), task.result).addOnCompleteListener {
-                            findNavController().popBackStack()
-                        }
+                        manager.launchReviewFlow(requireActivity(), task.result)
+                            .addOnCompleteListener {
+                                findNavController().popBackStack()
+                            }
                     } else {
                         log("Failed to launch review popup with exception: ${task.exception?.message}")
                         findNavController().popBackStack()
@@ -153,59 +160,75 @@ class HomeFragment : Fragment() {
         }).attachToRecyclerView(binding.listTransactions)
     }
 
-    /**
-     * Set chip titles.
-     * TODO fix through LiveData
-     */
-    override fun onResume() {
-        super.onResume()
-        setChipTitles()
-    }
 
-    /**
-     * Called whenever a new transactions list is received from the VM.
-     * If the transactions are empty (result of a filter or new install), then the empty lottie view is shown.
-     */
-    private fun onNewTransactionListReceived(transactions: List<Transaction>) {
-        if (transactions.isNullOrEmpty()) {
-            binding.listTransactions.visibility = View.GONE
-            binding.lottieEmpty.visibility = View.VISIBLE
-            return
-        } else {
-            binding.listTransactions.visibility = View.VISIBLE
-            binding.lottieEmpty.visibility = View.GONE
-            adapter.submitList(transactions)
-            binding.textViewCashBalance.text = "₹${model.getCashBalance()}"
-            binding.textViewDigitalBalance.text = "₹${model.getDigitalBalance()}"
+    private fun initListUpdateListener() {
+        model.transactions.collectWithLifecycle {
+            if (it.isNullOrEmpty()) {
+                binding.listTransactions.visibility = View.GONE
+                binding.lottieEmpty.visibility = View.VISIBLE
+            } else {
+                binding.listTransactions.visibility = View.VISIBLE
+                binding.lottieEmpty.visibility = View.GONE
+                adapter.submitList(it)
+            }
+        }
+
+        model.cashBalance.collectWithLifecycle {
+            binding.textViewCashBalance.text = it.toString()
+        }
+
+        model.digitalBalance.collectWithLifecycle {
+            binding.textViewDigitalBalance.text = it.toString()
         }
     }
 
     /**
      * Resets chip titles to their default states
      */
-    private fun setChipTitles() {
-        binding.chipSort.text = MainViewModel.QueryConfig.sortChoice.readableString
-        binding.chipFilterType.text = MainViewModel.QueryConfig.filterTypeChoice.readableString
-        binding.chipFilterMedium.text = MainViewModel.QueryConfig.filterMediumChoice.readableString
-        binding.chipFilterAmount.text = MainViewModel.QueryConfig.filterAmountChoice.readableString
-        binding.chipSearch.text = MainViewModel.QueryConfig.searchChoice.readableString
-        binding.chipFilterTime.text = MainViewModel.QueryConfig.filterTimeChoice.readableString
+    private fun initFilterObservers() {
+        model.filterState.collectWithLifecycle {
+            binding.chipSort.text = it.sortChoice.readableString
+            binding.chipSearch.text = if (it.searchChoice == SearchChoices.UNSPECIFIED) {
+                it.searchChoice.readableString
+            } else {
+                "${it.searchChoice.readableString} ${it.searchQuery}"
+            }
+            binding.chipFilterMedium.text = it.filterMediumChoice.readableString
+            binding.chipFilterType.text = it.filterTypeChoice.readableString
+            binding.chipFilterAmount.text = if (it.filterAmountChoice == FilterByAmountChoices.UNSPECIFIED) {
+                it.filterAmountChoice.readableString
+            } else {
+                "${it.filterAmountChoice.readableString} ${it.filterAmountValue}"
+            }
+            binding.chipFilterTime.text = if (it.filterTimeChoice == FilterByTimeChoices.UNSPECIFIED) {
+                it.filterTimeChoice.readableString
+            } else {
+                "${it.filterFromTime.asFormattedDateTime()}- ${it.filterToTime.asFormattedDateTime()}"
+            }
+        }
+
+        val backPressedCallback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            model.resetFilters()
+        }
+
+        model.backClearsFilter.collectWithLifecycle {
+            backPressedCallback.isEnabled = it
+        }
     }
 
-    private fun setChipListeners() {
+    private fun initChipClickListeners() {
         // Sort by Chip
         binding.chipSort.setOnClickListener {
             findNavController().navigate(
                 generateOptionsDirection(
                     SortByChoices.values().map {
                         it.readableString
-                    }.toTypedArray(), SORT_REQUEST_KEY, MainViewModel.QueryConfig.sortChoice.ordinal, "Sort By"
+                    }.toTypedArray(), SORT_REQUEST_KEY, model.filterState.value.sortChoice.ordinal, "Sort By"
                 )
             )
             setFragmentResultListener(SORT_REQUEST_KEY) { _, bundle ->
                 val selected = bundle.getInt(KEY_SELECTED_OPTION_INDEX)
                 model.setSortMethod(selected)
-                (it as Chip).text = MainViewModel.QueryConfig.sortChoice.readableString
             }
         }
 
@@ -215,13 +238,12 @@ class HomeFragment : Fragment() {
                 generateOptionsDirection(
                     FilterByTypeChoices.values().map {
                         it.readableString
-                    }.toTypedArray(), KEY_FILTER_BY_TYPE, MainViewModel.QueryConfig.filterTypeChoice.ordinal, "Filter by Type"
+                    }.toTypedArray(), KEY_FILTER_BY_TYPE, model.filterState.value.filterTypeChoice.ordinal, "Filter by Type"
                 )
             )
             setFragmentResultListener(KEY_FILTER_BY_TYPE) { _, bundle ->
                 val selected = bundle.getInt(KEY_SELECTED_OPTION_INDEX)
                 model.setFilterType(selected)
-                (it as Chip).text = MainViewModel.QueryConfig.filterTypeChoice.readableString
             }
         }
 
@@ -231,30 +253,26 @@ class HomeFragment : Fragment() {
                 generateOptionsDirection(
                     FilterByMediumChoices.values().map {
                         it.readableString
-                    }.toTypedArray(), KEY_FILTER_BY_MEDIUM, MainViewModel.QueryConfig.filterMediumChoice.ordinal, "Filter by Medium"
+                    }.toTypedArray(), KEY_FILTER_BY_MEDIUM, model.filterState.value.filterMediumChoice.ordinal, "Filter by Medium"
                 )
             )
             setFragmentResultListener(KEY_FILTER_BY_MEDIUM) { _, bundle ->
                 val selected = bundle.getInt(KEY_SELECTED_OPTION_INDEX)
                 model.setFilterMedium(selected)
-                (it as Chip).text = MainViewModel.QueryConfig.filterMediumChoice.readableString
             }
         }
 
         // Filter by amount chip
         binding.chipFilterAmount.setOnClickListener {
             val directions = HomeFragmentDirections.actionHomeFragmentToAmountFilterBottomSheet(
-                MainViewModel.QueryConfig.filterAmountValue,
-                MainViewModel.QueryConfig.filterAmountChoice.ordinal
+                model.filterState.value.filterAmountValue,
+                model.filterState.value.filterAmountChoice.ordinal
             )
             findNavController().navigate(directions)
             setFragmentResultListener(KEY_FILTER_BY_AMOUNT) { _, bundle ->
                 val amount = bundle.getInt(KEY_AMOUNT)
                 val index = bundle.getInt(KEY_SELECTED_OPTION_INDEX)
                 model.setFilterAmount(amount, index)
-                (it as Chip).text = if (amount != -1)
-                    "${MainViewModel.QueryConfig.filterAmountChoice.readableString} ${MainViewModel.QueryConfig.filterAmountValue}"
-                    else MainViewModel.QueryConfig.filterAmountChoice.readableString
             }
         }
 
@@ -262,7 +280,6 @@ class HomeFragment : Fragment() {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchQueryBottomSheet())
             setFragmentResultListener(KEY_SEARCH) { _, bundle ->
                 model.setSearchQuery(bundle.getString(KEY_SEARCH) ?: "")
-                (it as Chip).text = "Search for '${MainViewModel.QueryConfig.searchQuery}'"
             }
         }
 
@@ -293,7 +310,6 @@ class HomeFragment : Fragment() {
                     timeInMillis
                 }
                 model.setFilterTime(from, to)
-                binding.chipFilterTime.text = "${from.asFormattedDateTime()}- ${to.asFormattedDateTime()}"
             }
             dateRangePicker.show(childFragmentManager, "dateRangePicker")
         }
@@ -337,17 +353,8 @@ class HomeFragment : Fragment() {
      * Shows a feedback dialog with options for sending feedback through
      * Gmail or GitHub
      */
-    private fun sendFeedbackDialog() {
+    private fun showFeedbackSheet() {
         findNavController().navigate(R.id.action_homeFragment_to_feedbackBottomSheet)
-    }
-
-    /**
-     * Clears all applied filters and resets the chip text
-     */
-    private fun clearFilters() {
-        model.resetQueryConfig()
-        setChipTitles()
-        binding.root.shortSnackbar("Cleared all filters")
     }
 
     /**

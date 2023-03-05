@@ -1,6 +1,8 @@
 package dev.sanskar.transactions.data
 
 import androidx.sqlite.db.SimpleSQLiteQuery
+import dev.sanskar.transactions.ui.home.FilterState
+import dev.sanskar.transactions.ui.home.areFiltersActive
 
 enum class FilterByAmountChoices(val readableString: String) {
     GREATER_THAN("Amount Greater Than"),
@@ -26,169 +28,87 @@ enum class FilterByTimeChoices(val readableString: String) {
 }
 
 enum class SearchChoices(val readableString: String) {
-    SPECIFIED(""),
-    UNSPECIFIED("Search Description")
+    SPECIFIED("Searching For"),
+    UNSPECIFIED("Search by Description")
 }
 
 enum class SortByChoices(val readableString: String) {
     AMOUNT_HIGHEST_FIRST("Highest Amount First"),
     AMOUNT_LOWEST_FIRST("Lowest Amount First"),
-    TIME_EARLIEST_FIRST("Earliest Transaction First"),
+    UNSPECIFIED_TIME_EARLIEST_FIRST("Earliest Transaction First"),
     TIME_NEWEST_FIRST("Latest Transaction First"),
-    UNSPECIFIED("Default Order")
+    INSERT_ORDER("Insert Order")
 }
 
-class QueryBuilder {
-
-    private var filterAmountChoice = FilterByAmountChoices.UNSPECIFIED
-    private var filterAmountValue = 0
-
-    private var filterTypeChoice = FilterByTypeChoices.UNSPECIFIED
-    private var filterMediumChoice = FilterByMediumChoices.UNSPECIFIED
-    private var filterTimeChoice = FilterByTimeChoices.UNSPECIFIED
-    private var fromTime = 0L
-    private var toTime = 0L
-    private var filterEnabled = false
-
-    private var sortChoice = SortByChoices.UNSPECIFIED
-
-    private var searchChoice = SearchChoices.UNSPECIFIED
-    private var searchQuery = ""
-
-    fun setFilterAmount(filterAmountChoice: FilterByAmountChoices, amount: Int): QueryBuilder {
-        if (filterAmountChoice != FilterByAmountChoices.UNSPECIFIED) {
-            this.filterAmountChoice = filterAmountChoice
-            this.filterAmountValue = amount
-            this.filterEnabled = true
-        }
-        return this
+fun buildQuery(filter: FilterState): SimpleSQLiteQuery {
+    var previousFilterExists = false
+    val query = StringBuilder("SELECT * FROM `transaction`")
+    if (filter.areFiltersActive()) {
+        query.append(" WHERE")
     }
 
-    fun setFilterType(filterTypeChoice: FilterByTypeChoices): QueryBuilder {
-        if (filterTypeChoice != FilterByTypeChoices.UNSPECIFIED) {
-            this.filterTypeChoice = filterTypeChoice
-            this.filterEnabled = true
+    // Amount filter
+    if (filter.filterAmountChoice != FilterByAmountChoices.UNSPECIFIED) {
+        query.append(" amount")
+        val operator: String = when (filter.filterAmountChoice) {
+            FilterByAmountChoices.GREATER_THAN -> " >="
+            FilterByAmountChoices.LESSER_THAN -> " <="
+            else -> ""
         }
-        return this
+        query.append(operator)
+        query.append(" ${filter.filterAmountValue}")
+        previousFilterExists = true
+    }
+    // Type filter
+    if (filter.filterTypeChoice != FilterByTypeChoices.UNSPECIFIED) {
+        if (previousFilterExists) query.append(" AND")
+        query.append(" isExpense")
+        val typeIsExpense = when (filter.filterTypeChoice) {
+            FilterByTypeChoices.EXPENSE -> "= 1"
+            FilterByTypeChoices.INCOME -> "= 0"
+            else -> ""
+        }
+        query.append(" $typeIsExpense")
+        previousFilterExists = true
     }
 
-    fun setFilterMedium(filterMediumChoice: FilterByMediumChoices): QueryBuilder {
-        if (filterMediumChoice != FilterByMediumChoices.UNSPECIFIED) {
-            this.filterMediumChoice = filterMediumChoice
-            this.filterEnabled = true
+    // Medium filter
+    if (filter.filterMediumChoice != FilterByMediumChoices.UNSPECIFIED) {
+        if (previousFilterExists) query.append(" AND")
+        query.append(" isDigital")
+        val mediumIsDigital = when (filter.filterMediumChoice) {
+            FilterByMediumChoices.DIGITAL -> "= 1"
+            FilterByMediumChoices.CASH -> "= 0"
+            else -> ""
         }
-        return this
+        query.append(" $mediumIsDigital")
+        previousFilterExists = true
     }
 
-    fun setFilterSearch(searchChoice: SearchChoices, searchQuery: String): QueryBuilder {
-        if (searchChoice != SearchChoices.UNSPECIFIED) {
-            this.searchChoice = searchChoice
-            this.searchQuery = searchQuery.lowercase()
-            this.filterEnabled = true
-        }
-        return this
+    if (filter.searchChoice != SearchChoices.UNSPECIFIED) {
+        if (previousFilterExists) query.append(" AND")
+        query.append(" description LIKE '%${filter.searchQuery}%'")
+        previousFilterExists = true
     }
 
-    fun setFilterTime(filterTimeChoice: FilterByTimeChoices, fromTime: Long, toTime: Long): QueryBuilder {
-        if (filterTimeChoice != FilterByTimeChoices.UNSPECIFIED) {
-            this.filterTimeChoice = filterTimeChoice
-            this.fromTime = fromTime
-            this.toTime = toTime
-            this.filterEnabled = true
-        }
-        return this
+    if (filter.filterTimeChoice != FilterByTimeChoices.UNSPECIFIED) {
+        if (previousFilterExists) query.append(" AND")
+        query.append(" timestamp BETWEEN ${filter.filterFromTime} AND ${filter.filterToTime}")
+        previousFilterExists = true
     }
 
-//    fun setFilterTime(filterTimeChoice: FilterByTimeChoices, fromTime: Long, toTime: Long): QueryBuilder {
-//        this.filterTimeChoice = filterTimeChoice
-//        this.fromTime = fromTime
-//        this.toTime = toTime
-//        filterCount++
-//        return this
-//    }
-
-    fun setSortingChoice(sortChoice: SortByChoices): QueryBuilder {
-        this.sortChoice = sortChoice
-        return this
+    // Sort
+    if (filter.sortChoice != SortByChoices.INSERT_ORDER) {
+        query.append(" ORDER BY")
+        val sort = when(filter.sortChoice) {
+            SortByChoices.AMOUNT_HIGHEST_FIRST -> "amount DESC"
+            SortByChoices.AMOUNT_LOWEST_FIRST -> "amount ASC"
+            SortByChoices.TIME_NEWEST_FIRST -> "timestamp DESC"
+            SortByChoices.UNSPECIFIED_TIME_EARLIEST_FIRST -> "timestamp ASC"
+            else -> ""
+        }
+        query.append(" $sort")
     }
 
-    private var previousFilterExists = false
-
-    fun build(): SimpleSQLiteQuery {
-        val query = StringBuilder("SELECT * FROM `transaction`")
-        if (filterEnabled) {
-            query.append(" WHERE")
-        }
-
-        // Amount filter
-        if (filterAmountChoice != FilterByAmountChoices.UNSPECIFIED) {
-            query.append(" amount")
-            val operator: String = when (filterAmountChoice) {
-                FilterByAmountChoices.GREATER_THAN -> " >="
-                FilterByAmountChoices.LESSER_THAN -> " <="
-                else -> ""
-            }
-            query.append(operator)
-            query.append(" $filterAmountValue")
-            previousFilterExists = true
-        }
-        // Type filter
-        if (filterTypeChoice != FilterByTypeChoices.UNSPECIFIED) {
-            if (previousFilterExists) query.append(" AND")
-            query.append(" isExpense")
-            val typeIsExpense = when (filterTypeChoice) {
-                FilterByTypeChoices.EXPENSE -> "= 1"
-                FilterByTypeChoices.INCOME -> "= 0"
-                else -> ""
-            }
-            query.append(" $typeIsExpense")
-            previousFilterExists = true
-        }
-
-        // Medium filter
-        if (filterMediumChoice != FilterByMediumChoices.UNSPECIFIED) {
-            if (previousFilterExists) query.append(" AND")
-            query.append(" isDigital")
-            val mediumIsDigital = when (filterMediumChoice) {
-                FilterByMediumChoices.DIGITAL -> "= 1"
-                FilterByMediumChoices.CASH -> "= 0"
-                else -> ""
-            }
-            query.append(" $mediumIsDigital")
-            previousFilterExists = true
-        }
-
-        if (searchChoice != SearchChoices.UNSPECIFIED) {
-            if (previousFilterExists) query.append(" AND")
-            query.append(" description LIKE '%$searchQuery%'")
-            previousFilterExists = true
-        }
-
-        if (filterTimeChoice != FilterByTimeChoices.UNSPECIFIED) {
-            if (previousFilterExists) query.append(" AND")
-            query.append(" timestamp BETWEEN $fromTime AND $toTime")
-            previousFilterExists = true
-        }
-
-        // Time filter
-//        if (filterTimeChoice != FilterByTimeChoices.UNSPECIFIED) {
-//            if (previousFilterExists) query.append(" AND")
-//            query.append(" timestamp BETWEEN $fromTime AND $toTime")
-//        }
-
-        // Sort
-        if (sortChoice != SortByChoices.UNSPECIFIED) {
-            query.append(" ORDER BY")
-            val sort = when(sortChoice) {
-                SortByChoices.AMOUNT_HIGHEST_FIRST -> "amount DESC"
-                SortByChoices.AMOUNT_LOWEST_FIRST -> "amount ASC"
-                SortByChoices.TIME_NEWEST_FIRST -> "timestamp DESC"
-                SortByChoices.TIME_EARLIEST_FIRST -> "timestamp ASC"
-                else -> ""
-            }
-            query.append(" $sort")
-        }
-
-        return SimpleSQLiteQuery(query.toString())
-    }
+    return SimpleSQLiteQuery(query.toString())
 }
