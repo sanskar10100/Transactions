@@ -4,20 +4,14 @@ A fast and easy zero-config transaction manager for Android which helps you trac
 <a href='https://play.google.com/store/apps/details?id=dev.sanskar.transactions&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'  width="30%" height="30%"/></a>
 
 ### Features:
-- Fields for amount, description
-- Chips for selecting digital/cash income/expense
-- Time and Date Picker along with default values
-- Dashboard containing charts and various stats
-- Color coded expense/income tracking
-- Intuitive and Beautiful Material3 UI
-- Add/Edit/Delete/Clear Transactions
+- Track incomes/expenses through cash and digital mediums
+- View major stats and metrics on a handy dashboard
+- Apply incremental filters that stack on top of each other with multiple options to get the view you want
+- View balances that update in realtime based on your transactions and filters
 - Exchange amount between cash and digital mediums
-- App Shortcuts for directly opening Transaction Add Screen or Dashboard
-- Filter by amount, medium, type or time
-- Sort by amount, time and insertion order
-- Easy onboarding for first time users
-- Swipe from right to delete a transaction
-- Get daily reminder notifications at a time of your choice
+- Enable daily reminder notifications at a time of your choice
+- Directly open major screens in the app through App Shortcuts
+- Easily get onboarded onto the app with the help of a visual guide
 
 ### What is being used in building this app
 - Kotlin
