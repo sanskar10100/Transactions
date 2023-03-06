@@ -2,7 +2,6 @@ package dev.sanskar.transactions.data
 
 import androidx.sqlite.db.SimpleSQLiteQuery
 import dev.sanskar.transactions.ui.home.FilterState
-import dev.sanskar.transactions.ui.home.areFiltersActive
 
 enum class FilterByAmountChoices(val readableString: String) {
     GREATER_THAN("Amount Greater Than"),
@@ -43,9 +42,17 @@ enum class SortByChoices(val readableString: String) {
 fun buildQuery(filter: FilterState): SimpleSQLiteQuery {
     var previousFilterExists = false
     val query = StringBuilder("SELECT * FROM `transaction`")
-    if (filter.areFiltersActive()) {
-        query.append(" WHERE")
+    with (filter) {
+        val active = filterAmountChoice != FilterByAmountChoices.UNSPECIFIED ||
+                filterTypeChoice != FilterByTypeChoices.UNSPECIFIED ||
+                filterMediumChoice != FilterByMediumChoices.UNSPECIFIED ||
+                searchChoice != SearchChoices.UNSPECIFIED ||
+                filterTimeChoice != FilterByTimeChoices.UNSPECIFIED
+        if (active) {
+            query.append(" WHERE")
+        }
     }
+
 
     // Amount filter
     if (filter.filterAmountChoice != FilterByAmountChoices.UNSPECIFIED) {
