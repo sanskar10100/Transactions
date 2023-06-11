@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import dev.sanskar.transactions.databinding.FragmentDashboardBinding
 
 import com.github.mikephil.charting.formatter.PercentFormatter
@@ -19,12 +19,12 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sanskar.transactions.R
-import dev.sanskar.transactions.ui.home.MainViewModel
+import dev.sanskar.transactions.collectWithLifecycle
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {
     private lateinit var binding: FragmentDashboardBinding
-    private val model by activityViewModels<MainViewModel>()
+    private val model by viewModels<DashboardViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,10 +40,10 @@ class DashboardFragment : Fragment() {
 
         setupSourcePieChart()
 
-        with (binding) {
-            // TODO review and fix
-//            textViewWeekExpense.text = "This week's expense: ₹${model.getThisWeekExpense().toString()}"
+        model.getExpensesSinceMidnight().collectWithLifecycle {
+            binding.textViewExpensesToday.text = "Expenses Since Midnight: ₹$it"
         }
+
     }
 
     private fun setupSourcePieChart() {

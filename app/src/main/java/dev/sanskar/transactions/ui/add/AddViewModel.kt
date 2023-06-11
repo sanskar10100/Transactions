@@ -1,13 +1,15 @@
 package dev.sanskar.transactions.ui.add
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.data.TransactionDatabase
 import dev.sanskar.transactions.get12HourTime
 import dev.sanskar.transactions.log
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -70,7 +72,7 @@ class AddViewModel @Inject constructor(
     }
 
 
-    fun setValuesIfEdit(id: Int) = liveData {
+    fun setValuesIfEdit(id: Int) = flow {
         val result = db.transactionDao().getTransactionFromId(id)
         if (result != null) {
             amount = result.amount
@@ -80,7 +82,7 @@ class AddViewModel @Inject constructor(
             setTimeComponents(result.timestamp)
             emit(true)
         }
-    }
+    }.stateIn(viewModelScope, SharingStarted.Lazily, false)
 
     /**
      * Adds a transaction to the database

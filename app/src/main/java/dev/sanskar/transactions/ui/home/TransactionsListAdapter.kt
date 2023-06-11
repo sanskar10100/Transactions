@@ -13,7 +13,7 @@ import dev.sanskar.transactions.asFormattedDateTime
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.LayoutTransactionBinding
 
-class TransactionsListAdapter(private val context: Context, private val searchMode: Boolean = false) :
+class TransactionsListAdapter(private val context: Context) :
     ListAdapter<Transaction, TransactionsListAdapter.ViewHolder>(TransactionDiffCallback()) {
 
     class ViewHolder(val binding: LayoutTransactionBinding) : RecyclerView.ViewHolder(binding.root)
@@ -44,7 +44,7 @@ class TransactionsListAdapter(private val context: Context, private val searchMo
             textViewSource.text = if (transaction.isDigital) "Digital" else "Cash"
 
             root.setOnClickListener {
-                if (!searchMode) root.findNavController().navigate(
+                root.findNavController().navigate(
                     HomeFragmentDirections.actionHomeFragmentToAddTransactionFragment(transaction.id)
                 )
             }

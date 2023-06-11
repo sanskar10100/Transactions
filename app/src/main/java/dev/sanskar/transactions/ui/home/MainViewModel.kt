@@ -1,8 +1,6 @@
 package dev.sanskar.transactions.ui.home
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanskar.transactions.DEFAULT_REMINDER_HOUR
@@ -10,13 +8,12 @@ import dev.sanskar.transactions.DEFAULT_REMINDER_MINUTE
 import dev.sanskar.transactions.data.*
 import dev.sanskar.transactions.log
 import dev.sanskar.transactions.notifications.NotificationScheduler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,12 +49,6 @@ class MainViewModel @Inject constructor(
 
         log("clearTransactions: all transactions cleared!")
     }
-
-    fun getTotalExpenses() = db.getExpenses().toFloat()
-
-    fun getCashExpense() = db.getCashExpenses().toFloat()
-
-    fun getDigitalExpense() = db.getDigitalExpenses()
 
     /**
      * Sets the sorting method (highest amount/lowest amount/earliest/latest/insertion order (default))
@@ -187,17 +178,15 @@ class MainViewModel @Inject constructor(
      */
     fun deleteTransactionByPosition(position: Int) {
         viewModelScope.launch {
-            val transactionToDelete = transactions.value?.get(position)
-            if (transactionToDelete != null) {
-                deleteTransaction(transactionToDelete)
-            }
+            val transactionToDelete = transactions.value.get(position)
+            deleteTransaction(transactionToDelete)
         }
     }
 
-    fun shouldAskForReview() = liveData {
+    fun shouldAskForReview() = flow {
         val result = db.getTransactionCount()
-        if (result in listOf(10, 25, 50, 100, 200, 500, 1000)) emit(true)
-    }
+        emit(result in listOf(10, 25, 50, 100, 200, 500, 1000))
+    }.stateIn(viewModelScope, SharingStarted.Lazily, false)
 
     /**
      * Restores any deleted transactions

@@ -19,6 +19,9 @@ interface TransactionDao {
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1")
     fun getExpenses(): Int
 
+    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND timestamp >= :timestamp")
+    fun getTotalExpenseSinceTimestamp(timestamp: Long): Int
+
     @Update
     suspend fun updateTransaction(transactions: Transaction)
 

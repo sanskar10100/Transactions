@@ -54,7 +54,7 @@ class HomeFragment : Fragment() {
         when (item.itemId) {
             R.id.action_clear_transactions -> clearAllTransactionsDialog()
             R.id.action_dashboard -> {
-                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDashboardFragment())
+                findNavController().navigate(R.id.action_homeFragment_to_dashboardFragment)
             }
             R.id.action_exchange_medium -> {
                 findNavController().navigate(R.id.action_homeFragment_to_mediumExchangeFragment)
@@ -114,20 +114,19 @@ class HomeFragment : Fragment() {
 
         // Add or edit event performed in [AddTransactionFragment], ask for review
         setFragmentResultListener(KEY_ADD_OR_UPDATE) { _, _ ->
-            model.shouldAskForReview().observe(viewLifecycleOwner) {
-                log("Attempting to make review request")
-                val manager = ReviewManagerFactory.create(requireContext())
-                val request = manager.requestReviewFlow()
-                request.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        log("Review request successfully attempted")
-                        manager.launchReviewFlow(requireActivity(), task.result)
-                            .addOnCompleteListener {
-                                findNavController().popBackStack()
-                            }
-                    } else {
-                        log("Failed to launch review popup with exception: ${task.exception?.message}")
-                        findNavController().popBackStack()
+            model.shouldAskForReview().collectWithLifecycle {
+                if (it) {
+                    log("Attempting to make review request")
+                    val manager = ReviewManagerFactory.create(requireContext())
+                    val request = manager.requestReviewFlow()
+                    request.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            log("Review request successfully attempted")
+                            manager.launchReviewFlow(requireActivity(), task.result)
+                        } else {
+                            log("Failed to launch review popup with exception: ${task.exception?.message}")
+                            findNavController().popBackStack()
+                        }
                     }
                 }
             }

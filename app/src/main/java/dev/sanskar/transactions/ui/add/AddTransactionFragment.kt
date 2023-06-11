@@ -52,7 +52,7 @@ class AddTransactionFragment : Fragment() {
             setFragmentResult(KEY_DELETE_REQUEST, bundleOf(
                 KEY_DELETE_TRANSACTION_ID to args.transactionId
             ))
-            findNavController().popBackStack()
+            findNavController().navigateUp()
         }
         return false
     }
@@ -62,8 +62,8 @@ class AddTransactionFragment : Fragment() {
         onboard()
 
         if (editMode) {
-            model.setValuesIfEdit(args.transactionId).observe(viewLifecycleOwner) {
-                if (true) {
+            model.setValuesIfEdit(args.transactionId).collectWithLifecycle {
+                if (it) {
                     setInitial() // Wait until values are loaded in ViewModel
                 }
             }
@@ -108,7 +108,7 @@ class AddTransactionFragment : Fragment() {
 
             if (editMode) model.updateTransaction(args.transactionId) else model.addTransaction()
             setFragmentResult(KEY_ADD_OR_UPDATE, bundleOf())
-            findNavController().popBackStack()
+            findNavController().navigateUp()
         }
     }
 
