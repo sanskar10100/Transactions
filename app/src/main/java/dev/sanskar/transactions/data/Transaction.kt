@@ -10,5 +10,5 @@ data class Transaction(
     val timestamp: Long,
     val isExpense: Boolean,
     val description: String,
-    val isDigital: Boolean
+    val transactionType: Int
 )

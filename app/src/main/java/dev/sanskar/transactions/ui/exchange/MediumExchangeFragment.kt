@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import dev.sanskar.transactions.TransactionMedium
 import dev.sanskar.transactions.databinding.FragmentMediumExchangeBinding
 import dev.sanskar.transactions.text
 import dev.sanskar.transactions.ui.add.AddViewModel
@@ -54,18 +55,18 @@ class MediumExchangeFragment : BottomSheetDialogFragment() {
                 if (binding.chipCashSource.isChecked) {
                     // Remove from cash and add to digital
                     model.isExpense = true
-                    model.isDigital = false
+                    model.transactionType = TransactionMedium.CASH
                     model.addTransaction()
                     model.isExpense = false
-                    model.isDigital = true
+                    model.transactionType = TransactionMedium.DIGITAL
                     model.addTransaction()
                 } else if (binding.chipDigitalSource.isChecked) {
                     // Remove from digital and add to cash
                     model.isExpense = true
-                    model.isDigital = true
+                    model.transactionType = TransactionMedium.DIGITAL
                     model.addTransaction()
                     model.isExpense = false
-                    model.isDigital = false
+                    model.transactionType = TransactionMedium.CASH
                     model.addTransaction()
                 }
                 dialog?.dismiss()

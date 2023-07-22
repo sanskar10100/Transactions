@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanskar.transactions.DEFAULT_REMINDER_HOUR
 import dev.sanskar.transactions.DEFAULT_REMINDER_MINUTE
+import dev.sanskar.transactions.TransactionMedium
 import dev.sanskar.transactions.data.*
 import dev.sanskar.transactions.log
 import dev.sanskar.transactions.notifications.NotificationScheduler
@@ -32,6 +33,7 @@ class MainViewModel @Inject constructor(
     val transactions = MutableStateFlow(emptyList<Transaction>())
     val cashBalance = MutableStateFlow(0)
     val digitalBalance = MutableStateFlow(0)
+    val creditBalance = MutableStateFlow(0)
 
     init {
         resetFilters()
@@ -74,11 +76,8 @@ class MainViewModel @Inject constructor(
     /**
      * Sets the filter medium (cash/digital/both)
      */
-    fun setFilterMedium(index: Int) {
-        filterState.value =
-            filterState.value.copy(filterMediumChoice = FilterByMediumChoices.values().find {
-                it.ordinal == index
-            } ?: FilterByMediumChoices.UNSPECIFIED)
+    fun setFilterMedium(medium: FilterByMediumChoices) {
+        filterState.value = filterState.value.copy(filterMediumChoice = medium)
         executeConfig()
     }
 
@@ -125,13 +124,19 @@ class MainViewModel @Inject constructor(
 
                     // I haven't quite figured out how to do this in SQL because of the complexity of the query
                     digitalBalance.value = it
-                        .filter { it.isDigital }
+                        .filter { it.transactionType == TransactionMedium.DIGITAL.ordinal }
                         .fold(0) { acc, transaction ->
                             if (transaction.isExpense) (acc - transaction.amount) else (acc + transaction.amount)
                         }
 
                     cashBalance.value = it
-                        .filter { !it.isDigital }
+                        .filter { it.transactionType == TransactionMedium.CASH.ordinal }
+                        .fold(0) { acc, transaction ->
+                            if (transaction.isExpense) (acc - transaction.amount) else (acc + transaction.amount)
+                        }
+
+                    creditBalance.value = it.
+                        filter { it.transactionType == TransactionMedium.CREDIT.ordinal }
                         .fold(0) { acc, transaction ->
                             if (transaction.isExpense) (acc - transaction.amount) else (acc + transaction.amount)
                         }

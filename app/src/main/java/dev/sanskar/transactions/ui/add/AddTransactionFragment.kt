@@ -12,13 +12,13 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import com.google.android.play.core.review.ReviewManagerFactory
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sanskar.transactions.*
 import dev.sanskar.transactions.databinding.FragmentAddTransactionBinding
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
+import java.lang.IllegalArgumentException
 
 @AndroidEntryPoint
 class AddTransactionFragment : Fragment() {
@@ -104,7 +104,12 @@ class AddTransactionFragment : Fragment() {
             }
 
             model.isExpense = binding.chipExpense.isChecked
-            model.isDigital = binding.chipDigital.isChecked
+            model.transactionType = when {
+                binding.chipCash.isChecked -> TransactionMedium.CASH
+                binding.chipDigital.isChecked -> TransactionMedium.DIGITAL
+                binding.chipCredit.isChecked -> TransactionMedium.CREDIT
+                else -> throw IllegalArgumentException("One of the medium chips must be checked")
+            }
 
             if (editMode) model.updateTransaction(args.transactionId) else model.addTransaction()
             setFragmentResult(KEY_ADD_OR_UPDATE, bundleOf())
@@ -116,9 +121,10 @@ class AddTransactionFragment : Fragment() {
         with (binding) {
             textFieldAmount.text = if (model.amount > 0) model.amount.toString() else ""
             textFieldDescription.text = model.description.ifEmpty { "" }
-            chipDigital.isChecked = model.isDigital
+            chipDigital.isChecked = model.transactionType == TransactionMedium.DIGITAL
+            chipCash.isChecked = model.transactionType == TransactionMedium.CASH
+            chipCredit.isChecked = model.transactionType == TransactionMedium.CREDIT
             chipExpense.isChecked = model.isExpense
-            chipCash.isChecked = !model.isDigital
             chipIncome.isChecked = !model.isExpense
             buttonSetDate.text = model.getDate()
             buttonSetTime.text = model.getTime()
@@ -167,7 +173,7 @@ class AddTransactionFragment : Fragment() {
                 .setTarget(binding.chipGroupSource)
                 .setSkipText("Skip")
                 .setDismissText("Got it")
-                .setContentText("Select medium of transaction. Default is digital.")
+                .setContentText("Select medium of transaction. Default is digital. You can also add credit transactions, such as from a Credit Credit Card or Pay Later app.")
                 .withRectangleShape()
                 .build())
             addSequenceItem(MaterialShowcaseView.Builder(requireActivity())

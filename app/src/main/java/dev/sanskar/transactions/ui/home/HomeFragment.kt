@@ -1,5 +1,6 @@
 package dev.sanskar.transactions.ui.home
 
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.activity.addCallback
@@ -179,6 +180,10 @@ class HomeFragment : Fragment() {
         model.digitalBalance.collectWithLifecycle {
             binding.textViewDigitalBalance.text = it.toString()
         }
+
+        model.creditBalance.collectWithLifecycle {
+            binding.textViewCreditBalance.text = it.toString()
+        }
     }
 
     /**
@@ -192,7 +197,7 @@ class HomeFragment : Fragment() {
             } else {
                 "${it.searchChoice.readableString} ${it.searchQuery}"
             }
-            binding.chipFilterMedium.text = it.filterMediumChoice.readableString
+            binding.chipFilterMedium.text = it.filterMediumChoice.toString()
             binding.chipFilterType.text = it.filterTypeChoice.readableString
             binding.chipFilterAmount.text = if (it.filterAmountChoice == FilterByAmountChoices.UNSPECIFIED) {
                 it.filterAmountChoice.readableString
@@ -248,17 +253,17 @@ class HomeFragment : Fragment() {
 
         // Filter by Medium Chip
         binding.chipFilterMedium.setOnClickListener {
-            findNavController().navigate(
-                generateOptionsDirection(
-                    FilterByMediumChoices.values().map {
-                        it.readableString
-                    }.toTypedArray(), KEY_FILTER_BY_MEDIUM, model.filterState.value.filterMediumChoice.ordinal, "Filter by Medium"
-                )
-            )
             setFragmentResultListener(KEY_FILTER_BY_MEDIUM) { _, bundle ->
-                val selected = bundle.getInt(KEY_SELECTED_OPTION_INDEX)
-                model.setFilterMedium(selected)
+                val selectedMediums = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    bundle.getSerializable(KEY_MEDIUM, FilterByMediumChoices::class.java)
+                } else {
+                    bundle.getSerializable(KEY_MEDIUM) as FilterByMediumChoices
+                }
+                model.setFilterMedium(selectedMediums!!)
             }
+
+            val directions = HomeFragmentDirections.actionHomeFragmentToMediumFilterBottomSheet(model.filterState.value.filterMediumChoice)
+            findNavController().navigate(directions)
         }
 
         // Filter by amount chip
@@ -371,6 +376,7 @@ class HomeFragment : Fragment() {
                 .build())
             addSequenceItem(binding.textViewCashBalance, "You can see your current cash balance here", "Got it")
             addSequenceItem(binding.textViewDigitalBalance, "You can see your current digital balance here", "Got it")
+            addSequenceItem(binding.textViewCreditBalance, "You can see your current credit balance here", "Got it")
             addSequenceItem(binding.chipSearch, "Click this to search your transactions", "Got it")
             addSequenceItem(binding.chipSort, "Sort your transactions by clicking here.\nSwipe left to see more options!", "Got it")
             start()

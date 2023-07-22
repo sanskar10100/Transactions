@@ -32,6 +32,14 @@
                 app:chipIcon="@drawable/ic_baseline_cash_24" />
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/chip_credit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="Credit"
+                app:chipIcon="@drawable/baseline_credit_card_24" />
+
+            <com.google.android.material.chip.Chip
                 android:id="@+id/chip_digital"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

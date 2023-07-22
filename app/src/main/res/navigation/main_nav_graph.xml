@@ -42,6 +42,9 @@
         <action
             android:id="@+id/action_homeFragment_to_notificationsBottomSheet"
             app:destination="@id/notificationsBottomSheet" />
+        <action
+            android:id="@+id/action_homeFragment_to_mediumFilterBottomSheet"
+            app:destination="@id/mediumFilterBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/addTransactionFragment"
@@ -108,4 +111,12 @@
         android:name="dev.sanskar.transactions.ui.bottomdialogs.NotificationsBottomSheet"
         android:label="fragment_notifications_bottom_sheet"
         tools:layout="@layout/fragment_notifications_bottom_sheet" />
+    <dialog
+        android:id="@+id/mediumFilterBottomSheet"
+        android:name="dev.sanskar.transactions.ui.bottomdialogs.MediumFilterBottomSheet"
+        android:label="MediumFilterBottomSheet" >
+        <argument
+            android:name="selectedMediums"
+            app:argType="dev.sanskar.transactions.data.FilterByMediumChoices" />
+    </dialog>
 </navigation>
