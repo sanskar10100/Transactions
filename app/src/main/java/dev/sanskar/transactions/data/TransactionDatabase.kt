@@ -12,17 +12,9 @@ abstract class TransactionDatabase : RoomDatabase() {
 
 val MIGRATION_2_3 = object : Migration(2, 3) {
     override fun migrate(database: SupportSQLiteDatabase) {
-        // Create the new transactionType column
-        database.execSQL("ALTER TABLE `Transaction` ADD COLUMN `transactionType` INTEGER NOT NULL DEFAULT 0")
-
-        // Set the transactionType value based on the isDigital value
-        database.execSQL("UPDATE `Transaction` SET `transactionType` = 0 WHERE `isDigital` = 0")
-        database.execSQL("UPDATE `Transaction` SET `transactionType` = 1 WHERE `isDigital` = 1")
-
-        // Remove the old isDigital column
-        database.execSQL("CREATE TABLE `Transaction_new` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `description` TEXT NOT NULL, `isExpense` INTEGER NOT NULL, `transactionType` INTEGER NOT NULL)")
-        database.execSQL("INSERT INTO `Transaction_new` (`id`, `amount`, `timestamp`, `description`, `isExpense`, `transactionType`) SELECT `id`, `amount`, `timestamp`, `description`, `isDigital`, `transactionType` FROM `Transaction`")
+        database.execSQL("CREATE TABLE new_Transaction (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, amount INTEGER NOT NULL, timestamp INTEGER NOT NULL, isExpense INTEGER NOT NULL, description TEXT NOT NULL, transactionType INTEGER NOT NULL)")
+        database.execSQL("INSERT INTO new_Transaction (id, amount, timestamp, isExpense, description, transactionType) SELECT id, amount, timestamp, isExpense, description, CASE WHEN isDigital THEN 1 ELSE 0 END FROM `Transaction`")
         database.execSQL("DROP TABLE `Transaction`")
-        database.execSQL("ALTER TABLE `Transaction_new` RENAME TO `Transaction`")
+        database.execSQL("ALTER TABLE new_Transaction RENAME TO `Transaction`")
     }
 }
