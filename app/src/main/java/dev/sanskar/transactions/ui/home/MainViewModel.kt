@@ -1,33 +1,43 @@
 package dev.sanskar.transactions.ui.home
 
+import android.content.ContentResolver
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.sanskar.transactions.DEFAULT_REMINDER_HOUR
 import dev.sanskar.transactions.DEFAULT_REMINDER_MINUTE
 import dev.sanskar.transactions.TransactionMedium
+import dev.sanskar.transactions.asFormattedDateTime
 import dev.sanskar.transactions.data.*
+import dev.sanskar.transactions.formattedName
 import dev.sanskar.transactions.log
 import dev.sanskar.transactions.notifications.NotificationScheduler
+import dev.sanskar.transactions.oneShotFlow
+import dev.sanskar.transactions.toTransactionMedium
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val prefStore: PreferenceStore,
     private val db: TransactionDao,
-    private val notificationScheduler: NotificationScheduler
+    private val notificationScheduler: NotificationScheduler,
+    private val contentResolver: ContentResolver
 ) : ViewModel() {
 
     val filterState = MutableStateFlow(FilterState())
     val backClearsFilter = filterState
         .map { it.areFiltersActive() }
         .stateIn(viewModelScope, SharingStarted.Lazily, false)
+
+    val message = oneShotFlow<String>()
 
     // The main transactions list livedata. This list is used as the central reference throughout the app
     val transactions = MutableStateFlow(emptyList<Transaction>())
@@ -136,7 +146,7 @@ class MainViewModel @Inject constructor(
                         }
 
                     creditBalance.value = it.
-                        filter { it.transactionType == TransactionMedium.CREDIT.ordinal }
+                    filter { it.transactionType == TransactionMedium.CREDIT.ordinal }
                         .fold(0) { acc, transaction ->
                             if (transaction.isExpense) (acc - transaction.amount) else (acc + transaction.amount)
                         }
@@ -183,7 +193,7 @@ class MainViewModel @Inject constructor(
      */
     fun deleteTransactionByPosition(position: Int) {
         viewModelScope.launch {
-            val transactionToDelete = transactions.value.get(position)
+            val transactionToDelete = transactions.value[position]
             deleteTransaction(transactionToDelete)
         }
     }
@@ -226,6 +236,37 @@ class MainViewModel @Inject constructor(
         if (!prefStore.isDefaultReminderSet()) {
             scheduleReminderNotification(DEFAULT_REMINDER_HOUR, DEFAULT_REMINDER_MINUTE)
             prefStore.saveDefaultReminderIsSet()
+        }
+    }
+
+    /**
+     * Exports a CSV of all available transactions to the
+     * downloads folder on the user's device
+     */
+    fun exportCsv(uri: Uri) {
+        viewModelScope.launch {
+            val transactions = db.getAllTransactions()
+            try {
+                val outputStream = contentResolver.openOutputStream(uri)
+                val writer = outputStream?.bufferedWriter()
+                writer?.append("ID,Amount,Type,Medium,Time,Description\n")
+                transactions.forEach {
+                    writer?.append("${it.id}," +
+                            "${it.amount}," +
+                            "${if (it.isExpense) "Expense" else "Income"}," +
+                            "${it.transactionType.toTransactionMedium().formattedName}," +
+                            "${it.timestamp.asFormattedDateTime()}," +
+                            "${it.description}\n"
+                    )
+                }
+                writer?.flush()
+                writer?.close()
+                outputStream?.close()
+                message.tryEmit("CSV exported")
+            } catch (e: IOException) {
+                log("exportCsv: ${e.message}")
+                message.tryEmit("Error exporting CSV")
+            }
         }
     }
 }

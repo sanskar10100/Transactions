@@ -12,6 +12,7 @@ import dev.sanskar.transactions.R
 import dev.sanskar.transactions.asFormattedDateTime
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.LayoutTransactionBinding
+import dev.sanskar.transactions.formattedName
 import dev.sanskar.transactions.toTransactionMedium
 
 class TransactionsListAdapter(private val context: Context) :
@@ -42,9 +43,7 @@ class TransactionsListAdapter(private val context: Context) :
                 root.setCardBackgroundColor(ContextCompat.getColor(context, R.color.income_green))
             }
 
-            textViewSource.text = transaction.transactionType.toTransactionMedium().name.let {
-                it.first() + it.substring(1).lowercase()
-            }
+            textViewSource.text = transaction.transactionType.toTransactionMedium().formattedName
 
             root.setOnClickListener {
                 root.findNavController().navigate(

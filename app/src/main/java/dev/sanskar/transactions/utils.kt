@@ -14,6 +14,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -55,6 +57,13 @@ fun Int.toTransactionMedium(): TransactionMedium {
         else -> throw IllegalArgumentException("Invalid index for TransactionMedium")
     }
 }
+
+val TransactionMedium.formattedName: String
+    get() {
+        return name.let {
+            it.first() + it.substring(1).lowercase()
+        }
+    }
 
 fun Long.asFormattedDateTime() : String {
     return SimpleDateFormat(
@@ -156,3 +165,5 @@ fun <T> StateFlow<T>.collectWithLifecycle(block: (T) -> Unit) {
         }
     }
 }
+
+fun <T> oneShotFlow() = MutableSharedFlow<T>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)

@@ -1,13 +1,18 @@
 package dev.sanskar.transactions.ui.home
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.activity.addCallback
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -19,6 +24,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.sanskar.transactions.*
 import dev.sanskar.transactions.data.*
 import dev.sanskar.transactions.databinding.FragmentHomeBinding
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
@@ -30,6 +38,17 @@ class HomeFragment : Fragment() {
     private val model by activityViewModels<MainViewModel>()
     private val adapter by lazy {
         TransactionsListAdapter(requireContext())
+    }
+
+    private val exportToCsvIntent = registerForActivityResult(StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK) {
+            val uri = it.data?.data
+            if (uri != null) {
+                model.exportCsv(uri)
+            } else {
+                binding.root.shortSnackbar("Error exporting CSV")
+            }
+        }
     }
 
     override fun onCreateView(
@@ -66,6 +85,13 @@ class HomeFragment : Fragment() {
                 binding.root.shortSnackbar("Filters cleared")
             }
             R.id.action_notifications -> findNavController().navigate(R.id.action_homeFragment_to_notificationsBottomSheet)
+            R.id.action_export_csv -> exportToCsvIntent.launch(
+                Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "text/csv"
+                    putExtra(Intent.EXTRA_TITLE, "transaction_${System.currentTimeMillis()}.csv")
+                })
+
         }
 
         return true
@@ -79,6 +105,12 @@ class HomeFragment : Fragment() {
 
         binding.fabAddTransaction.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_addTransactionFragment)
+        }
+
+        lifecycleScope.launch {
+            model.message.collect {
+                binding.root.shortSnackbar(it)
+            }
         }
 
         initChipClickListeners()
@@ -295,7 +327,7 @@ class HomeFragment : Fragment() {
                         MaterialDatePicker.thisMonthInUtcMilliseconds(),
                         MaterialDatePicker.todayInUtcMilliseconds()
                     )
-                   )
+                )
                 .build()
             dateRangePicker.addOnPositiveButtonClickListener {
                 // For some reason selecting 1 and 8 gives us time between 5:30 AM on these dates,

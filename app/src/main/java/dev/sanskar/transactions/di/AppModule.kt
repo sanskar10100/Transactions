@@ -39,4 +39,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideWorkManagerScheduler(@ApplicationContext context: Context) = NotificationScheduler(context)
+
+    @Provides
+    fun provideContentResolver(@ApplicationContext context: Context) = context.contentResolver
 }
