@@ -43,7 +43,7 @@ class TransactionsListAdapter(private val context: Context) :
                 root.setCardBackgroundColor(ContextCompat.getColor(context, R.color.income_green))
             }
 
-            textViewSource.text = transaction.transactionType.toTransactionMedium().formattedName
+            textViewSource.text = transaction.medium.toTransactionMedium().formattedName
 
             root.setOnClickListener {
                 root.findNavController().navigate(

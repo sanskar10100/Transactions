@@ -134,19 +134,19 @@ class MainViewModel @Inject constructor(
 
                     // I haven't quite figured out how to do this in SQL because of the complexity of the query
                     digitalBalance.value = it
-                        .filter { it.transactionType == TransactionMedium.DIGITAL.ordinal }
+                        .filter { it.medium == TransactionMedium.DIGITAL.ordinal }
                         .fold(0) { acc, transaction ->
                             if (transaction.isExpense) (acc - transaction.amount) else (acc + transaction.amount)
                         }
 
                     cashBalance.value = it
-                        .filter { it.transactionType == TransactionMedium.CASH.ordinal }
+                        .filter { it.medium == TransactionMedium.CASH.ordinal }
                         .fold(0) { acc, transaction ->
                             if (transaction.isExpense) (acc - transaction.amount) else (acc + transaction.amount)
                         }
 
                     creditBalance.value = it.
-                    filter { it.transactionType == TransactionMedium.CREDIT.ordinal }
+                    filter { it.medium == TransactionMedium.CREDIT.ordinal }
                         .fold(0) { acc, transaction ->
                             if (transaction.isExpense) (acc - transaction.amount) else (acc + transaction.amount)
                         }
@@ -254,7 +254,7 @@ class MainViewModel @Inject constructor(
                     writer?.append("${it.id}," +
                             "${it.amount}," +
                             "${if (it.isExpense) "Expense" else "Income"}," +
-                            "${it.transactionType.toTransactionMedium().formattedName}," +
+                            "${it.medium.toTransactionMedium().formattedName}," +
                             "${it.timestamp.asFormattedDateTime()}," +
                             "${it.description}\n"
                     )

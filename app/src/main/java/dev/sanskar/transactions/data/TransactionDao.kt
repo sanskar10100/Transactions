@@ -10,13 +10,13 @@ interface TransactionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transactions: Transaction)
 
-    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND transactionType = 0")
+    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND medium = 0")
     fun getCashExpenses(): Int
 
-    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND transactionType = 1")
+    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND medium = 1")
     fun getDigitalExpenses(): Int
 
-    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND transactionType = 2")
+    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND medium = 2")
     fun getCreditExpenses(): Int
 
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1")

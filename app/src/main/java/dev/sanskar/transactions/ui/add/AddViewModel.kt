@@ -79,7 +79,7 @@ class AddViewModel @Inject constructor(
         if (result != null) {
             amount = result.amount
             description = result.description
-            transactionType = result.transactionType.toTransactionMedium()
+            transactionType = result.medium.toTransactionMedium()
             isExpense = result.isExpense
             setTimeComponents(result.timestamp)
             emit(true)
