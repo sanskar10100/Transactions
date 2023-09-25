@@ -2,6 +2,8 @@ package dev.sanskar.transactions.data
 
 import androidx.sqlite.db.SimpleSQLiteQuery
 import dev.sanskar.transactions.ui.home.FilterState
+import dev.sanskar.transactions.ui.home.areFiltersActive
+import java.io.Serializable
 
 enum class FilterByAmountChoices(val readableString: String) {
     GREATER_THAN("Amount Greater Than"),
@@ -15,10 +17,18 @@ enum class FilterByTypeChoices(val readableString: String) {
     UNSPECIFIED("Income and Expense")
 }
 
-enum class FilterByMediumChoices(val readableString: String) {
-    CASH("Cash Only"),
-    DIGITAL("Digital Only"),
-    UNSPECIFIED("Cash and Digital")
+data class FilterByMediumChoices(
+    val cash: Boolean,
+    val digital: Boolean,
+    val credit: Boolean
+): Serializable {
+    override fun toString(): String {
+        val choices = mutableListOf<String>()
+        if (cash) { choices += "Cash" }
+        if (digital) { choices += "Digital" }
+        if (credit) { choices += "Credit" }
+        return choices.joinToString(", ")
+    }
 }
 
 enum class FilterByTimeChoices(val readableString: String) {
@@ -42,17 +52,9 @@ enum class SortByChoices(val readableString: String) {
 fun buildQuery(filter: FilterState): SimpleSQLiteQuery {
     var previousFilterExists = false
     val query = StringBuilder("SELECT * FROM `transaction`")
-    with (filter) {
-        val active = filterAmountChoice != FilterByAmountChoices.UNSPECIFIED ||
-                filterTypeChoice != FilterByTypeChoices.UNSPECIFIED ||
-                filterMediumChoice != FilterByMediumChoices.UNSPECIFIED ||
-                searchChoice != SearchChoices.UNSPECIFIED ||
-                filterTimeChoice != FilterByTimeChoices.UNSPECIFIED
-        if (active) {
-            query.append(" WHERE")
-        }
+    if (filter.areFiltersActive()) {
+        query.append(" WHERE")
     }
-
 
     // Amount filter
     if (filter.filterAmountChoice != FilterByAmountChoices.UNSPECIFIED) {
@@ -79,16 +81,15 @@ fun buildQuery(filter: FilterState): SimpleSQLiteQuery {
         previousFilterExists = true
     }
 
-    // Medium filter
-    if (filter.filterMediumChoice != FilterByMediumChoices.UNSPECIFIED) {
+    // Medium filter. It is guaranteed that at least one medium will be true at all times.
+    if (filter.filterMediumChoice != FilterByMediumChoices(true, true, true)) {
         if (previousFilterExists) query.append(" AND")
-        query.append(" isDigital")
-        val mediumIsDigital = when (filter.filterMediumChoice) {
-            FilterByMediumChoices.DIGITAL -> "= 1"
-            FilterByMediumChoices.CASH -> "= 0"
-            else -> ""
-        }
-        query.append(" $mediumIsDigital")
+        query.append(" transactionType IN ")
+        val list = mutableListOf<Int>()
+        if (filter.filterMediumChoice.cash) list.add(0)
+        if (filter.filterMediumChoice.digital) list.add(1)
+        if (filter.filterMediumChoice.credit) list.add(2)
+        query.append("(${list.joinToString()})")
         previousFilterExists = true
     }
 

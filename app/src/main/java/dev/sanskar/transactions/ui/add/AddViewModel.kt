@@ -3,10 +3,12 @@ package dev.sanskar.transactions.ui.add
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.sanskar.transactions.TransactionMedium
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.data.TransactionDatabase
 import dev.sanskar.transactions.get12HourTime
 import dev.sanskar.transactions.log
+import dev.sanskar.transactions.toTransactionMedium
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
@@ -21,7 +23,7 @@ class AddViewModel @Inject constructor(
 
     var amount = 0
     var description = ""
-    var isDigital = true
+    var transactionType = TransactionMedium.DIGITAL
     var isExpense = true
     var year = 0
     var month = 0
@@ -77,7 +79,7 @@ class AddViewModel @Inject constructor(
         if (result != null) {
             amount = result.amount
             description = result.description
-            isDigital = result.isDigital
+            transactionType = result.medium.toTransactionMedium()
             isExpense = result.isExpense
             setTimeComponents(result.timestamp)
             emit(true)
@@ -94,7 +96,7 @@ class AddViewModel @Inject constructor(
             constructTimestamp(),
             isExpense,
             description,
-            isDigital
+            transactionType.ordinal
         )
 
         viewModelScope.launch {
@@ -113,7 +115,7 @@ class AddViewModel @Inject constructor(
             constructTimestamp(),
             isExpense,
             description,
-            isDigital
+            transactionType.ordinal
         )
 
         viewModelScope.launch {

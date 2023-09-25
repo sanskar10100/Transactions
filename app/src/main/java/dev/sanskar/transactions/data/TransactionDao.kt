@@ -10,11 +10,14 @@ interface TransactionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transactions: Transaction)
 
-    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND isDigital = 0")
+    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND medium = 0")
     fun getCashExpenses(): Int
 
-    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND isDigital = 1")
+    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND medium = 1")
     fun getDigitalExpenses(): Int
+
+    @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1 AND medium = 2")
+    fun getCreditExpenses(): Int
 
     @Query("SELECT SUM(amount) FROM `transaction` WHERE isExpense = 1")
     fun getExpenses(): Int
@@ -33,6 +36,9 @@ interface TransactionDao {
 
     @RawQuery(observedEntities = [Transaction::class])
     fun customTransactionQuery(query: SupportSQLiteQuery): Flow<List<Transaction>>
+
+    @Query("SELECT * FROM `transaction`")
+    suspend fun getAllTransactions(): List<Transaction>
 
     @Query("SELECT * FROM `transaction` WHERE id = :id")
     suspend fun getTransactionFromId(id: Int): Transaction?

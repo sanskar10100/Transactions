@@ -15,7 +15,7 @@ class DashboardViewModel @Inject constructor(
     private val db: TransactionDao
 ) : ViewModel() {
 
-    fun getExpensesSinceMidnight() = flow<Int> {
+    fun getExpensesSinceMidnight() = flow {
         val calendar = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, 0)
             set(Calendar.MINUTE, 0)

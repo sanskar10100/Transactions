@@ -1,12 +1,18 @@
 package dev.sanskar.transactions.ui.home
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.activity.addCallback
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -18,6 +24,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.sanskar.transactions.*
 import dev.sanskar.transactions.data.*
 import dev.sanskar.transactions.databinding.FragmentHomeBinding
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig
@@ -29,6 +38,17 @@ class HomeFragment : Fragment() {
     private val model by activityViewModels<MainViewModel>()
     private val adapter by lazy {
         TransactionsListAdapter(requireContext())
+    }
+
+    private val exportToCsvIntent = registerForActivityResult(StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK) {
+            val uri = it.data?.data
+            if (uri != null) {
+                model.exportCsv(uri)
+            } else {
+                binding.root.shortSnackbar("Error exporting CSV")
+            }
+        }
     }
 
     override fun onCreateView(
@@ -65,6 +85,13 @@ class HomeFragment : Fragment() {
                 binding.root.shortSnackbar("Filters cleared")
             }
             R.id.action_notifications -> findNavController().navigate(R.id.action_homeFragment_to_notificationsBottomSheet)
+            R.id.action_export_csv -> exportToCsvIntent.launch(
+                Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "text/csv"
+                    putExtra(Intent.EXTRA_TITLE, "transaction_${System.currentTimeMillis()}.csv")
+                })
+
         }
 
         return true
@@ -78,6 +105,12 @@ class HomeFragment : Fragment() {
 
         binding.fabAddTransaction.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_addTransactionFragment)
+        }
+
+        lifecycleScope.launch {
+            model.message.collect {
+                binding.root.shortSnackbar(it)
+            }
         }
 
         initChipClickListeners()
@@ -179,6 +212,10 @@ class HomeFragment : Fragment() {
         model.digitalBalance.collectWithLifecycle {
             binding.textViewDigitalBalance.text = it.toString()
         }
+
+        model.creditBalance.collectWithLifecycle {
+            binding.textViewCreditBalance.text = it.toString()
+        }
     }
 
     /**
@@ -192,7 +229,7 @@ class HomeFragment : Fragment() {
             } else {
                 "${it.searchChoice.readableString} ${it.searchQuery}"
             }
-            binding.chipFilterMedium.text = it.filterMediumChoice.readableString
+            binding.chipFilterMedium.text = it.filterMediumChoice.toString()
             binding.chipFilterType.text = it.filterTypeChoice.readableString
             binding.chipFilterAmount.text = if (it.filterAmountChoice == FilterByAmountChoices.UNSPECIFIED) {
                 it.filterAmountChoice.readableString
@@ -248,17 +285,17 @@ class HomeFragment : Fragment() {
 
         // Filter by Medium Chip
         binding.chipFilterMedium.setOnClickListener {
-            findNavController().navigate(
-                generateOptionsDirection(
-                    FilterByMediumChoices.values().map {
-                        it.readableString
-                    }.toTypedArray(), KEY_FILTER_BY_MEDIUM, model.filterState.value.filterMediumChoice.ordinal, "Filter by Medium"
-                )
-            )
             setFragmentResultListener(KEY_FILTER_BY_MEDIUM) { _, bundle ->
-                val selected = bundle.getInt(KEY_SELECTED_OPTION_INDEX)
-                model.setFilterMedium(selected)
+                val selectedMediums = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    bundle.getSerializable(KEY_MEDIUM, FilterByMediumChoices::class.java)
+                } else {
+                    bundle.getSerializable(KEY_MEDIUM) as FilterByMediumChoices
+                }
+                model.setFilterMedium(selectedMediums!!)
             }
+
+            val directions = HomeFragmentDirections.actionHomeFragmentToMediumFilterBottomSheet(model.filterState.value.filterMediumChoice)
+            findNavController().navigate(directions)
         }
 
         // Filter by amount chip
@@ -290,7 +327,7 @@ class HomeFragment : Fragment() {
                         MaterialDatePicker.thisMonthInUtcMilliseconds(),
                         MaterialDatePicker.todayInUtcMilliseconds()
                     )
-                   )
+                )
                 .build()
             dateRangePicker.addOnPositiveButtonClickListener {
                 // For some reason selecting 1 and 8 gives us time between 5:30 AM on these dates,
@@ -371,6 +408,7 @@ class HomeFragment : Fragment() {
                 .build())
             addSequenceItem(binding.textViewCashBalance, "You can see your current cash balance here", "Got it")
             addSequenceItem(binding.textViewDigitalBalance, "You can see your current digital balance here", "Got it")
+            addSequenceItem(binding.textViewCreditBalance, "You can see your current credit balance here", "Got it")
             addSequenceItem(binding.chipSearch, "Click this to search your transactions", "Got it")
             addSequenceItem(binding.chipSort, "Sort your transactions by clicking here.\nSwipe left to see more options!", "Got it")
             start()

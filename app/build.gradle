@@ -39,6 +39,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+    namespace 'dev.sanskar.transactions'
 }
 
 dependencies {

@@ -34,6 +34,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_export_csv"
+        android:icon="@drawable/baseline_dataset_24"
+        android:title="Export to CSV"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_clear_transactions"
         android:icon="@drawable/ic_baseline_delete_sweep_24"
         android:title="Clear Transactions"

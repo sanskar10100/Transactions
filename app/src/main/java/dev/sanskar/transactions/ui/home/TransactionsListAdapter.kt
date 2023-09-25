@@ -12,6 +12,8 @@ import dev.sanskar.transactions.R
 import dev.sanskar.transactions.asFormattedDateTime
 import dev.sanskar.transactions.data.Transaction
 import dev.sanskar.transactions.databinding.LayoutTransactionBinding
+import dev.sanskar.transactions.formattedName
+import dev.sanskar.transactions.toTransactionMedium
 
 class TransactionsListAdapter(private val context: Context) :
     ListAdapter<Transaction, TransactionsListAdapter.ViewHolder>(TransactionDiffCallback()) {
@@ -41,7 +43,7 @@ class TransactionsListAdapter(private val context: Context) :
                 root.setCardBackgroundColor(ContextCompat.getColor(context, R.color.income_green))
             }
 
-            textViewSource.text = if (transaction.isDigital) "Digital" else "Cash"
+            textViewSource.text = transaction.medium.toTransactionMedium().formattedName
 
             root.setOnClickListener {
                 root.findNavController().navigate(

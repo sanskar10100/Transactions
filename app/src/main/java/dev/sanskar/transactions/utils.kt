@@ -14,6 +14,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -26,7 +28,7 @@ const val KEY_FILTER_BY_TYPE = "key_filter_by_type"
 const val KEY_FILTER_BY_MEDIUM = "key_filter_by_medium"
 const val KEY_FILTER_BY_AMOUNT = "key_filter_by_amount"
 const val KEY_AMOUNT = "key_amount"
-
+const val KEY_MEDIUM = "key_medium"
 
 const val KEY_DELETE_REQUEST = "key_delete_request"
 const val KEY_DELETE_TRANSACTION_ID = "key_delete_transaction_id"
@@ -42,6 +44,26 @@ const val SHARED_PREF_REMINDER_HOUR = "reminder_hour"
 const val SHARED_PREF_REMINDER_MINUTE = "reminder_minute"
 const val DEFAULT_REMINDER_HOUR = 22
 const val DEFAULT_REMINDER_MINUTE = 0
+
+enum class TransactionMedium {
+    CASH, DIGITAL, CREDIT
+}
+
+fun Int.toTransactionMedium(): TransactionMedium {
+    return when (this) {
+        0 -> TransactionMedium.CASH
+        1 -> TransactionMedium.DIGITAL
+        2 -> TransactionMedium.CREDIT
+        else -> throw IllegalArgumentException("Invalid index for TransactionMedium")
+    }
+}
+
+val TransactionMedium.formattedName: String
+    get() {
+        return name.let {
+            it.first() + it.substring(1).lowercase()
+        }
+    }
 
 fun Long.asFormattedDateTime() : String {
     return SimpleDateFormat(
@@ -143,3 +165,5 @@ fun <T> StateFlow<T>.collectWithLifecycle(block: (T) -> Unit) {
         }
     }
 }
+
+fun <T> oneShotFlow() = MutableSharedFlow<T>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)

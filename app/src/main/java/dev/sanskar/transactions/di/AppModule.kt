@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dev.sanskar.transactions.data.MIGRATION_2_3
 import dev.sanskar.transactions.data.PreferenceStore
 import dev.sanskar.transactions.data.TransactionDatabase
 import dev.sanskar.transactions.notifications.NotificationScheduler
@@ -24,6 +25,7 @@ object AppModule {
         "transactions"
         )
         .allowMainThreadQueries() // For small queries like sum calculation
+        .addMigrations(MIGRATION_2_3)
         .build()
 
     @Singleton
@@ -37,4 +39,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideWorkManagerScheduler(@ApplicationContext context: Context) = NotificationScheduler(context)
+
+    @Provides
+    fun provideContentResolver(@ApplicationContext context: Context) = context.contentResolver
 }
