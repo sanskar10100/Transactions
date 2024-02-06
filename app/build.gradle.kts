@@ -62,8 +62,9 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx:20.1.2")
     implementation("androidx.work:work-runtime-ktx:2.7.1")
 
-    // ViewModel (added to solve dependency issue)
+    // (added to solve dependency issue)
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
 
     // Google Play
     implementation("com.google.android.play:core:1.10.3")
@@ -77,7 +78,7 @@ dependencies {
     ksp("com.google.dagger:hilt-compiler:2.48")
 
     // Room
-    val room_version = "2.4.2"
+    val room_version = "2.5.2"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
